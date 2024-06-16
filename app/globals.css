@@ -31,3 +31,15 @@ body {
     text-wrap: balance;
   }
 }
+
+
+
+/* .horizontal-checkbox-group .ant-checkbox-group-item {
+  display: inline-block;
+  margin-right: 10px;
+} */
+
+.vertical-checkbox-group .ant-checkbox-group-item {
+  display: block;
+  margin-bottom: 8px;
+}
