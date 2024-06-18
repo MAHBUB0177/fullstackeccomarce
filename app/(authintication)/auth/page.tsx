@@ -37,7 +37,8 @@ const Login = () => {
           //  setToken(true)
           //  dispatch(setAuth(response?.data));
           //  dispatch(setSearchData(guestlist))
-           router.push('/')
+          //  router.push('/')
+          window.location.href = '/'; 
    
          }
        })

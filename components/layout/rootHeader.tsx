@@ -8,6 +8,7 @@ import { FaRegUser } from "react-icons/fa";
 import Link from 'next/link';
 import { Badge, Input, Space } from 'antd';
 import type { SearchProps } from 'antd/es/input/Search';
+import { title } from 'process';
 
 
 
@@ -33,14 +34,19 @@ export interface AuthDataType {
   user: UserType;
 }
 
+const menuList=[
+  {title:'My Orders',path:''},
+  {title:'Old Orders',path:''},
+  {title:'My Orders',path:''},
+  {title:'Profile',path:''},
+  {title:'Logout',path:''},
+]
 
 const Rootheader = () => {
 
   const [authData, setAuthData] = useState<AuthDataType | null>(null);
-  console.log(authData,'authData+++++++')
-
+  const[show,setShow]=useState(false)
   useEffect(() => {
-    // Check if the window object is available (only in the browser)
     if (typeof window !== 'undefined') {
       const storedAuthData = localStorage.getItem('authdata');
       if (storedAuthData) {
@@ -50,6 +56,22 @@ const Rootheader = () => {
   }, []);
   const { Search } = Input;
   const onSearch: SearchProps['onSearch'] = (value, _e, info) => console.log(info?.source, value);
+
+
+  const handelLogout = () => {
+    console.log('call logout function');
+    localStorage.setItem('authdata', JSON.stringify({})); // Correctly setting an empty object
+    window.location.href = '/';
+}
+
+  const handleItemClick = (title: string) => {
+    if (title === "Logout") {
+      handelLogout()
+    } else  {
+      // handelLogout()
+      
+    } 
+  };
 
   return (
     <div className='bg-primary  w-full z-50 fixed shadow-sm p-5 px-4 lg:px-20'>
@@ -108,7 +130,8 @@ const Rootheader = () => {
 
             {authData?.accessToken ? (
                 <>
-                  <p className="flex justify-center items-center text-normal h-[30px] w-[30px] font-semibold rounded-full bg-black text-white">
+                  <p className="flex justify-center items-center cursor-pointer text-normal h-[25px] w-[25px] font-semibold rounded-full bg-black text-white"
+                  onClick={()=>setShow(!show)}>
                     {authData?.user?.name?.charAt(0).toUpperCase()}
                   </p>{" "}
                 </>
@@ -123,7 +146,33 @@ const Rootheader = () => {
 
             
         </div>
+        {show && 
+        <div
+          className="bg-primary shadow-md rounded-md h-auto w-[40%] md:w-[25%] lg:w-[15%] fixed right-10 top-20 px-4 border-[1px] border-slate-200"
+          style={{ zIndex: 1000 }}
+        >
+          
 
+         
+            {menuList.map((item, i) => (
+            <Link href={item?.path} key={i}>
+              <p
+                key={i}
+                className={`py-2 cursor-pointer ${
+                  item?.title === "Sign Up"
+                    ? "border-b-[1px] border-slate-400"
+                    : ""
+                }`}
+                onClick={() => handleItemClick(item.title)}
+              >
+                {item?.title}
+              </p>
+            </Link>
+          ))}
+             
+          
+        </div>}
+    
       </div>
     </div>
   )
