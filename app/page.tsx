@@ -6,7 +6,7 @@ export default function Home() {
   return (
   <div className=" px-4 lg:px-20">
 <LandingPage />
-<ProductPage/>
+{/* <ProductPage/> */}
 </div>
   );
 }

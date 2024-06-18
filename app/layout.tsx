@@ -6,6 +6,8 @@ import "slick-carousel/slick/slick-theme.css";
 import Rootheader from "@/components/layout/rootHeader";
 import RootFooter from "@/components/layout/rootFooter";
 
+
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {

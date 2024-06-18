@@ -1,7 +1,53 @@
+'use client'
+import { message } from 'antd';
+import axios from 'axios';
 import Link from 'next/link';
-import React from 'react'
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react'
+import { json } from 'stream/consumers';
 
 const Login = () => {
+  const router=useRouter()
+   //simple authentication part:
+   const [email, setEmail] = useState('');
+   const [password, setPassword] = useState('');
+   const[loginData,setLoginData]=useState({
+    email:'',
+    password:''
+   })
+   console.log(loginData,'++++++++loginData')
+   const LoginNow = async (e:any) => {
+    e.preventDefault()
+     let payload = {
+      email: loginData?.email,//kminchelle 
+      password: loginData?.password,//0lelplR
+     }
+     if(loginData?.email ==='' || loginData?.password === ''){
+       return message.error('User Name Or Password Missing')
+     }
+     await axios.post('http://localhost:500/api/user/login', payload, {
+     
+     })
+       .then(response => {
+         if (response?.data) {
+          console.log(response?.data,'+++++++++++++')
+           message.success('User Successfully Logged In')
+           localStorage.setItem('authdata', JSON.stringify(response?.data?.data));
+
+          //  setToken(true)
+          //  dispatch(setAuth(response?.data));
+          //  dispatch(setSearchData(guestlist))
+           router.push('/')
+   
+         }
+       })
+       .catch(error => {
+        //  console.error('An error occurred:', error); 
+         message.error(error?.response?.data?.message)
+       });
+   };
+
+
   return (
     <div className='px-4 lg:px-20'>
  <div className="flex justify-center items-center dark:bg-gray-900">
@@ -12,7 +58,8 @@ const Login = () => {
           <h1 className="pt-2 pb-2 font-bold dark:text-gray-400 text-2xl text-center cursor-default">
             Log in
           </h1>
-          <form action="/" method="post" className="space-y-4">
+
+          <form  className=''>
             <div>
               <label htmlFor="email" className="mb-2  dark:text-gray-400 text-lg">Email</label>
               <input
@@ -21,6 +68,7 @@ const Login = () => {
                 type="email"
                 placeholder="Email"
                 required
+                onChange={(e)=>setLoginData({...loginData,email:e.target.value})}
               />
             </div>
             <div>
@@ -31,11 +79,12 @@ const Login = () => {
                 type="password"
                 placeholder="Password"
                 required
+                onChange={(e)=>setLoginData({...loginData,password:e.target.value})}
               />
             </div>
             <a
               className="group text-blue-400 transition-all duration-100 ease-in-out"
-              href="/"
+              // href="/"
             >
               <span
                 className="bg-left-bottom bg-gradient-to-r text-sm from-blue-400 to-blue-400 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
@@ -46,18 +95,20 @@ const Login = () => {
             
               <button
               className="bg-black shadow-lg mt-6 p-2 text-white rounded-lg w-full "
-              type="submit"
+              // type="submit"
+              onClick={LoginNow}
             >
               LOG IN
             </button>
           </form>
+
           <div className="flex flex-col mt-4 items-center justify-center text-sm">
             <h3 className="dark:text-gray-300">
               Don't have an account?
              
               <a
                 className="group text-blue-400 transition-all duration-100 ease-in-out"
-                // href="/auth/signUp"
+                href=""
               >
                  <Link href={'/signup'}>
                 <span
@@ -75,7 +126,6 @@ const Login = () => {
             className="flex items-center justify-center mt-5 flex-wrap"
           >
             <button
-              // href="/"
               className="hover:scale-105 ease-in-out duration-300 shadow-lg p-2 rounded-lg m-1"
             >
               <img
@@ -144,7 +194,7 @@ const Login = () => {
               By signing in, you agree to our
               <a
                 className="group text-blue-400 transition-all duration-100 ease-in-out"
-                href="/"
+                // href="/"
               >
                 <span
                   className="cursor-pointer bg-left-bottom bg-gradient-to-r from-blue-400 to-blue-400 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
@@ -155,7 +205,7 @@ const Login = () => {
               and
               <a
                 className="group text-blue-400 transition-all duration-100 ease-in-out"
-                href="/"
+                // href="/"
               >
                 <span
                   className="cursor-pointer bg-left-bottom bg-gradient-to-r from-blue-400 to-blue-400 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
