@@ -1,4 +1,5 @@
 'use client'
+import { RegisterUser } from '@/service/allApi'
 import { message } from 'antd'
 import axios from 'axios'
 import Link from 'next/link'
@@ -37,9 +38,7 @@ const SignUp = () => {
       password:usrData?.password,
     }
 
-    await axios.post('http://localhost:500/api/user/register', payload, {
-     
-    })
+    RegisterUser(payload)
       .then(response => {
         if (response?.data) {
          console.log(response?.data,'+++++++++++++')

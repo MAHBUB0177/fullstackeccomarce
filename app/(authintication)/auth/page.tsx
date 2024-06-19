@@ -1,4 +1,5 @@
 'use client'
+import { LoginUser } from '@/service/allApi';
 import { message } from 'antd';
 import axios from 'axios';
 import Link from 'next/link';
@@ -25,9 +26,8 @@ const Login = () => {
      if(loginData?.email ==='' || loginData?.password === ''){
        return message.error('User Name Or Password Missing')
      }
-     await axios.post('http://localhost:500/api/user/login', payload, {
-     
-     })
+
+    await LoginUser(payload)
        .then(response => {
          if (response?.data) {
           console.log(response?.data,'+++++++++++++')

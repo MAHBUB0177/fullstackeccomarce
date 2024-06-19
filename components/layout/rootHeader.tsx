@@ -9,25 +9,13 @@ import Link from 'next/link';
 import { Badge, Input, Space } from 'antd';
 import type { SearchProps } from 'antd/es/input/Search';
 import { title } from 'process';
-
-
-
-
-
-let beforeList = [
-  { title: 'About', path: '/', icon: null },
-  { title: 'Contact', path: '/', icon: null },
-  { title: '', path: '/', icon: BsCart3 },
-  { title: 'Sign In', path: '/auth', icon: FaRegUser },
-]
-
+import { SketchOutlined } from "@ant-design/icons";
 
 
 export interface UserType {
   email: string;
   name: string;
 }
-
 export interface AuthDataType {
   accessToken: string;
   refreshToken: string;
@@ -73,6 +61,13 @@ const Rootheader = () => {
     } 
   };
 
+  const[searchTerm,setSearchterm]=useState('')
+  const handelSubmit=async(e:any)=>{
+    e.preventDefault()
+    // console.log(searchTerm,'searchTerm++++++++++++++')
+
+  }
+
   return (
     <div className='bg-primary  w-full z-50 fixed shadow-sm p-5 px-4 lg:px-20'>
       <div className='flex justify-between items-center'>
@@ -87,14 +82,16 @@ const Rootheader = () => {
           </div>
         </Link>
 
-        <div className="">
-        <Search
-      placeholder="input search text"
-      allowClear
-      enterButton="Search"
-      size="large"
-      onSearch={onSearch}
-    />
+        <div className="flex justify-start">
+          <form className="flex flex-col md:flex-row gap-3" onSubmit={handelSubmit}>
+            <div className="flex">
+                <input type="text" placeholder="Search for the tool you like"
+              className="w-full md:w-80 px-3 h-10 rounded-l border-2 border-sky-500 focus:outline-none focus:border-sky-500"
+              onChange={(e)=>setSearchterm(e.target.value)}
+              />
+                <button type="submit" className="bg-sky-500 text-white rounded-r px-2 md:px-3 py-0 md:py-1">Search</button>
+            </div>
+        </form>
         </div>
 
         <div className="flex justify-start gap-7 pt-1 ">
@@ -151,9 +148,25 @@ const Rootheader = () => {
           className="bg-primary shadow-md rounded-md h-auto w-[40%] md:w-[25%] lg:w-[15%] fixed right-10 top-20 px-4 border-[1px] border-slate-200"
           style={{ zIndex: 1000 }}
         >
-          
+          <div className='flex justify-start gap-2'>
+          <p className="mt-5 flex justify-center items-center cursor-pointer text-normal h-[25px] w-[25px] font-semibold rounded-full bg-black text-white"
+                  onClick={()=>setShow(!show)}>
+                    {authData?.user?.name?.charAt(0).toUpperCase()}
+                  </p>
+                  <p className='pt-5'> {authData?.user?.name}</p>
+        
+            </div>
 
-         
+            <div className='flex justify-start gap-2  border-2 border-orange-300 mt-3 rounded-md p-2 bg-orange-100'>
+            <SketchOutlined
+          className="h-[30px] w-[30px]  text-orange-400"
+          style={{ fontSize: "200%" }}
+        />
+              <p className='text-orange-400'>0 points</p>
+
+
+              </div>
+          
             {menuList.map((item, i) => (
             <Link href={item?.path} key={i}>
               <p
