@@ -10,6 +10,7 @@ import { Badge, Input, Space } from 'antd';
 import type { SearchProps } from 'antd/es/input/Search';
 import { title } from 'process';
 import { SketchOutlined } from "@ant-design/icons";
+import { GetCurrentuserInfo } from '@/service/allApi';
 
 
 export interface UserType {
@@ -33,7 +34,9 @@ const menuList=[
 const Rootheader = () => {
 
   const [authData, setAuthData] = useState<AuthDataType | null>(null);
+  console.log(authData,'authData+++++++++++++++++++++++++++++++|||')
   const[show,setShow]=useState(false)
+
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const storedAuthData = localStorage.getItem('authdata');
@@ -103,7 +106,7 @@ const Rootheader = () => {
               </div>
             </Link>
           ))} */}
-          <Link href={'/'} >
+          <Link href={'/about'} >
               <div className="text-lg font-base flex justify-between gap-1 text-slate-900">
                 <p> About</p>
               </div>
@@ -163,15 +166,13 @@ const Rootheader = () => {
           style={{ fontSize: "200%" }}
         />
               <p className='text-orange-400'>0 points</p>
-
-
               </div>
           
             {menuList.map((item, i) => (
             <Link href={item?.path} key={i}>
               <p
                 key={i}
-                className={`py-2 cursor-pointer ${
+                className={`py-1 cursor-pointer ${
                   item?.title === "Sign Up"
                     ? "border-b-[1px] border-slate-400"
                     : ""
