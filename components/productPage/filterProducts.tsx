@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import classNames from 'classnames';
 import { Checkbox, Col, Row } from 'antd';
 import { FaCheck } from 'react-icons/fa';
 import Product from './product';
 // import Pagination from '../paginate';
 import Pagination from '../common/paginate';
+import { GetProductInfo } from '@/service/allApi';
 const CheckboxGroup = Checkbox.Group;
 
 
@@ -49,19 +50,18 @@ const FilterProducts = () => {
   const onChange = (list: string[]) => {
     setCheckedList(list);
   };
-  let items = [1, 2, 3, 4, 5,6,7,8,9,1, 2, 3, 4, 5,6,7,8,9 ,9,7,6]
+  // let items = [1, 2, 3, 4, 5,6,7,8,9,1, 2, 3, 4, 5,6,7,8,9 ,9,7,6]
+  const[productList,setProductList]= useState<any[]>([]);
   //paginate
   const [currentPageNumber, setCurrentPageNumber] = useState<number>(1);
-  const itemsPerPage: number = 9;
-  const totalPages: number = 3
+  const [pageSize,setPageSize]=useState<number>(9)
+  const[pageCount,setPageCount]=useState<number>(1)
+  // const itemsPerPage: number = 9;
+  // const totalPages: number = 6
 
-  const visibleItems = items.slice(
-    (currentPageNumber - 1) * itemsPerPage,
-    currentPageNumber * itemsPerPage
-  );
+  
 
   const _handlePageClick = (data: { selected: number }) => {
-    console.log(data,"+++++++++++data")
     setCurrentPageNumber(data.selected + 1);
   };
 
@@ -71,7 +71,23 @@ const FilterProducts = () => {
       behavior: "smooth",
     });
   };
-  
+
+  //get product data
+  useEffect(() => {
+    getAllProduct(currentPageNumber);
+}, [currentPageNumber]);
+
+  const getAllProduct = async (currentPageNumber:number) => {
+    try {
+      await GetProductInfo(currentPageNumber,pageSize).then((res)=>{
+        setProductList(res?.data?.item)
+        setPageCount(res?.data?.totalPage)
+      })
+    } catch (error) {
+        console.error('Error fetching products:', error);
+    }
+};
+ 
   return (
     <div>
       <div className='flex justify-between items-center'>
@@ -189,10 +205,10 @@ const FilterProducts = () => {
         </div>
 
         <div className="w-full lg:w-4/5  rounded-md bg-white px-4 pb-5 shadow-sm border-[1px] sorder-slate-200 ">
-        <Product item={visibleItems}/>
+        <Product item={productList }/>
         <div className='pt-5 flex justify-center items-center '>
             <Pagination
-                pageCount={totalPages}
+                pageCount={pageCount}
                 forcePage={currentPageNumber - 1}
                 onPageChange={_handlePageClick}
                 scrollToTop={scrollToTop}

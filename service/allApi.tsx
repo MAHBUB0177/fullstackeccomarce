@@ -20,3 +20,11 @@ export const LoginUser = (payload:any) => {
     return axiosInstance.get(url);
   };
 
+  // export const GetProductInfo = (currentPageNumber: number, pageSize: number) => {
+  //   let url = `/api/items/getproducts`;
+  //   return axiosInstance.get(url);
+  // };
+  export const GetProductInfo = (currentPageNumber: number, pageSize: number) => {
+    const url = `/api/items/getproducts?page=${currentPageNumber}&limit=${pageSize}`;
+    return axiosInstance.get(url);
+};
