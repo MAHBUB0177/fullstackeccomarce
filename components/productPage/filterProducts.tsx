@@ -6,6 +6,7 @@ import Product from './product';
 // import Pagination from '../paginate';
 import Pagination from '../common/paginate';
 import { GetProductInfo } from '@/service/allApi';
+import { json } from 'stream/consumers';
 const CheckboxGroup = Checkbox.Group;
 
 
@@ -39,10 +40,12 @@ const colorItem: { color: Color; value: Color }[] = [
 ];
 
 
+interface ProductPageProps {
+  setIsHide: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
 
-
-const FilterProducts = () => {
+const FilterProducts = ({setIsHide}:ProductPageProps) => {
   const [selectedColor, setSelectedColor] = useState('all');
   console.log(selectedColor,'selectedColor')
   const [item, setItem] = useState('heighest')
@@ -50,22 +53,18 @@ const FilterProducts = () => {
   const onChange = (list: string[]) => {
     setCheckedList(list);
   };
-  // let items = [1, 2, 3, 4, 5,6,7,8,9,1, 2, 3, 4, 5,6,7,8,9 ,9,7,6]
   const[productList,setProductList]= useState<any[]>([]);
   //paginate
   const [currentPageNumber, setCurrentPageNumber] = useState<number>(1);
   const [pageSize,setPageSize]=useState<number>(9)
   const[pageCount,setPageCount]=useState<number>(1)
-  // const itemsPerPage: number = 9;
-  // const totalPages: number = 6
-
-  
-
   const _handlePageClick = (data: { selected: number }) => {
     setCurrentPageNumber(data.selected + 1);
   };
 
+  const[hide,setHide]=useState<boolean>(false)
   const scrollToTop = () => {
+    setIsHide(true)
     window.scrollTo({
       top: 30, // Change this value to 30 to stop scrolling at 30 pixels from the top
       behavior: "smooth",

@@ -2,10 +2,15 @@
 import React from 'react'
 import FilterProducts from './filterProducts'
 
-const ProductPage = () => {
+interface ProductPageProps {
+  hide:boolean
+  setIsHide: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const ProductPage = ({setIsHide,hide}:ProductPageProps) => {
   return (
-    <div className='pt-10'>
-        <FilterProducts/>
+    <div className={hide ? 'pt-0' : 'pt-10'}>
+        <FilterProducts setIsHide={setIsHide}/>
     </div>
   )
 }

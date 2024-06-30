@@ -1,14 +1,18 @@
 'use client'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import BannerSlider from './bannerSlider'
 import OfferCuppon from './offerCuppon'
 import Banner from './banner'
 import ProductPage from '../productPage'
 
 const LandingPage = () => {
+
+  const[hide,setIsHide]=useState<boolean>(false)
+
   return (
     <div className='pt-5 h-auto'>
+     { !hide && <>
       <div className='flex justify-between gap-2 '>
         <div className='w-full lg:w-2/3  shadow-md  border bg-slate-300 rounded-md'>
           <BannerSlider />
@@ -18,13 +22,14 @@ const LandingPage = () => {
           <OfferCuppon />
         </div>
       </div>
-
       <div>
       <Banner />
       </div>
+      </>}
+
 
       <div>
-      <ProductPage/> 
+      <ProductPage setIsHide={setIsHide} hide={hide}/> 
       </div>
 
     </div>
