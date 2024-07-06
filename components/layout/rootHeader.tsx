@@ -27,7 +27,7 @@ const menuList=[
   {title:'My Orders',path:''},
   {title:'Old Orders',path:''},
   {title:'My Orders',path:''},
-  {title:'Profile',path:''},
+  {title:'Profile',path:'/profile'},
   {title:'Logout',path:''},
 ]
 
@@ -56,6 +56,7 @@ const Rootheader = () => {
 }
 
   const handleItemClick = (title: string) => {
+    setShow(false)
     if (title === "Logout") {
       handelLogout()
     } else  {
