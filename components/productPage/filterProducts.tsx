@@ -11,8 +11,8 @@ const CheckboxGroup = Checkbox.Group;
 
 let categoryList = [
   // { title: 'All', value: 'All' },
-  { title: 'DELL', value: 'DELL' },
   { title: 'Laptop', value: 'laptop' },
+  { title: 'Phone', value: 'phone' },
   { title: 'Watch', value: 'watch' },
   { title: 'Key Pad', value: 'key pad' },
 ];
@@ -47,14 +47,17 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
   const [itemprice, setItemprice] = useState('highest');
   const [item, setItem] = useState('All');
   const [checkedList, setCheckedList] = useState<string[]>([]);
-  console.log(checkedList,'checkedList++++')
+  // console.log(checkedList,'checkedList++++')
 
-  const [productList, setProductList] = useState<any[]>(productData);
-  const [filteredProductList, setFilteredProductList] = useState<any[]>([]);
-  console.log(filteredProductList,'++++++++++++filteredProductList')
+  const [productList, setProductList] = useState<any[]>([]);
+  const [filteredProductPrice, setFilteredProductPrice] = useState<any[]>([]);
+  // console.log(filteredProductPrice,'++++++++++++filteredProductList')
+  const [filteredProductCategory, setFilteredProductCategory] = useState<any[]>([]);
+  // console.log(filteredProductCategory,'filteredProductCategory++++++++++++++')
   const [currentPageNumber, setCurrentPageNumber] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(9);
   const [pageCount, setPageCount] = useState<number>(1);
+  // console.log(pageCount,'pageCount++++++++++++')
 
  
   const onChange = (list: string[]) => {
@@ -74,75 +77,98 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
   };
 
   // // Get product data
-  // useEffect(() => {
-  //   getAllProduct(currentPageNumber);
-  // }, [currentPageNumber]);
+  useEffect(() => {
+    getAllProduct(currentPageNumber);
+  }, [currentPageNumber]);
 
-  // const getAllProduct = async (currentPageNumber: number) => {
-  //   try {
-  //     await GetProductInfo(currentPageNumber, pageSize).then((res) => {
-  //       setProductList(res?.data?.item);
-  //       setPageCount(res?.data?.totalPage);
-  //     });
-  //   } catch (error) {
-  //     // console.error('Error fetching products:', error);
-  //   }
-  // };
+  const getAllProduct = async (currentPageNumber: number) => {
+    try {
+      await GetProductInfo(currentPageNumber, pageSize).then((res) => {
+        setProductList(res?.data?.item);
+        setPageCount(res?.data?.totalPage);
+      });
+    } catch (error) {
+      // console.error('Error fetching products:', error);
+    }
+  };
 
    // Sorting and filtering logic
-   useEffect(() => {
-    // let result = [...productList];
-    let result = [...productData]
-    console.log(result,'result++++++++++++++')
+  //  useEffect(() => {
+  //   let result = [...productList];
+  //   // let result = [...productData]
 
-    // Apply sorting
-    if (itemprice === 'highest') {
-      result.sort((a, b) => b?.price - a?.price);
-    } 
-    if (itemprice === 'lowest') {
-      result.sort((a, b) => a?.price - b?.price);
-    }
-    if (itemprice === "a-z") {
-      result.sort((a, b) => a?.productName.localeCompare(b?.productName));
-    }
-    if (itemprice === "z-a") {
-      result.sort((a, b) => b?.productName.localeCompare(a?.productName));
-    }
+  //   // Apply sorting
+  //   if (itemprice === 'highest') {
+  //     result.sort((a, b) => b?.price - a?.price);
+  //   } 
+  //   if (itemprice === 'lowest') {
+  //     result.sort((a, b) => a?.price - b?.price);
+  //   }
+  //   if (itemprice === "a-z") {
+  //     result.sort((a, b) => a?.productName.localeCompare(b?.productName));
+  //   }
+  //   if (itemprice === "z-a") {
+  //     result.sort((a, b) => b?.productName.localeCompare(a?.productName));
+  //   }
 
     
 
-    setFilteredProductList(result);
-  }, [itemprice, productList,checkedList]);
+  //   setFilteredProductPrice(result);
+  // }, [itemprice, productList]);
 
  
-  useEffect(() => {
-    categoryfilter();
-  }, [checkedList]);
+  // useEffect(() => {
+  //   categoryfilter();
+  // }, [checkedList]);
 
-  const categoryfilter = () => {
-    console.log('category filter is called');
-    let filterList = [...filteredProductList];
-    let previousresult=[]
+  // const categoryfilter = () => {
+  //   // console.log('category filter is called');
+  //   let filterList = [...filteredProductPrice];
 
-    if (checkedList.length > 0) {
-      filterList = filterList.filter(product => checkedList.includes(product.company));
-      console.log('Filtered product list:', filterList);
-    } else {
-      filterList = [...productList]; // Return all products if no category is selected
-      console.log('All products returned:', filterList);
-    }
+  //   if (checkedList.length > 0) {
+  //     filterList = filterList.filter(product => checkedList.includes(product.company));
+  //     // console.log('Filtered product list:', filterList);
+  //   } else {
+  //     filterList = [...filteredProductPrice]; // Return all products if no category is selected
+  //     // console.log('All products returned:', filterList);
+  //     console.log('called else block')
+  //   }
 
-    setFilteredProductList(filterList);
-  };
+  //   setFilteredProductCategory(filterList);
+  // };
   
 
+  useEffect(() => {
+    categoryfilter();
+  }, [productList, itemprice, checkedList]);
 
 
+  const categoryfilter = () => {
+    let result = [...productList];
+
+    // Apply sorting and price filtering
+    if (itemprice === 'highest') {
+      result.sort((a, b) => b?.price - a?.price);
+    } else if (itemprice === 'lowest') {
+      result.sort((a, b) => a?.price - b?.price);
+    } else if (itemprice === "a-z") {
+      result.sort((a, b) => a?.productName.localeCompare(b?.productName));
+    } else if (itemprice === "z-a") {
+      result.sort((a, b) => b?.productName.localeCompare(a?.productName));
+    }
+
+    // Apply category filter
+    if (checkedList.length > 0) {
+      result = result.filter(product => checkedList.includes(product.category));
+    }
+
+    setFilteredProductCategory(result);
+  };
   return (
     <div>
       <div className='flex justify-between items-center'>
         <div>
-          <p className='text-lg font-medium'>Showing {filteredProductList.length} results</p>
+          <p className='text-lg font-medium'>Showing {filteredProductPrice.length} results</p>
         </div>
         <div className='flex justify-between '>
           <select
@@ -194,9 +220,9 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
               className='w-full h-10 border-2 border-sky-500 focus:outline-none focus:border-sky-500 text-sky-500 rounded px-2 md:px-3 py-0 md:py-1 tracking-wider'
             >
               <option value='All'>All</option>
-              <option value='Apple'>Apple</option>
+              <option value='ASUS'>DELL</option>
+              <option value='ASUS'>ASUS</option>
               <option value='Samsung'>Samsung</option>
-              <option value='Dell'>Dell</option>
               <option value='Nokia'>Nokia</option>
               <option value='Asus'>Asus</option>
             </select>
@@ -232,7 +258,8 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
         </div>
 
         <div className='w-full lg:w-4/5 rounded-md bg-white px-4 pb-5 shadow-sm border-[1px] sorder-slate-200'>
-          <Product item={filteredProductList} />
+        
+          <Product item={filteredProductCategory} />
           <div className='pt-5 flex justify-center items-center'>
             <Pagination
               pageCount={pageCount}
