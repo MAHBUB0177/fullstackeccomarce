@@ -41,10 +41,11 @@ axiosInstance.interceptors.response.use(
       try {
         if (authData?.refreshTokenExpiration !== undefined) {
           // Check if the refresh token has expired
-          const refreshTokenExpiration = moment(authData.refreshTokenExpiration);
-          const now = moment();
-        console.log(refreshTokenExpiration.isBefore(now),'++++++time check')
-          if (refreshTokenExpiration.isBefore(now)) {
+          const refreshTokenExpiration = new Date(authData.refreshTokenExpiration);
+          const now = new Date();
+          console.log(authData,'authData++++++++++++')
+        console.log(now < refreshTokenExpiration,'++++++time check')
+          if (now < refreshTokenExpiration) {
             console.log('we are called')
             const handleLogout = () => {
               localStorage.clear();
