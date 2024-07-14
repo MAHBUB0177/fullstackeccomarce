@@ -12,6 +12,8 @@ const Product = ({ item }: ProductProps) => {
   return (
     <div className="w-full ">
       <div className="grid grid-cols-1 md:grid-cols-3   gap-4 ">
+        
+        <>
         {item?.map((item, i) => (
           <div className="relative mt-2 flex w-full  flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
             <div className="relative overflow-hidden pt-8 pb-3 px-2 rounded-md ">
@@ -109,6 +111,7 @@ const Product = ({ item }: ProductProps) => {
             </div>
           </div>
         ))}
+        </>
       </div>
     </div>
   );
