@@ -10,7 +10,7 @@ import { Badge, Input, Space } from 'antd';
 import type { SearchProps } from 'antd/es/input/Search';
 import { title } from 'process';
 import { SketchOutlined } from "@ant-design/icons";
-import { GetCurrentuserInfo } from '@/service/allApi';
+import { GetCurrentuserInfo, GetProductInfo, GetSearchProduct } from '@/service/allApi';
 
 
 export interface UserType {
@@ -31,10 +31,13 @@ const menuList=[
   {title:'Logout',path:''},
 ]
 
+
+interface SearchPayload {
+  searchTerm: string;
+}
 const Rootheader = () => {
 
   const [authData, setAuthData] = useState<AuthDataType | null>(null);
-  console.log(authData,'authData+++++++++++++++++++++++++++++++|||')
   const[show,setShow]=useState(false)
 
   useEffect(() => {
@@ -45,8 +48,7 @@ const Rootheader = () => {
       }
     }
   }, []);
-  const { Search } = Input;
-  const onSearch: SearchProps['onSearch'] = (value, _e, info) => console.log(info?.source, value);
+
 
 
   const handelLogout = () => {
@@ -65,12 +67,35 @@ const Rootheader = () => {
     } 
   };
 
-  const[searchTerm,setSearchterm]=useState('')
-  const handelSubmit=async(e:any)=>{
-    e.preventDefault()
-    // console.log(searchTerm,'searchTerm++++++++++++++')
+  const [currentPageNumber, setCurrentPageNumber] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(9);
+  const [pageCount, setPageCount] = useState<number>(1);
 
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  interface SearchPayload {
+    searchTerm: string;
   }
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(searchTerm, 'searchTerm++++++++++++++');
+
+    const payload = {
+      searchTerm: searchTerm  // Ensure searchTerm is explicitly treated as a string
+    };
+    try {
+      const res = await GetSearchProduct(currentPageNumber, pageSize, payload);
+      console.log(res, '++++++++++response');
+      if (res?.data) {
+        localStorage.setItem('productData', JSON.stringify(res.data.data));
+      }
+    } catch (error) {
+      console.error('Error fetching product info:', error);
+    }
+  };
+
+
+
+ 
 
   return (
     <div className='bg-primary  w-full z-50 fixed shadow-sm p-5 px-4 lg:px-20'>
@@ -87,11 +112,11 @@ const Rootheader = () => {
         </Link>
 
         <div className="flex justify-start">
-          <form className="flex flex-col md:flex-row gap-3" onSubmit={handelSubmit}>
+          <form className="flex flex-col md:flex-row gap-3" onSubmit={handleSubmit}>
             <div className="flex">
-                <input type="text" placeholder="Search for the tool you like"
+                <input type="text" placeholder="Search for Category,Brand,Name"
               className="w-full md:w-80 px-3 h-10 rounded-l border-2 border-sky-500 focus:outline-none focus:border-sky-500"
-              onChange={(e)=>setSearchterm(e.target.value)}
+              onChange={(e)=>setSearchTerm(e.target.value)}
               />
                 <button type="submit" className="bg-sky-500 text-white rounded-r px-2 md:px-3 py-0 md:py-1">Search</button>
             </div>

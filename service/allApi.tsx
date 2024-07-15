@@ -20,11 +20,18 @@ export const LoginUser = (payload:any) => {
     return axiosInstance.get(url);
   };
 
-  // export const GetProductInfo = (currentPageNumber: number, pageSize: number) => {
-  //   let url = `/api/items/getproducts`;
-  //   return axiosInstance.get(url);
-  // };
+ 
   export const GetProductInfo = (currentPageNumber: number, pageSize: number) => {
     const url = `/api/items/getproducts?page=${currentPageNumber}&limit=${pageSize}`;
+    http://localhost:500/api/products?name=iphone&select=company,featured
     return axiosInstance.get(url);
+};
+
+
+export const GetSearchProduct = (currentPageNumber: number, pageSize: number, payload: any) => {
+  console.log(payload, '++++++++++payload');
+  
+  const url = `/api/items/getproducts?page=${currentPageNumber}&limit=${pageSize}&${payload}`;
+
+  return axiosInstance.get(url);
 };

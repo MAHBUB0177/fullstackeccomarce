@@ -63,6 +63,16 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
     setCurrentPageNumber(data.selected + 1);
   };
 
+
+  // useEffect(() => {
+  //   if (typeof window !== 'undefined') {
+  //     const productData = localStorage.getItem('productData');
+  //     if (productData) {
+  //       setProductList(JSON.parse(productData));
+  //     }
+  //   }
+  // }, []);
+  
   const scrollToTop = () => {
     setIsHide(true);
     window.scrollTo({
@@ -248,33 +258,7 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
           </div>
         </div>
 
-        {/* <div className="w-full lg:w-4/5 rounded-md bg-white px-4 pb-5 shadow-sm border-[1px] sorder-slate-200">
-          {isLoading ? (
-            <div className="flex flex-grow justify-center items-center h-full">
-              <Loading />
-            </div>
-          ) : (
-            <>
-              {filteredProductCategory?.length > 0 ? (
-                <>
-                  <Product item={filteredProductCategory} />
-                  <div className="pt-5 flex justify-center items-center  bottom-2">
-                    <Pagination
-                      pageCount={pageCount}
-                      forcePage={currentPageNumber - 1}
-                      onPageChange={_handlePageClick}
-                      scrollToTop={scrollToTop}
-                    />
-                  </div>
-                </>
-              ) : (
-                <div className="flex flex-grow justify-center items-center h-full">
-                  <NodataFound />
-                </div>
-              )}
-            </>
-          )}
-        </div> */}
+        
 
 <div className="w-full lg:w-4/5 rounded-md bg-white px-4 pb-5 shadow-sm border-[1px] border-slate-200">
   {isLoading ? (
