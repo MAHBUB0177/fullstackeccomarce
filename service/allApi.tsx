@@ -28,10 +28,20 @@ export const LoginUser = (payload:any) => {
 };
 
 
-export const GetSearchProduct = (currentPageNumber: number, pageSize: number, payload: any) => {
-  console.log(payload, '++++++++++payload');
+// export const GetSearchProduct = (currentPageNumber: number, pageSize: number, payload: any) => {
+//   console.log(payload, '++++++++++payload');
   
-  const url = `/api/items/getproducts?page=${currentPageNumber}&limit=${pageSize}&${payload}`;
+//   const url = `/api/items/getproducts?page=${currentPageNumber}&limit=${pageSize}&${payload}`;
 
+//   return axiosInstance.get(url);
+// };
+
+export const GetSearchProduct = (currentPageNumber: number, pageSize: number, payload: any) => {
+  // Convert payload object to query string
+  const queryParams = new URLSearchParams(payload).toString();
+  
+  // Build the URL with pagination parameters
+  const url = `/api/items/getproducts?page=${currentPageNumber}&limit=${pageSize}&${queryParams}`;
+  
   return axiosInstance.get(url);
 };

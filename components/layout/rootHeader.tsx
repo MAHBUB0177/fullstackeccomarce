@@ -11,6 +11,8 @@ import type { SearchProps } from 'antd/es/input/Search';
 import { title } from 'process';
 import { SketchOutlined } from "@ant-design/icons";
 import { GetCurrentuserInfo, GetProductInfo, GetSearchProduct } from '@/service/allApi';
+import { useDispatch } from 'react-redux';
+import {  setSearchData } from '@/reducer/searchReducer';
 
 
 export interface UserType {
@@ -39,6 +41,8 @@ const Rootheader = () => {
 
   const [authData, setAuthData] = useState<AuthDataType | null>(null);
   const[show,setShow]=useState(false)
+  const dispatch=useDispatch()
+  
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -85,9 +89,8 @@ const Rootheader = () => {
     try {
       const res = await GetSearchProduct(currentPageNumber, pageSize, payload);
       console.log(res, '++++++++++response');
-      if (res?.data) {
-        localStorage.setItem('productData', JSON.stringify(res.data.data));
-      }
+      dispatch(setSearchData('ooooooooooo7777'))
+    
     } catch (error) {
       console.error('Error fetching product info:', error);
     }

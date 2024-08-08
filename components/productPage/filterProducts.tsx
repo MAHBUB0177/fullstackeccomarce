@@ -68,7 +68,7 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
   //   if (typeof window !== 'undefined') {
   //     const productData = localStorage.getItem('productData');
   //     if (productData) {
-  //       setProductList(JSON.parse(productData));
+  //         setProductList(JSON.parse(productData));
   //     }
   //   }
   // }, []);

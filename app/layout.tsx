@@ -5,8 +5,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Rootheader from "@/components/layout/rootHeader";
 import RootFooter from "@/components/layout/rootFooter";
-
-
+import LayoutProvider from "./layoutProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,6 +22,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
+        <LayoutProvider>
           <Rootheader />
           <div
             style={{ minHeight: "calc(100vh)" }}
@@ -31,6 +31,7 @@ export default function RootLayout({
             {children}
           </div>
           <RootFooter />
+        </LayoutProvider>
       </body>
     </html>
   );

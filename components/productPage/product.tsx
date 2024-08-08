@@ -11,7 +11,7 @@ const Product = ({ item }: ProductProps) => {
 
   return (
     <div className="w-full ">
-      <div className="grid grid-cols-1 md:grid-cols-3   gap-4 ">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3   gap-4 ">
         
         <>
         {item?.map((item, i) => (
@@ -25,7 +25,7 @@ const Product = ({ item }: ProductProps) => {
             </div>
             <div className=" px-3 pb-5">
               <h5 className="text-md tracking-tight text-slate-900">
-                {/* Nike Air MX Super 2500 - Red */}
+                
                 {item?.productName}
               </h5>
               <div className="mt-1 mb-5 flex items-center justify-between">
@@ -113,6 +113,18 @@ const Product = ({ item }: ProductProps) => {
         ))}
         </>
       </div>
+
+{/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
+  <div className="bg-gray-200 p-4">Item 1</div>
+  <div className="bg-gray-200 p-4">Item 2</div>
+  <div className="bg-gray-200 p-4">Item 3</div>
+  <div className="bg-gray-200 p-4">Item 4</div>
+  <div className="bg-gray-200 p-4">Item 5</div>
+  <div className="bg-gray-200 p-4">Item 6</div>
+
+</div> */}
+
+
     </div>
   );
 };
