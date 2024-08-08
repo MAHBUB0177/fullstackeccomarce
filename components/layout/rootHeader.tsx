@@ -11,8 +11,9 @@ import type { SearchProps } from 'antd/es/input/Search';
 import { title } from 'process';
 import { SketchOutlined } from "@ant-design/icons";
 import { GetCurrentuserInfo, GetProductInfo, GetSearchProduct } from '@/service/allApi';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {  setSearchData } from '@/reducer/searchReducer';
+import { RootState } from "@/store" 
 
 
 export interface UserType {
@@ -37,8 +38,13 @@ const menuList=[
 interface SearchPayload {
   searchTerm: string;
 }
+interface SearchDataType {
+  data: any;
+ 
+  // Add other properties as needed
+}
 const Rootheader = () => {
-
+  const searchData = useSelector((state: RootState) => state.auth?.searchData) as SearchDataType;
   const [authData, setAuthData] = useState<AuthDataType | null>(null);
   const[show,setShow]=useState(false)
   const dispatch=useDispatch()
@@ -89,7 +95,7 @@ const Rootheader = () => {
     try {
       const res = await GetSearchProduct(currentPageNumber, pageSize, payload);
       console.log(res, '++++++++++response');
-      dispatch(setSearchData('ooooooooooo7777'))
+      dispatch(setSearchData(res))
     
     } catch (error) {
       console.error('Error fetching product info:', error);

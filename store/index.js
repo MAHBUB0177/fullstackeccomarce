@@ -47,7 +47,7 @@ export const store = configureStore({
     }),
   });
 
-//   export type RootState = ReturnType<typeof rootReducers>;
+  // export type RootState = ReturnType<typeof rootReducers>;
 
 export let persistor = persistStore(store);
 // export let persitor = persistStore(store);
