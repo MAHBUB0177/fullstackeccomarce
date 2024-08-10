@@ -12,7 +12,8 @@ import { title } from 'process';
 import { SketchOutlined } from "@ant-design/icons";
 import { GetCurrentuserInfo, GetProductInfo, GetSearchProduct } from '@/service/allApi';
 import { useDispatch, useSelector } from 'react-redux';
-import {  setSearchData } from '@/reducer/searchReducer';
+import { setSearchData } from '@/reducer/searchReducer';
+// import {  setSearchData } from '@/reducer/searchReducer';
 
 
 

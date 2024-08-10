@@ -1,6 +1,4 @@
 import React from "react";
-// import ReactPaginate from "react-paginate";
-
 interface PaginationProps {
     pageCount: number;
     forcePage: number;

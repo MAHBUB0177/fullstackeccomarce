@@ -10,6 +10,7 @@ import Loading from "./loading";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { setSearchData } from "@/reducer/searchReducer";
+// import { setSearchData } from "@/reducer/searchReducer";
 
 const CheckboxGroup = Checkbox.Group;
 
@@ -44,10 +45,21 @@ interface ProductPageProps {
   setIsHide: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+interface Data {
+  item: [];
+  totalRecords: number;
+  totalPage: number;
+}
+
+// Define the Response interface
+interface Response {
+  data: Data;
+  searchTerm: string;
+}
 
 
 const FilterProducts = ({ setIsHide }: ProductPageProps) => {
-  const searchData = useSelector((state: RootState) => state.search.search)
+  const searchData = useSelector((state: RootState) => state.search.search) as Response
   const dispatch = useDispatch()
   console.log(searchData, 'searchData++++++++++')
   const [isLoading, setIsloading] = useState(false);
