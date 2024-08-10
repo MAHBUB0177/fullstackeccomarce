@@ -3,10 +3,13 @@ import { Checkbox, Col, Row } from "antd";
 import { FaCheck } from "react-icons/fa";
 import Product from "./product";
 import Pagination from "../common/paginate";
-import { GetProductInfo } from "@/service/allApi";
+import { GetProductInfo, GetSearchProduct } from "@/service/allApi";
 import productData from "@/products.json";
 import NodataFound from "./nodataFound";
 import Loading from "./loading";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { setSearchData } from "@/reducer/searchReducer";
 
 const CheckboxGroup = Checkbox.Group;
 
@@ -41,20 +44,31 @@ interface ProductPageProps {
   setIsHide: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+
+
 const FilterProducts = ({ setIsHide }: ProductPageProps) => {
+  const searchData = useSelector((state: RootState) => state.search.search)
+  const dispatch = useDispatch()
+  console.log(searchData, 'searchData++++++++++')
   const [isLoading, setIsloading] = useState(false);
   const [selectedColor, setSelectedColor] = useState("all");
   const [itemprice, setItemprice] = useState("highest");
   const [isbrand, setIsbrand] = useState("All");
   const [checkedList, setCheckedList] = useState<string[]>([]);
   const [productList, setProductList] = useState<any[]>([]);
+  console.log(productList, 'productList---------------------->')
   const [totalResults, setTotalResults] = useState();
   const [filteredProductCategory, setFilteredProductCategory] = useState<any[]>(
     []
   );
+
+  console.log(filteredProductCategory, 'filteredProductCategory+++++++')
   const [currentPageNumber, setCurrentPageNumber] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(9);
   const [pageCount, setPageCount] = useState<number>(1);
+  console.log(pageCount,'pageCount++++++++++++')
+
+
 
   const onChange = (list: string[]) => {
     setCheckedList(list);
@@ -63,16 +77,15 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
     setCurrentPageNumber(data.selected + 1);
   };
 
+  // search header data set
+  useEffect(() => {
+    if (Object.keys(searchData).length > 0) {
+      setProductList(searchData?.data?.item);
+      setPageCount(searchData?.data?.totalPage)
 
-  // useEffect(() => {
-  //   if (typeof window !== 'undefined') {
-  //     const productData = localStorage.getItem('productData');
-  //     if (productData) {
-  //         setProductList(JSON.parse(productData));
-  //     }
-  //   }
-  // }, []);
-  
+    }
+  }, [searchData]);
+
   const scrollToTop = () => {
     setIsHide(true);
     window.scrollTo({
@@ -81,35 +94,39 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
     });
   };
 
-  // // Get product data
+  // Get product data
+  const payload = {
+    searchTerm: searchData?.searchTerm ?? ''  // Ensure searchTerm is explicitly treated as a string
+  };
   useEffect(() => {
-    getAllProduct(currentPageNumber);
+    getAllProduct(currentPageNumber,payload);
   }, [currentPageNumber]);
-
-  const getAllProduct = async (currentPageNumber: number) => {
+ 
+  const getAllProduct = async (currentPageNumber: number,payload:any) => {
+   
     setIsloading(true);
     try {
-      await GetProductInfo(currentPageNumber, pageSize).then((res) => {
+      await GetSearchProduct(currentPageNumber, pageSize ,payload).then((res) => {
         setProductList(res?.data?.item);
         setPageCount(res?.data?.totalPage);
         setTotalResults(res?.data?.totalRecords);
-        // setTimeout(() => {
-        //   setIsloading(false);
-        // }, 1000);
-        setIsloading(false);
+        setTimeout(() => {
+          setIsloading(false);
+        }, 1000);
+        // setIsloading(false);
       });
     } catch (error) {
       setIsloading(false);
-      // console.error('Error fetching products:', error);
     }
   };
 
   useEffect(() => {
-    categoryfilter();
+    Productsfilter();
   }, [productList, itemprice, checkedList, isbrand, selectedColor]);
 
-  const categoryfilter = () => {
+  const Productsfilter = () => {
     let result = [...productList];
+    console.log(result,'result++++++++++++')
     // Apply sorting
     if (itemprice === "highest") {
       result.sort((a, b) => b?.price - a?.price);
@@ -125,6 +142,7 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
       result = result.filter((product) =>
         checkedList.includes(product.category)
       );
+      console.log(result, '0000000000')
     }
     // Apply brand filter
     if (isbrand !== "All") {
@@ -138,17 +156,36 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
   };
 
   const resetFilterList = () => {
+    // Reset all filters
     setItemprice("highest");
     setCheckedList([]);
     setIsbrand("All");
     setSelectedColor("all");
     setIsHide(false);
+  
+    // Clear the search data in the Redux store (if used)
+    dispatch(setSearchData({}));
+  
+    // // Clear the product list and filtered product category
+    // setFilteredProductCategory([]);
+    // setProductList([]);
+  
+    // Scroll to the top of the page
     window.scrollTo({
-      top: 30, // Change this value to 30 to stop scrolling at 30 pixels from the top
+      top: 30,
       behavior: "smooth",
     });
-    setFilteredProductCategory(productList);
+
+    getAllProduct(1,{
+      searchTerm:  ''  // Ensure searchTerm is explicitly treated as a string
+    });
+  
+  
   };
+  
+  
+
+  
   return (
     <div>
       <div className="flex justify-between items-center">
@@ -240,13 +277,11 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
                   <div className="text-gray-700 cursor-pointer">All</div>
                 ) : (
                   <div
-                    className={`w-5 h-5 cursor-pointer rounded-full flex items-center justify-center border-2 border-gray-300 ${
-                      colorClasses[item.color]
-                    } ${
-                      selectedColor === item.value
+                    className={`w-5 h-5 cursor-pointer rounded-full flex items-center justify-center border-2 border-gray-300 ${colorClasses[item.color]
+                      } ${selectedColor === item.value
                         ? "peer-checked:border-white"
                         : ""
-                    }`}
+                      }`}
                   >
                     {selectedColor === item.value && (
                       <FaCheck className="text-white w-3 h-3" />
@@ -258,35 +293,35 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
           </div>
         </div>
 
-        
 
-<div className="w-full lg:w-4/5 rounded-md bg-white px-4 pb-5 shadow-sm border-[1px] border-slate-200">
-  {isLoading ? (
-    <div className="flex flex-grow justify-center items-center h-full">
-      <Loading />
-    </div>
-  ) : (
-    <>
-      {filteredProductCategory?.length > 0 ? (
-        <>
-          <Product item={filteredProductCategory} />
-          <div className="pt-5 flex justify-center items-center sticky top-20 z-10 bg-white">
-            <Pagination
-              pageCount={pageCount}
-              forcePage={currentPageNumber - 1}
-              onPageChange={_handlePageClick}
-              scrollToTop={scrollToTop}
-            />
-          </div>
-        </>
-      ) : (
-        <div className="flex flex-grow justify-center items-center h-full">
-          <NodataFound />
+
+        <div className="w-full lg:w-4/5 rounded-md bg-white px-4 pb-5 shadow-sm border-[1px] border-slate-200">
+          {isLoading ? (
+            <div className="flex flex-grow justify-center items-center h-full">
+              <Loading />
+            </div>
+          ) : (
+            <>
+              {filteredProductCategory?.length > 0 ? (
+                <>
+                  <Product item={filteredProductCategory} />
+                  <div className="pt-5 flex justify-center items-center sticky top-20 z-10 bg-white">
+                    <Pagination
+                      pageCount={pageCount}
+                      forcePage={currentPageNumber - 1}
+                      onPageChange={_handlePageClick}
+                      scrollToTop={scrollToTop}
+                    />
+                  </div>
+                </>
+              ) : (
+                <div className="flex flex-grow justify-center items-center h-full">
+                  <NodataFound />
+                </div>
+              )}
+            </>
+          )}
         </div>
-      )}
-    </>
-  )}
-</div>
 
       </div>
     </div>

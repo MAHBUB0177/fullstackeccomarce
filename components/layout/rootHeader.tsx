@@ -13,7 +13,7 @@ import { SketchOutlined } from "@ant-design/icons";
 import { GetCurrentuserInfo, GetProductInfo, GetSearchProduct } from '@/service/allApi';
 import { useDispatch, useSelector } from 'react-redux';
 import {  setSearchData } from '@/reducer/searchReducer';
-import { RootState } from "@/store" 
+
 
 
 export interface UserType {
@@ -35,16 +35,9 @@ const menuList=[
 ]
 
 
-interface SearchPayload {
-  searchTerm: string;
-}
-interface SearchDataType {
-  data: any;
- 
-  // Add other properties as needed
-}
+
+
 const Rootheader = () => {
-  const searchData = useSelector((state: RootState) => state.auth?.searchData) as SearchDataType;
   const [authData, setAuthData] = useState<AuthDataType | null>(null);
   const[show,setShow]=useState(false)
   const dispatch=useDispatch()
@@ -82,20 +75,14 @@ const Rootheader = () => {
   const [pageCount, setPageCount] = useState<number>(1);
 
   const [searchTerm, setSearchTerm] = useState<string>('');
-  interface SearchPayload {
-    searchTerm: string;
-  }
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(searchTerm, 'searchTerm++++++++++++++');
-
     const payload = {
       searchTerm: searchTerm  // Ensure searchTerm is explicitly treated as a string
     };
     try {
       const res = await GetSearchProduct(currentPageNumber, pageSize, payload);
-      console.log(res, '++++++++++response');
-      dispatch(setSearchData(res))
+      dispatch(setSearchData({ data: res?.data, searchTerm }));
     
     } catch (error) {
       console.error('Error fetching product info:', error);
