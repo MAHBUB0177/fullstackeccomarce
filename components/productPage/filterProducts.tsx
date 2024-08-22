@@ -68,19 +68,13 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
   const [isbrand, setIsbrand] = useState("All");
   const [checkedList, setCheckedList] = useState<string[]>([]);
   const [productList, setProductList] = useState<any[]>([]);
-  console.log(productList, 'productList---------------------->')
   const [totalResults, setTotalResults] = useState();
   const [filteredProductCategory, setFilteredProductCategory] = useState<any[]>(
     []
   );
-
-  console.log(filteredProductCategory, 'filteredProductCategory+++++++')
   const [currentPageNumber, setCurrentPageNumber] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(9);
   const [pageCount, setPageCount] = useState<number>(1);
-  console.log(pageCount,'pageCount++++++++++++')
-
-
 
   const onChange = (list: string[]) => {
     setCheckedList(list);
@@ -88,13 +82,11 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
   const _handlePageClick = (data: { selected: number }) => {
     setCurrentPageNumber(data.selected + 1);
   };
-
   // search header data set
   useEffect(() => {
     if (Object.keys(searchData).length > 0) {
       setProductList(searchData?.data?.item);
       setPageCount(searchData?.data?.totalPage)
-
     }
   }, [searchData]);
 
@@ -106,6 +98,10 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
     });
   };
 
+  
+  useEffect(()=>{
+    dispatch(setSearchData({}));  
+  },[])
   // Get product data
   const payload = {
     searchTerm: searchData?.searchTerm ?? ''  // Ensure searchTerm is explicitly treated as a string
@@ -115,7 +111,6 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
   }, [currentPageNumber]);
  
   const getAllProduct = async (currentPageNumber: number,payload:any) => {
-   
     setIsloading(true);
     try {
       await GetSearchProduct(currentPageNumber, pageSize ,payload).then((res) => {
@@ -138,7 +133,7 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
 
   const Productsfilter = () => {
     let result = [...productList];
-    console.log(result,'result++++++++++++')
+    // console.log(result,'result++++++++++++')
     // Apply sorting
     if (itemprice === "highest") {
       result.sort((a, b) => b?.price - a?.price);
@@ -154,7 +149,7 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
       result = result.filter((product) =>
         checkedList.includes(product.category)
       );
-      console.log(result, '0000000000')
+      // console.log(result, '0000000000')
     }
     // Apply brand filter
     if (isbrand !== "All") {
@@ -167,6 +162,7 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
     setFilteredProductCategory(result);
   };
 
+
   const resetFilterList = () => {
     // Reset all filters
     setItemprice("highest");
@@ -177,11 +173,6 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
   
     // Clear the search data in the Redux store (if used)
     dispatch(setSearchData({}));
-  
-    // // Clear the product list and filtered product category
-    // setFilteredProductCategory([]);
-    // setProductList([]);
-  
     // Scroll to the top of the page
     window.scrollTo({
       top: 30,
