@@ -83,12 +83,12 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
     setCurrentPageNumber(data.selected + 1);
   };
   // search header data set
-  useEffect(() => {
-    if (Object.keys(searchData).length > 0) {
-      setProductList(searchData?.data?.item);
-      setPageCount(searchData?.data?.totalPage)
-    }
-  }, [searchData]);
+  // useEffect(() => {
+  //   if (Object.keys(searchData).length > 0) {
+  //     setProductList(searchData?.data?.item);
+  //     setPageCount(searchData?.data?.totalPage)
+  //   }
+  // }, [searchData]);
 
   const scrollToTop = () => {
     setIsHide(true);
@@ -99,16 +99,12 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
   };
 
   
-  useEffect(()=>{
-    dispatch(setSearchData({}));  
-  },[])
+  
   // Get product data
   const payload = {
-    searchTerm: searchData?.searchTerm ?? ''  // Ensure searchTerm is explicitly treated as a string
+    searchTerm: searchData ?? ''  // Ensure searchTerm is explicitly treated as a string
   };
-  useEffect(() => {
-    getAllProduct(currentPageNumber,payload);
-  }, [currentPageNumber]);
+
  
   const getAllProduct = async (currentPageNumber: number,payload:any) => {
     setIsloading(true);
@@ -127,9 +123,7 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
     }
   };
 
-  useEffect(() => {
-    Productsfilter();
-  }, [productList, itemprice, checkedList, isbrand, selectedColor]);
+ 
 
   const Productsfilter = () => {
     let result = [...productList];
@@ -161,8 +155,7 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
     }
     setFilteredProductCategory(result);
   };
-
-
+  
   const resetFilterList = () => {
     // Reset all filters
     setItemprice("highest");
@@ -186,6 +179,20 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
   
   };
   
+  useEffect(() => {
+    Productsfilter();
+  }, [productList, itemprice, checkedList, isbrand, selectedColor]);
+  
+  useEffect(() => {
+    getAllProduct(currentPageNumber,payload);
+  }, [currentPageNumber,searchData]);
+
+  useEffect(()=>{
+    dispatch(setSearchData({}));  
+  },[])
+
+ 
+
   
 
   

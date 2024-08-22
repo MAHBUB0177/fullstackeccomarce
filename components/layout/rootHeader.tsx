@@ -78,16 +78,17 @@ const Rootheader = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const payload = {
-      searchTerm: searchTerm  // Ensure searchTerm is explicitly treated as a string
-    };
-    try {
-      const res = await GetSearchProduct(currentPageNumber, pageSize, payload);
-      dispatch(setSearchData({ data: res?.data, searchTerm }));
+    dispatch(setSearchData(searchTerm));
+    // const payload = {
+    //   searchTerm: searchTerm  // Ensure searchTerm is explicitly treated as a string
+    // };
+    // try {
+    //   const res = await GetSearchProduct(currentPageNumber, pageSize, payload);
+    //   dispatch(setSearchData({ data: res?.data, searchTerm }));
     
-    } catch (error) {
-      console.error('Error fetching product info:', error);
-    }
+    // } catch (error) {
+    //   console.error('Error fetching product info:', error);
+    // }
   };
 
 
