@@ -45,15 +45,8 @@ interface ProductPageProps {
   setIsHide: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-interface Data {
-  item: [];
-  totalRecords: number;
-  totalPage: number;
-}
-
 // Define the Response interface
 interface Response {
-  data: Data;
   searchTerm: string;
 }
 
@@ -61,7 +54,6 @@ interface Response {
 const FilterProducts = ({ setIsHide }: ProductPageProps) => {
   const searchData = useSelector((state: RootState) => state.search.search) as Response
   const dispatch = useDispatch()
-  console.log(searchData, 'searchData++++++++++')
   const [isLoading, setIsloading] = useState(false);
   const [selectedColor, setSelectedColor] = useState("all");
   const [itemprice, setItemprice] = useState("highest");
@@ -82,13 +74,7 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
   const _handlePageClick = (data: { selected: number }) => {
     setCurrentPageNumber(data.selected + 1);
   };
-  // search header data set
-  // useEffect(() => {
-  //   if (Object.keys(searchData).length > 0) {
-  //     setProductList(searchData?.data?.item);
-  //     setPageCount(searchData?.data?.totalPage)
-  //   }
-  // }, [searchData]);
+
 
   const scrollToTop = () => {
     setIsHide(true);
@@ -104,8 +90,6 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
   const payload = {
     searchTerm: searchData ?? ''  // Ensure searchTerm is explicitly treated as a string
   };
-
- 
   const getAllProduct = async (currentPageNumber: number,payload:any) => {
     setIsloading(true);
     try {
@@ -119,6 +103,10 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
         // setIsloading(false);
       });
     } catch (error) {
+      console.log(error)
+      setIsloading(false);
+    }
+    finally{
       setIsloading(false);
     }
   };
@@ -127,7 +115,6 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
 
   const Productsfilter = () => {
     let result = [...productList];
-    // console.log(result,'result++++++++++++')
     // Apply sorting
     if (itemprice === "highest") {
       result.sort((a, b) => b?.price - a?.price);
@@ -179,19 +166,25 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
   
   };
   
-  useEffect(() => {
-    Productsfilter();
-  }, [productList, itemprice, checkedList, isbrand, selectedColor]);
   
-  useEffect(() => {
-    getAllProduct(currentPageNumber,payload);
-  }, [currentPageNumber,searchData]);
 
-  useEffect(()=>{
-    dispatch(setSearchData({}));  
-  },[])
+const [isInitialized, setIsInitialized] = useState(false);
 
+useEffect(() => {
+  // Clear search data on initial load
+  dispatch(setSearchData({}));
+  setIsInitialized(true);
+}, []);
  
+useEffect(() => {
+  Productsfilter();
+}, [productList, itemprice, checkedList, isbrand, selectedColor]);
+
+useEffect(() => {
+  if (isInitialized) {  // Only call getAllProduct once initialization is done
+    getAllProduct(currentPageNumber, payload);
+  }
+}, [currentPageNumber, searchData, isInitialized]);
 
   
 
