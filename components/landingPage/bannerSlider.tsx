@@ -28,9 +28,9 @@ const BannerSlider = () => {
     <div>
         <Slider {...settings}>
       
-        {categoryList.map((item,index)=><>
+        {categoryList.map((item,index)=><div key={index}>
         <Image src={item} alt='bannerimg' className='h-[350px] w-full rounded-md'/>
-        </>)}
+        </div>)}
       
     </Slider>
     </div>

@@ -1,17 +1,18 @@
 'use client'
+import { setAuth } from '@/reducer/authReducer';
 import { LoginUser } from '@/service/allApi';
 import { message } from 'antd';
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
+import { useDispatch } from 'react-redux';
 import { json } from 'stream/consumers';
 
 const Login = () => {
   const router=useRouter()
    //simple authentication part:
-   const [email, setEmail] = useState('');
-   const [password, setPassword] = useState('');
+   const dispatch = useDispatch()
    const[loginData,setLoginData]=useState({
     email:'',
     password:''
@@ -27,17 +28,13 @@ const Login = () => {
        return message.error('User Name Or Password Missing')
      }
 
-    await LoginUser(payload)
+    await axios.post (`http://localhost:500/api/user/login`,payload)
        .then(response => {
          if (response?.data) {
           console.log(response?.data,'+++++++++++++')
            message.success('User Successfully Logged In')
-           localStorage.setItem('authdata', JSON.stringify(response?.data?.data));
-
-          //  setToken(true)
-          //  dispatch(setAuth(response?.data));
-          //  dispatch(setSearchData(guestlist))
-          //  router.push('/')
+          //  localStorage.setItem('authdata', JSON.stringify(response?.data?.data));
+           dispatch(setAuth(response?.data?.data));
           window.location.href = '/'; 
    
          }

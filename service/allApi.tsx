@@ -20,7 +20,11 @@ export const LoginUser = (payload:any) => {
     return axiosInstance.get(url);
   };
 
- 
+ export const updateUserInfo=(payload:any)=>{
+  console.log(payload,'payload============')
+  let url=`api/user/update`;
+  return axiosInstance.put(url,payload);
+ }
   export const GetProductInfo = (currentPageNumber: number, pageSize: number) => {
     const url = `/api/items/getproducts?page=${currentPageNumber}&limit=${pageSize}`;
     http://localhost:500/api/products?name=iphone&select=company,featured

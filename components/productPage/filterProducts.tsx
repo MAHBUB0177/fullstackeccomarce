@@ -10,7 +10,6 @@ import Loading from "./loading";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { setSearchData } from "@/reducer/searchReducer";
-// import { setSearchData } from "@/reducer/searchReducer";
 
 const CheckboxGroup = Checkbox.Group;
 

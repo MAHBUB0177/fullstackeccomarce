@@ -6,13 +6,13 @@ import profilePic from '@/assets/images/logo/airbnb-logo.png'
 import { BsCart3 } from "react-icons/bs";
 import { FaRegUser } from "react-icons/fa";
 import Link from 'next/link';
-import { Badge, Input, Space } from 'antd';
-import type { SearchProps } from 'antd/es/input/Search';
-import { title } from 'process';
+import { Badge } from 'antd';
 import { SketchOutlined } from "@ant-design/icons";
-import { GetCurrentuserInfo, GetProductInfo, GetSearchProduct } from '@/service/allApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSearchData } from '@/reducer/searchReducer';
+import { RootState } from '@/store';
+import { setAuth, setAuthUser } from '@/reducer/authReducer';
+import { GetCurrentuserInfo } from '@/service/allApi';
 
 
 
@@ -26,10 +26,16 @@ export interface AuthDataType {
   user: UserType;
 }
 
+export interface UserType {
+  email: string;
+  name: string;
+  _id: string; // Ensure the id matches the actual field in your data
+}
+
+
 const menuList = [
   { title: 'My Orders', path: '' },
   { title: 'Old Orders', path: '' },
-  { title: 'My Orders', path: '' },
   { title: 'Profile', path: '/profile' },
   { title: 'Logout', path: '' },
 ]
@@ -38,24 +44,14 @@ const menuList = [
 
 
 const Rootheader = () => {
-  const [authData, setAuthData] = useState<AuthDataType | null>(null);
   const [show, setShow] = useState(false)
   const dispatch = useDispatch()
-
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const storedAuthData = localStorage.getItem('authdata');
-      if (storedAuthData) {
-        setAuthData(JSON.parse(storedAuthData));
-      }
-    }
-  }, []);
-
-
+  const authData = useSelector((state: RootState) => state.auth.authData) as AuthDataType
+  const authUserData = useSelector((state: RootState) => state.auth.authUser) as UserType
 
   const handelLogout = () => {
-    localStorage.setItem('authdata', JSON.stringify({})); // Correctly setting an empty object
+    dispatch(setAuth({}))
+    dispatch(setAuthUser({}))
     window.location.href = '/';
   }
 
@@ -64,15 +60,13 @@ const Rootheader = () => {
     if (title === "Logout") {
       handelLogout()
     } else {
-      // handelLogout()
-
+      return;
     }
   };
 
 
 
   const [searchTerm, setSearchTerm] = useState<string>('');
-  console.log(searchTerm, 'searchTerm+++++++++++')
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(setSearchData(searchTerm));
@@ -82,6 +76,20 @@ const Rootheader = () => {
 
 
 
+  const getCurrentUserInfo = async () => {
+    try {
+      const res = await GetCurrentuserInfo();
+      if (res?.data?.user) {
+        dispatch(setAuthUser(res.data.user))
+      }
+    } catch (error) {
+      console.error('Error fetching user info:', error);
+    }
+  };
+  // Fetch user info on component mount
+  useEffect(() => {
+    getCurrentUserInfo();
+  }, []);
 
 
   return (
@@ -146,7 +154,7 @@ const Rootheader = () => {
             <>
               <p className="flex justify-center items-center cursor-pointer text-normal h-[25px] w-[25px] font-semibold rounded-full bg-black text-white"
                 onClick={() => setShow(!show)}>
-                {authData?.user?.name?.charAt(0).toUpperCase()}
+                {authUserData?.name?.charAt(0).toUpperCase()}
               </p>{" "}
             </>
           ) : (
@@ -187,8 +195,8 @@ const Rootheader = () => {
                 <p
                   key={i}
                   className={`py-1 cursor-pointer ${item?.title === "Sign Up"
-                      ? "border-b-[1px] border-slate-400"
-                      : ""
+                    ? "border-b-[1px] border-slate-400"
+                    : ""
                     }`}
                   onClick={() => handleItemClick(item.title)}
                 >

@@ -13,21 +13,31 @@ import {
 import storage from "redux-persist/lib/storage";
 import storageSession from "redux-persist/lib/storage/session";
 import searchReducer from "@/reducer/searchReducer";
+import { authReducer } from "@/reducer";
+
 
 // Root persist configuration without whitelisting 'search'
 const persistConfig = {
   key: "root",
   storage: storage,
+  whitelist: ['auth', 'search'] // Only 'auth' state will be persisted
   // No need to whitelist 'search' since it's handled separately
 };
+
+const authPersistConfig = {
+  key: "auth",
+  storage,
+};
+
 
 // Specific persist configuration for 'search' using session storage
 const searchPersistConfig = {
   key: "search",
-  storage: storageSession,  // Use session storage
+  storage,  // Use session storage
 };
 
 const rootReducers = combineReducers({
+  auth: persistReducer(authPersistConfig, authReducer),
   search: persistReducer(searchPersistConfig, searchReducer), // Persist 'search' in session storage
   // other reducers if any...
 });

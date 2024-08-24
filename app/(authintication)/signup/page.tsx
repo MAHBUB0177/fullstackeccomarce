@@ -38,7 +38,7 @@ const SignUp = () => {
       password:usrData?.password,
     }
 
-    RegisterUser(payload)
+    await axios.post (`http://localhost:500/api/user/register`,payload)
       .then(response => {
         if (response?.data) {
          console.log(response?.data,'+++++++++++++')
