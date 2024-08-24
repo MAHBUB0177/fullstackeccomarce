@@ -3,11 +3,22 @@ import { setAuth } from '@/reducer/authReducer';
 import { LoginUser } from '@/service/allApi';
 import { message } from 'antd';
 import axios from 'axios';
+import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
-import { json } from 'stream/consumers';
+
+
+
+const authenticateWithNextAuth = async (userData:any) => {
+  const response = await signIn("credentials", {
+    ...userData,
+    redirect: false,
+  });
+  return response;
+};
+
 
 const Login = () => {
   const router=useRouter()
@@ -17,12 +28,11 @@ const Login = () => {
     email:'',
     password:''
    })
-   console.log(loginData,'++++++++loginData')
    const LoginNow = async (e:any) => {
     e.preventDefault()
      let payload = {
-      email: loginData?.email,//kminchelle 
-      password: loginData?.password,//0lelplR
+      email: loginData?.email,
+      password: loginData?.password,
      }
      if(loginData?.email ==='' || loginData?.password === ''){
        return message.error('User Name Or Password Missing')
@@ -31,10 +41,9 @@ const Login = () => {
     await axios.post (`http://localhost:500/api/user/login`,payload)
        .then(response => {
          if (response?.data) {
-          console.log(response?.data,'+++++++++++++')
            message.success('User Successfully Logged In')
-          //  localStorage.setItem('authdata', JSON.stringify(response?.data?.data));
            dispatch(setAuth(response?.data?.data));
+           authenticateWithNextAuth(response?.data?.data)
           window.location.href = '/'; 
    
          }
