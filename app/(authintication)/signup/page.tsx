@@ -14,7 +14,6 @@ const SignUp = () => {
     password: '',
     confirmpassword: ''
   })
-  console.log(usrData,'usrData')
   const handelSubmit=async(e:any)=>{
     e.preventDefault()
     if(!usrData?.name){
@@ -41,17 +40,12 @@ const SignUp = () => {
     await axios.post (`http://localhost:500/api/user/register`,payload)
       .then(response => {
         if (response?.data) {
-         console.log(response?.data,'+++++++++++++')
           message.success(response?.data?.message)
-         //  setToken(true)
-         //  dispatch(setAuth(response?.data));
-         //  dispatch(setSearchData(guestlist))
           router.push('/auth')
   
         }
       })
       .catch(error => {
-       //  console.error('An error occurred:', error); 
         message.error(error?.response?.data?.message)
       });
   }

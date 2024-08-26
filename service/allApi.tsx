@@ -21,7 +21,6 @@ export const LoginUser = (payload:any) => {
   };
 
  export const updateUserInfo=(payload:any)=>{
-  console.log(payload,'payload============')
   let url=`api/user/update`;
   return axiosInstance.put(url,payload);
  }

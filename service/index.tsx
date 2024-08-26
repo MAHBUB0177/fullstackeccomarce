@@ -16,7 +16,6 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(async (config) => {
   const authData = getAuthData();
-  console.log(authData, 'authData===========interceptors');
 
   if (authData) {
     config.headers.Authorization = `Bearer ${authData.accessToken}`;
@@ -24,52 +23,46 @@ axiosInstance.interceptors.request.use(async (config) => {
   return config;
 });
 
-// axiosInstance.interceptors.response.use(
-//   (response) => response,
-//   async (error) => {
-//     console.log(error?.response?.status, '+++++++++status');
-//     const originalRequest = error.config;
+axiosInstance.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
 
-//     if (error?.response?.status === 403 && !originalRequest._retry) {
-//       originalRequest._retry = true;
-//       const authData = getAuthData();
-//       let sendobj = {
-//         refreshToken: authData?.refreshToken,
-//       };
+    if (error?.response?.status === 403 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      const authData = getAuthData();
+      let sendobj = {
+        refreshToken: authData?.refreshToken,
+      };
 
-//       try {
-//         if (authData?.refreshTokenExpiration !== undefined) {
-//           const refreshTokenExpiration = new Date(authData.refreshTokenExpiration);
-//           const now = new Date();
-//           console.log(authData, 'authData++++++++++++');
-//           console.log(now < refreshTokenExpiration, '++++++time check');
+      try {
+        if (authData?.refreshTokenExpiration !== undefined) {
+          const refreshTokenExpiration = new Date(authData.refreshTokenExpiration);
+          const now = new Date();
 
-//           if (now < refreshTokenExpiration) {
-//             console.log('we are called');
-//             const handleLogout = () => {
-//               localStorage.clear();
-//               sessionStorage.clear();
-//               window.location.href = "/";
-//             };
-//             handleLogout();
-//           } else {
-//             const refreshTokenResponse = await axios.post('http://localhost:500/api/user/refreshToken', sendobj);
-//             const newAccessToken = refreshTokenResponse?.data?.data;
-//             console.log(newAccessToken, '++++newAccessToken');
-//             if (newAccessToken) {
-//               localStorage.setItem('authdata', JSON.stringify(newAccessToken));
-//               originalRequest.headers["Authorization"] = "Bearer " + newAccessToken?.accessToken;
-//               return axiosInstance(originalRequest);
-//             }
-//           }
-//         }
-//       } catch (refreshError) {
-//         console.error("Error refreshing token:", refreshError);
-//         return Promise.reject(refreshError);
-//       }
-//     }
-//     return Promise.reject(error);
-//   }
-// );
+          if (now < refreshTokenExpiration) {
+            const handleLogout = () => {
+              localStorage.clear();
+              sessionStorage.clear();
+              window.location.href = "/";
+            };
+            handleLogout();
+          } else {
+            const refreshTokenResponse = await axios.post('http://localhost:500/api/user/refreshToken', sendobj);
+            const newAccessToken = refreshTokenResponse?.data?.data;
+            if (newAccessToken) {
+              localStorage.setItem('authdata', JSON.stringify(newAccessToken));
+              originalRequest.headers["Authorization"] = "Bearer " + newAccessToken?.accessToken;
+              return axiosInstance(originalRequest);
+            }
+          }
+        }
+      } catch (refreshError) {
+        return Promise.reject(refreshError);
+      }
+    }
+    return Promise.reject(error);
+  }
+);
 
 export default axiosInstance;

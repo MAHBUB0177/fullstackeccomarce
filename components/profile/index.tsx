@@ -68,7 +68,6 @@ export interface UserType {
       name: '',
       email: ''
     });
-    console.log(userData, 'userData++++');
   
     // State for modal visibility
     const [isModalOpen, setIsModalOpen] = useState(false);

@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux';
 
 
 
-const authenticateWithNextAuth = async (userData:any) => {
+const authenticateWithNextAuth = async (userData: any) => {
   const response = await signIn("credentials", {
     ...userData,
     redirect: false,
@@ -21,44 +21,43 @@ const authenticateWithNextAuth = async (userData:any) => {
 
 
 const Login = () => {
-  const router=useRouter()
-   //simple authentication part:
-   const dispatch = useDispatch()
-   const[loginData,setLoginData]=useState({
-    email:'',
-    password:''
-   })
-   const LoginNow = async (e:any) => {
+  const router = useRouter()
+  //simple authentication part:
+  const dispatch = useDispatch()
+  const [loginData, setLoginData] = useState({
+    email: '',
+    password: ''
+  })
+  const LoginNow = async (e: any) => {
     e.preventDefault()
-     let payload = {
+    let payload = {
       email: loginData?.email,
       password: loginData?.password,
-     }
-     if(loginData?.email ==='' || loginData?.password === ''){
-       return message.error('User Name Or Password Missing')
-     }
+    }
+    if (loginData?.email === '' || loginData?.password === '') {
+      return message.error('User Name Or Password Missing')
+    }
 
-    await axios.post (`http://localhost:500/api/user/login`,payload)
-       .then(response => {
-         if (response?.data) {
-           message.success('User Successfully Logged In')
-           dispatch(setAuth(response?.data?.data));
-           authenticateWithNextAuth(response?.data?.data)
-          window.location.href = '/'; 
-   
-         }
-       })
-       .catch(error => {
-        //  console.error('An error occurred:', error); 
-         message.error(error?.response?.data?.message)
-       });
-   };
+    await axios.post(`http://localhost:500/api/user/login`, payload)
+      .then(response => {
+        if (response?.data) {
+          message.success('User Successfully Logged In')
+          dispatch(setAuth(response?.data?.data));
+          authenticateWithNextAuth(response?.data?.data)
+          window.location.href = '/';
+
+        }
+      })
+      .catch(error => {
+        message.error(error?.response?.data?.message)
+      });
+  };
 
 
   return (
     <div className='px-4 lg:px-20'>
- <div className="flex justify-center items-center dark:bg-gray-900">
-  
+      <div className="flex justify-center items-center dark:bg-gray-900">
+
         <div
           className="rounded-lg bg-white shadow-lg xl:p-10 2xl:p-10 lg:p-10 md:p-10 sm:p-2 m-2"
         >
@@ -66,7 +65,7 @@ const Login = () => {
             Log in
           </h1>
 
-          <form  className=''>
+          <form className=''>
             <div>
               <label htmlFor="email" className="mb-2  dark:text-gray-400 text-lg">Email</label>
               <input
@@ -75,7 +74,7 @@ const Login = () => {
                 type="email"
                 placeholder="Email"
                 required
-                onChange={(e)=>setLoginData({...loginData,email:e.target.value})}
+                onChange={(e) => setLoginData({ ...loginData, email: e.target.value })}
               />
             </div>
             <div>
@@ -86,12 +85,12 @@ const Login = () => {
                 type="password"
                 placeholder="Password"
                 required
-                onChange={(e)=>setLoginData({...loginData,password:e.target.value})}
+                onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
               />
             </div>
             <a
               className="group text-blue-400 transition-all duration-100 ease-in-out"
-              // href="/"
+            // href="/"
             >
               <span
                 className="bg-left-bottom bg-gradient-to-r text-sm from-blue-400 to-blue-400 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
@@ -99,8 +98,8 @@ const Login = () => {
                 Forget your password?
               </span>
             </a>
-            
-              <button
+
+            <button
               className="bg-black shadow-lg mt-6 p-2 text-white rounded-lg w-full "
               // type="submit"
               onClick={LoginNow}
@@ -112,20 +111,20 @@ const Login = () => {
           <div className="flex flex-col mt-4 items-center justify-center text-sm">
             <h3 className="dark:text-gray-300">
               Don't have an account?
-             
+
               <a
                 className="group text-blue-400 transition-all duration-100 ease-in-out"
                 href=""
               >
-                 <Link href={'/signup'}>
-                <span
-                  className="bg-left-bottom bg-gradient-to-r from-blue-400 to-blue-400 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
-                >
-                  Sign Up
-                </span>
+                <Link href={'/signup'}>
+                  <span
+                    className="bg-left-bottom bg-gradient-to-r from-blue-400 to-blue-400 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
+                  >
+                    Sign Up
+                  </span>
                 </Link>
               </a>
-              
+
             </h3>
           </div>
           <div
@@ -201,7 +200,7 @@ const Login = () => {
               By signing in, you agree to our
               <a
                 className="group text-blue-400 transition-all duration-100 ease-in-out"
-                // href="/"
+              // href="/"
               >
                 <span
                   className="cursor-pointer bg-left-bottom bg-gradient-to-r from-blue-400 to-blue-400 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
@@ -212,7 +211,7 @@ const Login = () => {
               and
               <a
                 className="group text-blue-400 transition-all duration-100 ease-in-out"
-                // href="/"
+              // href="/"
               >
                 <span
                   className="cursor-pointer bg-left-bottom bg-gradient-to-r from-blue-400 to-blue-400 bg-[length:0%_2px] bg-no-repeat group-hover:bg-[length:100%_2px] transition-all duration-500 ease-out"
@@ -224,7 +223,7 @@ const Login = () => {
           </div>
         </div>
       </div>
-    
+
 
     </div>
   )

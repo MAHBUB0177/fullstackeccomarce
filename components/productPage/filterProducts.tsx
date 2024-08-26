@@ -129,7 +129,6 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
       result = result.filter((product) =>
         checkedList.includes(product.category)
       );
-      // console.log(result, '0000000000')
     }
     // Apply brand filter
     if (isbrand !== "All") {

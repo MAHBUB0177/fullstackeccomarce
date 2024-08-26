@@ -8,10 +8,8 @@ name:string
 }
 const page = () => {
     const[userData,setUserData]=useState<userDataType | null>(null);
-console.log(userData,'+++userData')
   const getCurrentUserInfo=async()=>{
     await GetCurrentuserInfo().then((res)=>{
-      console.log(res,'++++++res')
       setUserData(res?.data?.user)
     })
   }

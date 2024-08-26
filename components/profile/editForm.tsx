@@ -14,7 +14,6 @@ interface UserData {
     handleInputChange: (value: string, fieldName: keyof UserData) => void;
   }
 const EditForm = ({userData,handleInputChange}:EditFormProps) => {
-    console.log(userData,'00000000000000000000000')
   return (
     <div>
          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>

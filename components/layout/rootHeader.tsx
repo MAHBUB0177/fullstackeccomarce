@@ -13,6 +13,7 @@ import { setSearchData } from '@/reducer/searchReducer';
 import { RootState } from '@/store';
 import { setAuth, setAuthUser } from '@/reducer/authReducer';
 import { GetCurrentuserInfo } from '@/service/allApi';
+import { useSession } from 'next-auth/react';
 
 
 
@@ -48,6 +49,9 @@ const Rootheader = () => {
   const dispatch = useDispatch()
   const authData = useSelector((state: RootState) => state.auth.authData) as AuthDataType
   const authUserData = useSelector((state: RootState) => state.auth.authUser) as UserType
+
+  const { data: session, status: sessionStatus } = useSession();
+  console.log(session,sessionStatus,'nextauth header===========>')
 
   const handelLogout = () => {
     dispatch(setAuth({}))
