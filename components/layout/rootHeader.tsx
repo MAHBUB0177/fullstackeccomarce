@@ -13,7 +13,7 @@ import { setSearchData } from '@/reducer/searchReducer';
 import { RootState } from '@/store';
 import { setAuth, setAuthUser } from '@/reducer/authReducer';
 import { GetCurrentuserInfo } from '@/service/allApi';
-import { useSession } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 
 
 
@@ -56,7 +56,8 @@ const Rootheader = () => {
   const handelLogout = () => {
     dispatch(setAuth({}))
     dispatch(setAuthUser({}))
-    window.location.href = '/';
+    signOut({ callbackUrl: "/" });
+    // window.location.href = '/';
   }
 
   const handleItemClick = (title: string) => {

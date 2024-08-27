@@ -1,48 +1,26 @@
-import NextAuth, { AuthOptions, DefaultSession } from "next-auth";
+import NextAuth from "next-auth";
+import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { JWT } from "next-auth/jwt";
 
-// Extend the default user type to include custom properties
-declare module "next-auth" {
-  interface Session {
-    user: {
-      id: string;
-      email: string;
-      // Add other user properties here if needed
-    } & DefaultSession["user"];
-  }
-
-  interface User {
-    id: string;
-    email: string;
-    // Add other user properties here if needed
-  }
-}
-
-declare module "next-auth/jwt" {
-  interface JWT {
-    user: User;
-  }
-}
-
-const authOptions: AuthOptions = {
+const authOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   session: {
-    jwt: true,
+    jwt: true as any,
     strategy: "jwt",
     updateAge: 0,
   },
   callbacks: {
-    jwt: async ({ token, user }: { token: JWT; user?: any }) => {
-      console.log(token, "token+++++++++++++++");
-      if (user) {
+    jwt: async ({ token, user }: { token: any; user: any }) => {
+      if (typeof user !== "undefined") {
         token.user = user;
       }
       return token;
     },
-    session: async ({ session, token }: { session: DefaultSession; token: JWT }) => {
-      if (session) {
+    session: async ({ session, token }: { session: any; token: any }) => {
+      if (session !== null) {
         session.user = token.user;
+      } else if (typeof token !== "undefined") {
+        session.token = token;
       }
       return session;
     },
@@ -63,16 +41,12 @@ const authOptions: AuthOptions = {
         },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
-        console.log("userData", credentials);
+      async authorize(userData: any) {
+        console.log(userData,'userData===============>>>>>>')
         try {
-          if (credentials) {
-            return { id: "1", email: credentials.email }; // Replace with actual user validation logic
-          } else {
-            return null;
-          }
-        } catch (error) {
-          throw new Error("Invalid credentials");
+          return userData;
+        } catch (error: any) {
+          throw new Error(error);
         }
       },
     }),
@@ -80,7 +54,7 @@ const authOptions: AuthOptions = {
   pages: {
     signIn: "/",
   },
-};
+} as NextAuthOptions;
 
 const handler = NextAuth(authOptions);
 

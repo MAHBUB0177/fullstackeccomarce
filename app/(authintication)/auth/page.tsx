@@ -12,10 +12,16 @@ import { useDispatch } from 'react-redux';
 
 
 const authenticateWithNextAuth = async (userData: any) => {
-  const response = await signIn("credentials", {
-    ...userData,
-    redirect: false,
-  });
+console.log(userData,'userData---header')
+const response = await signIn("credentials", {
+  email: userData.user.email,
+  name: userData.user.name,
+  accessToken: userData.accessToken,
+  refreshToken: userData.refreshToken,
+  tokenExpiration: userData.tokenExpiration,
+  refreshTokenExpiration: userData.refreshTokenExpiration,
+  redirect: false, // Optional, set to true if you want NextAuth to handle redirects
+});
   return response;
 };
 
@@ -44,7 +50,8 @@ const Login = () => {
           message.success('User Successfully Logged In')
           dispatch(setAuth(response?.data?.data));
           authenticateWithNextAuth(response?.data?.data)
-          window.location.href = '/';
+          console.log(response?.data?.data)
+          router.push('/')
 
         }
       })
