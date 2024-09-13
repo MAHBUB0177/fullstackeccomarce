@@ -33,7 +33,6 @@ export interface UserType {
   _id: string; // Ensure the id matches the actual field in your data
 }
 
-
 const menuList = [
   { title: 'My Orders', path: '' },
   { title: 'Old Orders', path: '' },
@@ -47,17 +46,13 @@ const menuList = [
 const Rootheader = () => {
   const [show, setShow] = useState(false)
   const dispatch = useDispatch()
-  const authData = useSelector((state: RootState) => state.auth.authData) as AuthDataType
   const authUserData = useSelector((state: RootState) => state.auth.authUser) as UserType
-
   const { data: session, status: sessionStatus } = useSession();
-  console.log(session,sessionStatus,'nextauth header===========>')
 
   const handelLogout = () => {
     dispatch(setAuth({}))
     dispatch(setAuthUser({}))
     signOut({ callbackUrl: "/" });
-    // window.location.href = '/';
   }
 
   const handleItemClick = (title: string) => {
@@ -80,7 +75,7 @@ const Rootheader = () => {
   };
 
 
-
+const[isCall,setIsCall]=useState(true)
   const getCurrentUserInfo = async () => {
     try {
       const res = await GetCurrentuserInfo();
@@ -94,7 +89,7 @@ const Rootheader = () => {
   // Fetch user info on component mount
   useEffect(() => {
     getCurrentUserInfo();
-  }, []);
+  }, [isCall]);
 
 
   return (
@@ -125,14 +120,6 @@ const Rootheader = () => {
         </div>
 
         <div className="flex justify-start gap-7 pt-1 ">
-          {/* {beforeList?.map((item, i) => (
-            <Link href={item?.path} key={i}>
-              <div className="text-lg font-base flex justify-between gap-1 text-slate-900">
-                <p className='pt-1'>{item?.icon && <item.icon className='h-[20px] w-[20px] font-extrabold' />}</p>
-                <p> {item?.title}</p>
-              </div>
-            </Link>
-          ))} */}
           <Link href={'/about'} >
             <div className="text-lg font-base flex justify-between gap-1 text-slate-900">
               <p> About</p>
@@ -155,7 +142,7 @@ const Rootheader = () => {
 
 
 
-          {authData?.accessToken ? (
+          {sessionStatus =='authenticated' ? (
             <>
               <p className="flex justify-center items-center cursor-pointer text-normal h-[25px] w-[25px] font-semibold rounded-full bg-black text-white"
                 onClick={() => setShow(!show)}>
@@ -181,9 +168,9 @@ const Rootheader = () => {
             <div className='flex justify-start gap-2'>
               <p className="mt-5 flex justify-center items-center cursor-pointer text-normal h-[25px] w-[25px] font-semibold rounded-full bg-black text-white"
                 onClick={() => setShow(!show)}>
-                {authData?.user?.name?.charAt(0).toUpperCase()}
+                {authUserData?.name?.charAt(0).toUpperCase()}
               </p>
-              <p className='pt-5'> {authData?.user?.name}</p>
+              <p className='pt-5'> {authUserData?.name}</p>
 
             </div>
 
@@ -209,8 +196,6 @@ const Rootheader = () => {
                 </p>
               </Link>
             ))}
-
-
           </div>}
 
       </div>

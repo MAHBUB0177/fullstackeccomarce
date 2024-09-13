@@ -42,7 +42,6 @@ const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(userData: any) {
-        console.log(userData,'userData===============>>>>>>')
         try {
           return userData;
         } catch (error: any) {

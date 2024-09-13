@@ -1,4 +1,5 @@
 'use client'
+import { errorMessage, successMessage } from '@/components/common/commonFunction';
 import { setAuth } from '@/reducer/authReducer';
 import { LoginUser } from '@/service/allApi';
 import { message } from 'antd';
@@ -12,7 +13,6 @@ import { useDispatch } from 'react-redux';
 
 
 const authenticateWithNextAuth = async (userData: any) => {
-console.log(userData,'userData---header')
 const response = await signIn("credentials", {
   email: userData.user.email,
   name: userData.user.name,
@@ -28,37 +28,43 @@ const response = await signIn("credentials", {
 
 const Login = () => {
   const router = useRouter()
-  //simple authentication part:
   const dispatch = useDispatch()
+
+  //simple authentication part:
   const [loginData, setLoginData] = useState({
     email: '',
     password: ''
   })
   const LoginNow = async (e: any) => {
-    e.preventDefault()
-    let payload = {
+    e.preventDefault();
+  
+    const payload = {
       email: loginData?.email,
       password: loginData?.password,
+    };
+  
+    // Validate if email or password is missing
+    if (!loginData?.email || !loginData?.password) {
+      return errorMessage('User Name Or Password Missing');
     }
-    if (loginData?.email === '' || loginData?.password === '') {
-      return message.error('User Name Or Password Missing')
+  
+    try {
+      // Make the API request with axios
+      const response = await axios.post(`http://localhost:500/api/user/login`, payload);
+  
+      // Handle successful login
+      if (response?.data) {
+        successMessage( response?.data?.message || 'User Successfully Logged In')
+        dispatch(setAuth(response?.data?.data));
+        authenticateWithNextAuth(response?.data?.data);
+        router.push('/');
+      }
+    } catch (error: any) {
+      // Handle errors during the login process
+      errorMessage(error?.response?.data?.message || 'Login failed, please try again.');
     }
-
-    await axios.post(`http://localhost:500/api/user/login`, payload)
-      .then(response => {
-        if (response?.data) {
-          message.success('User Successfully Logged In')
-          dispatch(setAuth(response?.data?.data));
-          authenticateWithNextAuth(response?.data?.data)
-          console.log(response?.data?.data)
-          router.push('/')
-
-        }
-      })
-      .catch(error => {
-        message.error(error?.response?.data?.message)
-      });
   };
+  
 
 
   return (
@@ -72,7 +78,7 @@ const Login = () => {
             Log in
           </h1>
 
-          <form className=''>
+          <form >
             <div>
               <label htmlFor="email" className="mb-2  dark:text-gray-400 text-lg">Email</label>
               <input
