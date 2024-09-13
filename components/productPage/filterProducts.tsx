@@ -198,7 +198,7 @@ useEffect(() => {
             id="pricingType"
             name="pricingType"
             onChange={(e) => setItemprice(e.target.value)}
-            className="w-full h-10 border-2 border-sky-500 focus:outline-none focus:border-sky-500 text-sky-500 rounded px-2 md:px-3 py-0 md:py-1 tracking-wider"
+            className="w-full h-10 border-2 border-secondary focus:outline-none focus:border-secondary text-secondary rounded px-2 md:px-3 py-0 md:py-1 tracking-wider"
           >
             <option value="highest">Price (highest)</option>
             <option value="lowest">Price (lowest)</option>
@@ -247,7 +247,7 @@ useEffect(() => {
               id="brandType"
               name="brandType"
               onChange={(e) => setIsbrand(e.target.value)}
-              className="w-full h-10 border-2 border-sky-500 focus:outline-none focus:border-sky-500 text-sky-500 rounded px-2 md:px-3 py-0 md:py-1 tracking-wider"
+              className="w-full h-10 border-2 border-secondary focus:outline-none focus:border-secondary text-secondary rounded px-2 md:px-3 py-0 md:py-1 tracking-wider"
             >
               <option value="All">All</option>
               <option value="HP">HP</option>

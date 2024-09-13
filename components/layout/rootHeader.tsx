@@ -14,6 +14,7 @@ import { RootState } from '@/store';
 import { setAuth, setAuthUser } from '@/reducer/authReducer';
 import { GetCurrentuserInfo } from '@/service/allApi';
 import { signOut, useSession } from 'next-auth/react';
+import CustomButton from '../common/customButton';
 
 
 
@@ -70,12 +71,12 @@ const Rootheader = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(setSearchData(searchTerm));
-    setSearchTerm('')
+    // setSearchTerm('')
 
   };
 
 
-const[isCall,setIsCall]=useState(true)
+  const [isCall, setIsCall] = useState(true)
   const getCurrentUserInfo = async () => {
     try {
       const res = await GetCurrentuserInfo();
@@ -110,17 +111,17 @@ const[isCall,setIsCall]=useState(true)
           <form className="flex flex-col md:flex-row gap-3" onSubmit={handleSubmit}>
             <div className="flex">
               <input type="text" placeholder="Search for Category,Brand,Name"
-                className="w-full md:w-80 px-3 h-10 rounded-l border-2 border-sky-500 focus:outline-none focus:border-sky-500"
+                className="w-full md:w-80 px-3 h-10 rounded-l border-2 border-secondary focus:outline-none focus:border-secondary"
                 onChange={(e) => setSearchTerm(e.target.value)}
                 value={searchTerm}
               />
-              <button type="submit" className="bg-sky-500 text-white rounded-r px-2 md:px-3 py-0 md:py-1">Search</button>
+              <button type="submit" className="bg-secondary text-white rounded-r px-2 md:px-3 py-0 md:py-1">Search</button>
             </div>
           </form>
         </div>
 
         <div className="flex justify-start gap-7 pt-1 ">
-          <Link href={'/about'} >
+          {/* <Link href={'/about'} >
             <div className="text-lg font-base flex justify-between gap-1 text-slate-900">
               <p> About</p>
             </div>
@@ -130,32 +131,47 @@ const[isCall,setIsCall]=useState(true)
             <div className="text-lg font-base flex justify-between gap-1 text-slate-900">
               <p> Contact</p>
             </div>
-          </Link>
+          </Link> */}
+
+        
 
           <Link href={'/'} >
-            <div className="text-lg font-base flex justify-between gap-1 text-slate-900">
+            <div className="text-lg pt-2 font-base flex justify-between gap-1 text-slate-900">
               <Badge count={5}>
-                <BsCart3 className='h-[20px] w-[20px] font-extrabold' />
+                <BsCart3 className='h-[20px] w-[20px] font-semibold' />
               </Badge>
             </div>
           </Link>
 
 
 
-          {sessionStatus =='authenticated' ? (
+          {sessionStatus == 'authenticated' ? (
             <>
-              <p className="flex justify-center items-center cursor-pointer text-normal h-[25px] w-[25px] font-semibold rounded-full bg-black text-white"
+              <p className="flex justify-center items-center cursor-pointer text-normal h-[35px] w-[35px] font-semibold rounded-full bg-secondary text-white pt-2"
                 onClick={() => setShow(!show)}>
                 {authUserData?.name?.charAt(0).toUpperCase()}
               </p>{" "}
             </>
           ) : (
-            <Link href={'/auth'} >
-              <div className="text-lg font-base flex justify-between gap-1 text-slate-900">
-                <p> <FaRegUser className='h-[20px] w-[20px] font-extrabold' /></p>
-                <p> Sign In</p>
-              </div>
+            <div className='flex justify-between gap-2'>
+             <Link href={'/auth'} >
+              <button
+                className={"w-20 text-sm p-[6px] font-semibold border hover:bg-red-200 border-red-500  text-secondary rounded-md hover:scale-105 duration-300"}
+              >
+                Sign in
+
+                </button>
             </Link>
+
+            <Link href={'/signup'} >
+              <CustomButton
+                btnName="Sign up"
+                size={"w-20 text-sm p-[6px] font-semibold bg-secondary"}
+              />
+            </Link>
+            </div>
+
+            
           )}
 
 
@@ -166,7 +182,7 @@ const[isCall,setIsCall]=useState(true)
             style={{ zIndex: 1000 }}
           >
             <div className='flex justify-start gap-2'>
-              <p className="mt-5 flex justify-center items-center cursor-pointer text-normal h-[25px] w-[25px] font-semibold rounded-full bg-black text-white"
+              <p className="mt-5 flex justify-center items-center cursor-pointer text-normal h-[25px] w-[25px] font-semibold rounded-full bg-secondary text-white pt-1"
                 onClick={() => setShow(!show)}>
                 {authUserData?.name?.charAt(0).toUpperCase()}
               </p>

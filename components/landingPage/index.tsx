@@ -14,7 +14,7 @@ const LandingPage = () => {
     <div className='pt-5 h-auto'>
      { !hide && <>
       <div className='flex justify-between gap-2 '>
-        <div className='w-full lg:w-2/3  shadow-md  border bg-slate-300 rounded-md'>
+        <div className='w-full lg:w-2/3  shadow-md  border  rounded-md'>
           <BannerSlider />
         </div>
         <div className=' hidden lg:block lg:w-1/3   bg-[#F5F5F5] rounded-md'>
@@ -23,7 +23,7 @@ const LandingPage = () => {
         </div>
       </div>
       <div>
-      <Banner />
+      {/* <Banner /> */}
       </div>
       </>}
 
