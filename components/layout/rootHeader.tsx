@@ -15,6 +15,8 @@ import { setAuth, setAuthUser } from '@/reducer/authReducer';
 import { GetCurrentuserInfo } from '@/service/allApi';
 import { signOut, useSession } from 'next-auth/react';
 import CustomButton from '../common/customButton';
+import { useRouter } from 'next/navigation';
+
 
 
 
@@ -46,6 +48,7 @@ const menuList = [
 
 const Rootheader = () => {
   const [show, setShow] = useState(false)
+  const router=useRouter()
   const dispatch = useDispatch()
   const authUserData = useSelector((state: RootState) => state.auth.authUser) as UserType
   const { data: session, status: sessionStatus } = useSession();
@@ -72,6 +75,8 @@ const Rootheader = () => {
     e.preventDefault();
     dispatch(setSearchData(searchTerm));
     // setSearchTerm('')
+    // router.push('/productPage')
+    
 
   };
 

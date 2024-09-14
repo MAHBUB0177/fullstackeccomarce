@@ -10,6 +10,8 @@ import Loading from "./loading";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { setSearchData } from "@/reducer/searchReducer";
+import CardLoading from "../landingPage/product/cardLoading";
+import ProductLoading from "./productLoading";
 
 const CheckboxGroup = Checkbox.Group;
 
@@ -50,8 +52,9 @@ interface Response {
 }
 
 
-const FilterProducts = ({ setIsHide }: ProductPageProps) => {
+const FilterProducts = () => {
   const searchData = useSelector((state: RootState) => state.search.search) as Response
+  console.log(searchData,'searchData++++++++++++')
   const dispatch = useDispatch()
   const [isLoading, setIsloading] = useState(false);
   const [selectedColor, setSelectedColor] = useState("all");
@@ -76,41 +79,42 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
 
 
   const scrollToTop = () => {
-    setIsHide(true);
+    // setIsHide(true);
     window.scrollTo({
       top: 30, // Change this value to 30 to stop scrolling at 30 pixels from the top
       behavior: "smooth",
     });
   };
 
-  
-  
+
+
   // Get product data
   const payload = {
     searchTerm: searchData ?? ''  // Ensure searchTerm is explicitly treated as a string
   };
-  const getAllProduct = async (currentPageNumber: number,payload:any) => {
+  const getAllProduct = async (currentPageNumber: number, payload: any) => {
     setIsloading(true);
     try {
-      await GetSearchProduct(currentPageNumber, pageSize ,payload).then((res) => {
+      await GetSearchProduct(currentPageNumber, pageSize, payload).then((res) => {
         setProductList(res?.data?.item);
         setPageCount(res?.data?.totalPage);
         setTotalResults(res?.data?.totalRecords);
-        setTimeout(() => {
-          setIsloading(false);
-        }, 1000);
+
         // setIsloading(false);
       });
     } catch (error) {
       console.log(error)
-      setIsloading(false);
+      // setIsloading(false);
     }
-    finally{
-      setIsloading(false);
+    finally {
+      // setIsloading(false);
+      setTimeout(() => {
+        setIsloading(false);
+      }, 2000);
     }
   };
 
- 
+
 
   const Productsfilter = () => {
     let result = [...productList];
@@ -140,15 +144,15 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
     }
     setFilteredProductCategory(result);
   };
-  
+
   const resetFilterList = () => {
     // Reset all filters
     setItemprice("highest");
     setCheckedList([]);
     setIsbrand("All");
     setSelectedColor("all");
-    setIsHide(false);
-  
+    // setIsHide(false);
+
     // Clear the search data in the Redux store (if used)
     dispatch(setSearchData({}));
     // Scroll to the top of the page
@@ -157,36 +161,36 @@ const FilterProducts = ({ setIsHide }: ProductPageProps) => {
       behavior: "smooth",
     });
 
-    getAllProduct(1,{
-      searchTerm:  ''  // Ensure searchTerm is explicitly treated as a string
+    getAllProduct(1, {
+      searchTerm: ''  // Ensure searchTerm is explicitly treated as a string
     });
-  
-  
+
+
   };
-  
-  
 
-const [isInitialized, setIsInitialized] = useState(false);
 
-useEffect(() => {
-  // Clear search data on initial load
-  dispatch(setSearchData({}));
-  setIsInitialized(true);
-}, []);
- 
-useEffect(() => {
-  Productsfilter();
-}, [productList, itemprice, checkedList, isbrand, selectedColor]);
 
-useEffect(() => {
-  if (isInitialized) {  // Only call getAllProduct once initialization is done
-    getAllProduct(currentPageNumber, payload);
-  }
-}, [currentPageNumber, searchData, isInitialized]);
+  const [isInitialized, setIsInitialized] = useState(false);
 
-  
+  useEffect(() => {
+    // Clear search data on initial load
+    dispatch(setSearchData({}));
+    setIsInitialized(true);
+  }, []);
 
-  
+  useEffect(() => {
+    Productsfilter();
+  }, [productList, itemprice, checkedList, isbrand, selectedColor]);
+
+  useEffect(() => {
+    if (isInitialized) {  // Only call getAllProduct once initialization is done
+      getAllProduct(currentPageNumber, payload);
+    }
+  }, [currentPageNumber, searchData, isInitialized]);
+
+
+
+
   return (
     <div>
       <div className="flex justify-between items-center">
@@ -299,7 +303,7 @@ useEffect(() => {
         <div className="w-full lg:w-4/5 rounded-md bg-white px-4 pb-5 shadow-sm border-[1px] border-slate-200">
           {isLoading ? (
             <div className="flex flex-grow justify-center items-center h-full">
-              <Loading />
+              <ProductLoading />
             </div>
           ) : (
             <>
