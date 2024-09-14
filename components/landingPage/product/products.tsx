@@ -4,6 +4,7 @@ import { IoMdTrendingUp } from 'react-icons/io';
 import { MdOutlineProductionQuantityLimits } from 'react-icons/md';
 import CardLoading from './cardLoading';
 import Link from 'next/link';
+import { ShuffledData } from '@/components/common/commonFunction';
 
 const Products = () => {
 
@@ -15,7 +16,7 @@ const Products = () => {
     setIsLoading(true);
     try {
       const res = await GetSearchProduct(currentPageNumber, 5, payload);
-      setProductList(res?.data?.item || []);
+      setProductList(ShuffledData(res?.data?.item || []));
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {

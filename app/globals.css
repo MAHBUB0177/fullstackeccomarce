@@ -43,3 +43,33 @@ body {
   display: block;
   margin-bottom: 8px;
 }
+
+
+
+/* .slick-prev:before, .slick-next:before {
+
+  color: #7d827e !important;
+
+} */
+
+
+
+ /* .slick-prev,
+ .slick-next {
+   width: 50px !important; 
+   height: 50px !important; 
+   font-size: 30px !important; 
+   background-color: white !important; 
+   border-radius: 50%; 
+   display: flex;
+   align-items: center;
+   justify-content: center;
+ } */
+ 
+
+
+.slick-prev:before,
+.slick-next:before {
+  color: #7d827e !important;
+  font-size: 22px !important;
+}

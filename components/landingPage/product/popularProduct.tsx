@@ -2,25 +2,26 @@ import { GetSearchProduct } from '@/service/allApi';
 import React, { useEffect, useState } from 'react';
 import { FaFire } from 'react-icons/fa';
 import CardLoading from './cardLoading';
+import { ShuffledData } from '@/components/common/commonFunction';
 
 const PopularProduct = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [productList, setProductList] = useState<any[]>([]);
-  console.log(productList, 'productList')
 
   const getAllProduct = async (currentPageNumber: number, payload: any) => {
     setIsLoading(true);
     try {
       const res = await GetSearchProduct(currentPageNumber, 5, payload);
-      setProductList(res?.data?.item || []);
+      setProductList(ShuffledData(res?.data?.item || []));
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
       setTimeout(() => {
         setIsLoading(false);
-      }, 2000); // Adding a small delay for better UX
+      }, 2000); 
     }
   };
+  
 
   useEffect(() => {
     getAllProduct(1, {});
@@ -39,7 +40,7 @@ const PopularProduct = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 py-4">
           {productList.length > 0 ? (
             productList.map((item, i) => (
-              <div key={i} className="relative mt-2 flex w-full flex-col overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
+              <div key={i} className=" mt-2  w-full  overflow-hidden rounded-lg border border-gray-100 bg-white shadow-md">
                 <div className="relative overflow-hidden pt-8 pb-3 px-2 rounded-md">
                   <img
                     src={item.image}

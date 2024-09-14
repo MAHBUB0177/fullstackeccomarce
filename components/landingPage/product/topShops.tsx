@@ -2,6 +2,7 @@ import { GetSearchProduct } from '@/service/allApi';
 import React, { useEffect, useState } from 'react'
 import { MdOutlineStarRate } from 'react-icons/md';
 import CardLoading from './cardLoading';
+import { ShuffledData } from '@/components/common/commonFunction';
 
 const TopShops = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -12,7 +13,7 @@ const TopShops = () => {
     setIsLoading(true);
     try {
       const res = await GetSearchProduct(currentPageNumber, 5, payload);
-      setProductList(res?.data?.item || []);
+      setProductList(ShuffledData(res?.data?.item || []));
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {

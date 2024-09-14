@@ -15,6 +15,8 @@ const LandingPage = () => {
 
   const [hide, setIsHide] = useState<boolean>(false)
 
+  
+
   return (
     <div className='pt-5 h-auto'>
       {!hide && <>
@@ -28,7 +30,6 @@ const LandingPage = () => {
           </div>
         </div>
         <div>
-          {/* <Banner /> */}
         </div>
       </>}
 
