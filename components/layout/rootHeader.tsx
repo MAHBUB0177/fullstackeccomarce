@@ -16,6 +16,7 @@ import { GetCurrentuserInfo } from '@/service/allApi';
 import { signOut, useSession } from 'next-auth/react';
 import CustomButton from '../common/customButton';
 import { useRouter } from 'next/navigation';
+import { IoMdCloseCircleOutline } from 'react-icons/io';
 
 
 
@@ -48,7 +49,7 @@ const menuList = [
 
 const Rootheader = () => {
   const [show, setShow] = useState(false)
-  const router=useRouter()
+  const router = useRouter()
   const dispatch = useDispatch()
   const authUserData = useSelector((state: RootState) => state.auth.authUser) as UserType
   const { data: session, status: sessionStatus } = useSession();
@@ -74,9 +75,8 @@ const Rootheader = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(setSearchData(searchTerm));
-    // setSearchTerm('')
-    // router.push('/productPage')
-    
+    router.push('/productPage')
+
 
   };
 
@@ -114,14 +114,32 @@ const Rootheader = () => {
 
         <div className="flex justify-start">
           <form className="flex flex-col md:flex-row gap-3" onSubmit={handleSubmit}>
-            <div className="flex">
-              <input type="text" placeholder="Search for Category,Brand,Name"
-                className="w-full md:w-80 px-3 h-10 rounded-l border-2 border-secondary focus:outline-none focus:border-secondary"
-                onChange={(e) => setSearchTerm(e.target.value)}
-                value={searchTerm}
-              />
-              <button type="submit" className="bg-secondary text-white rounded-r px-2 md:px-3 py-0 md:py-1">Search</button>
+            <div className="flex items-center">
+              <div className="relative w-full md:w-80">
+                <input
+                  type="text"
+                  placeholder="Search for Category, Brand, Name"
+                  className="w-full px-3 h-10 rounded-l border-2 border-secondary focus:outline-none focus:border-secondary pr-10"
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  value={searchTerm}
+                />
+
+                {searchTerm && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchTerm('')}
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                  >
+                    <IoMdCloseCircleOutline className='text-secondary h-[20px] w-[20px]'/>
+                  </button>
+                )}
+              </div>
+
+              <button type="submit" className="bg-secondary text-white rounded-r px-3 md:px-4 py-1 md:py-2">
+                Search
+              </button>
             </div>
+
           </form>
         </div>
 
@@ -138,7 +156,7 @@ const Rootheader = () => {
             </div>
           </Link> */}
 
-        
+
 
           <Link href={'/'} >
             <div className="text-lg pt-2 font-base flex justify-between gap-1 text-slate-900">
@@ -159,24 +177,24 @@ const Rootheader = () => {
             </>
           ) : (
             <div className='flex justify-between gap-2'>
-             <Link href={'/auth'} >
-              <button
-                className={"w-20 text-sm p-[6px] font-semibold border hover:bg-red-200 border-red-500  text-secondary rounded-md hover:scale-105 duration-300"}
-              >
-                Sign in
+              <Link href={'/auth'} >
+                <button
+                  className={"w-20 text-sm p-[6px] font-semibold border hover:bg-red-200 border-red-500  text-secondary rounded-md hover:scale-105 duration-300"}
+                >
+                  Sign in
 
                 </button>
-            </Link>
+              </Link>
 
-            <Link href={'/signup'} >
-              <CustomButton
-                btnName="Sign up"
-                size={"w-20 text-sm p-[6px] font-semibold bg-secondary"}
-              />
-            </Link>
+              <Link href={'/signup'} >
+                <CustomButton
+                  btnName="Sign up"
+                  size={"w-20 text-sm p-[6px] font-semibold bg-secondary"}
+                />
+              </Link>
             </div>
 
-            
+
           )}
 
 

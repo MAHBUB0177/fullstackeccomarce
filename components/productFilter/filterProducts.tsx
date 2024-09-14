@@ -175,7 +175,7 @@ const FilterProducts = () => {
   useEffect(() => {
     // Clear search data on initial load
     dispatch(setSearchData({}));
-    setIsInitialized(true);
+    // setIsInitialized(true);
   }, []);
 
   useEffect(() => {
@@ -183,9 +183,9 @@ const FilterProducts = () => {
   }, [productList, itemprice, checkedList, isbrand, selectedColor]);
 
   useEffect(() => {
-    if (isInitialized) {  // Only call getAllProduct once initialization is done
+    // if (isInitialized) {  // Only call getAllProduct once initialization is done
       getAllProduct(currentPageNumber, payload);
-    }
+    // }
   }, [currentPageNumber, searchData, isInitialized]);
 
 
