@@ -20,9 +20,7 @@ const TrendingProduct = () => {
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
-      setTimeout(() => {
         setIsLoading(false);
-      }, 2000); // Adding a small delay for better UX
     }
   };
 
