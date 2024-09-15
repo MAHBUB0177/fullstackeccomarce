@@ -6,7 +6,7 @@ import Pagination from "../common/paginate";
 import { GetProductInfo, GetSearchProduct } from "@/service/allApi";
 import productData from "@/products.json";
 import NodataFound from "./nodataFound";
-import Loading from "./loading";
+// import Loading from "./loading";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { setSearchData } from "@/reducer/searchReducer";
@@ -67,7 +67,7 @@ const FilterProducts = () => {
     []
   );
   const [currentPageNumber, setCurrentPageNumber] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(9);
+  const [pageSize, setPageSize] = useState<number>(12);
   const [pageCount, setPageCount] = useState<number>(1);
 
   const onChange = (list: string[]) => {

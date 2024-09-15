@@ -9,7 +9,7 @@ const Product = ({ item }: ProductProps) => {
 
   return (
     <div className="w-full ">
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3   gap-4 ">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4   gap-4 ">
 
         <>
           {item?.map((item, i) => (
@@ -100,6 +100,9 @@ const Product = ({ item }: ProductProps) => {
                 </a>
               </div>
             </div>
+
+
+          
           ))}
         </>
       </div>

@@ -36,7 +36,7 @@ const TopShops = () => {
       {isLoading ? (
         <CardLoading />
       ) : (
-        <div className="py-4 px-3">
+        <div className="py-4 px-4">
           <Slider {...settings()}>
             {productList.length > 0 ?
               productList?.map((item, i) => (

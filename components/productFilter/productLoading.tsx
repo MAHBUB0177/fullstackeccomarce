@@ -1,10 +1,10 @@
 import React from 'react'
 
 const ProductLoading = () => {
-  const productList = [1, 2, 3,4,5,6,7,8,9]
+  const productList = [1, 2, 3,4,5,6,7,8,9,10,11,12]
   return (
     <div>
-      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4 py-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 py-4">
         {
           productList.map((item, i) => (
             <div className="rounded-md border-2 border-slate-100 mx-1 cursor-pointer p-1 w-[280px]">
