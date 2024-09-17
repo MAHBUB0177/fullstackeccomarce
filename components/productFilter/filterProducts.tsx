@@ -180,7 +180,6 @@ const FilterProducts = () => {
     console.log("reloadData value from Redux: ", reloadData);
     if (!reloadData) {
       setIsSearchDataCleared(true);
-      return ;
     }else{
       dispatch(setSearchData({}));
       setIsSearchDataCleared(true);
@@ -193,12 +192,13 @@ const FilterProducts = () => {
   }, [productList, itemprice, checkedList, isbrand, selectedColor]);
 
   useEffect(() => {
-    if(isSearchDataCleared == true){
-      console.log(' first called')
-      getAllProduct(currentPageNumber,);
-
+    if (isSearchDataCleared) {
+      console.log('First called');
+      getAllProduct(currentPageNumber); // Ensure this is only called once
+      setIsSearchDataCleared(false); // Reset the flag to avoid multiple calls
     }
-  }, [currentPageNumber, searchData,isSearchDataCleared]);
+  }, [isSearchDataCleared, currentPageNumber]);
+  
 
 
 
