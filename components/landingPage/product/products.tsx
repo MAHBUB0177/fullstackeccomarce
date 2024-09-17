@@ -12,7 +12,6 @@ const Products = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [productList, setProductList] = useState<any[]>([]);
-  console.log(productList, 'productList')
 
   const getAllProduct = async (currentPageNumber: number, payload: any) => {
     setIsLoading(true);

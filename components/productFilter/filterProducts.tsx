@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Checkbox, Col, Row } from "antd";
 import { FaCheck } from "react-icons/fa";
 import Product from "./product";
@@ -54,7 +54,9 @@ interface Response {
 
 const FilterProducts = () => {
   const searchData = useSelector((state: RootState) => state.search.search) as Response
-  console.log(searchData,'searchData++++++++++++')
+  console.log(searchData,'searchData+++++++++++')
+  const reloadData = useSelector((state: RootState) => state.search.reloadState) 
+  console.log(reloadData,'reloadData+++++++++')
   const dispatch = useDispatch()
   const [isLoading, setIsloading] = useState(false);
   const [selectedColor, setSelectedColor] = useState("all");
@@ -89,10 +91,12 @@ const FilterProducts = () => {
 
 
   // Get product data
-  const payload = {
-    searchTerm: searchData ?? ''  // Ensure searchTerm is explicitly treated as a string
-  };
-  const getAllProduct = async (currentPageNumber: number, payload: any) => {
+  
+  const getAllProduct = async (currentPageNumber: number,) => {
+    const payload = {
+      searchTerm: searchData ?? ''  // Ensure searchTerm is explicitly treated as a string
+    };
+    console.log(payload,'payload============>')
     setIsloading(true);
     try {
       await GetSearchProduct(currentPageNumber, pageSize, payload).then((res) => {
@@ -161,32 +165,40 @@ const FilterProducts = () => {
       behavior: "smooth",
     });
 
-    getAllProduct(1, {
-      searchTerm: ''  // Ensure searchTerm is explicitly treated as a string
-    });
+    getAllProduct(1);
 
 
   };
 
 
 
-  const [isInitialized, setIsInitialized] = useState(false);
+ 
+  const [isSearchDataCleared, setIsSearchDataCleared] = useState(false);
+  console.log(isSearchDataCleared,'isSearchDataCleared')
 
   useEffect(() => {
-    // Clear search data on initial load
-    dispatch(setSearchData({}));
-    // setIsInitialized(true);
-  }, []);
+    console.log("reloadData value from Redux: ", reloadData);
+    if (!reloadData) {
+      setIsSearchDataCleared(true);
+      return ;
+    }else{
+      dispatch(setSearchData({}));
+      setIsSearchDataCleared(true);
+    }
+  }, [reloadData, dispatch]);
+  
 
   useEffect(() => {
     Productsfilter();
   }, [productList, itemprice, checkedList, isbrand, selectedColor]);
 
   useEffect(() => {
-    // if (isInitialized) {  // Only call getAllProduct once initialization is done
-      getAllProduct(currentPageNumber, payload);
-    // }
-  }, [currentPageNumber, searchData, isInitialized]);
+    if(isSearchDataCleared == true){
+      console.log(' first called')
+      getAllProduct(currentPageNumber,);
+
+    }
+  }, [currentPageNumber, searchData,isSearchDataCleared]);
 
 
 

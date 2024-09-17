@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { Badge } from 'antd';
 import { SketchOutlined } from "@ant-design/icons";
 import { useDispatch, useSelector } from 'react-redux';
-import { setSearchData } from '@/reducer/searchReducer';
+import { setReloadState, setSearchData } from '@/reducer/searchReducer';
 import { RootState } from '@/store';
 import { setAuth, setAuthUser } from '@/reducer/authReducer';
 import { GetCurrentuserInfo } from '@/service/allApi';
@@ -72,6 +72,18 @@ const Rootheader = () => {
 
 
   const [searchTerm, setSearchTerm] = useState<string>('');
+  console.log(searchTerm,'searchTerm')
+console.log(searchTerm,'searchTerm')
+  useEffect(() => {
+    if (searchTerm !== "") {
+      console.log('first search term')
+      dispatch(setReloadState(false)); // Sets reloadState to true when searchTerm is not empty
+    } else {
+      dispatch(setReloadState(true)); // Sets reloadState to false when searchTerm is empty
+    }
+  }, [searchTerm, dispatch]);
+  
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     dispatch(setSearchData(searchTerm));
