@@ -11,11 +11,11 @@ const TopShops = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [productList, setProductList] = useState<any[]>([]);
 
-  const getAllProduct = async (currentPageNumber: number, payload: any) => {
+  const getAllProduct = async () => {
     setIsLoading(true);
     try {
       const res = await GetAllShops();
-      setProductList(ShuffledData(res?.data?.item || []));
+      setProductList(ShuffledData(res?.data?.shop || []));
     } catch (error) {
       console.error('Error fetching products:', error);
     } finally {
@@ -24,7 +24,7 @@ const TopShops = () => {
   };
 
   useEffect(() => {
-    getAllProduct(1, {});
+    getAllProduct();
   }, []);
   const router=useRouter()
   const handleOnClick = (id:any) => {
