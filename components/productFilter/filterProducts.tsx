@@ -29,18 +29,15 @@ const FilterProducts = () => {
   const dispatch = useDispatch();
   const [isLoading, setIsloading] = useState(false);
   const [selectedColor, setSelectedColor] = useState("all");
-  console.log(selectedColor,'selectedColor=========')
   const [itemprice, setItemprice] = useState("highest");
   const [isbrand, setIsbrand] = useState("All");
   const [checkedList, setCheckedList] = useState<string[]>([]);
-  console.log(checkedList,'checkedList===========')
   const [productList, setProductList] = useState<any[]>([]);
   const [totalResults, setTotalResults] = useState();
   const [filteredProductCategory, setFilteredProductCategory] = useState<any[]>(
     []
   );
 
-  console.log(filteredProductCategory,'filteredProductCategory===')
   const [currentPageNumber, setCurrentPageNumber] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(12);
   const [pageCount, setPageCount] = useState<number>(1);
@@ -48,14 +45,11 @@ const FilterProducts = () => {
   const onChange = (list: string[]) => {
     setCheckedList(list);
   };
-  // const _handlePageClick = (data: { selected: number }) => {
-  //   setCurrentPageNumber(data.selected + 1);
-  // };
+
 
   const _handlePageClick = (data: { selected: number }) => {
     const selectedPage = data.selected + 1; // Adjust to 1-based index
     setCurrentPageNumber(selectedPage); // Update state
-    // getAllProduct(selectedPage, payload); // Fetch products for the selected page
   };
 
 

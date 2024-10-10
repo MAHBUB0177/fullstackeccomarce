@@ -2,7 +2,7 @@ export const  categoryList = [
     { title: "Laptop", value: "laptop" },
     { title: "Phone", value: "phone" },
     { title: "Watch", value: "watch" },
-    { title: "Key Pad", value: "key pad" },
+    { title: "Shoes", value: "shoes" },
   ];
 
 

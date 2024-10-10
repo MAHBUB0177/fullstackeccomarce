@@ -28,7 +28,7 @@ const TopShops = () => {
   }, []);
   const router=useRouter()
   const handleOnClick = (id:any) => {
-    router.push("/products/" + id);
+    router.push("/shop/" + id);
   };
   return (
     <div className='shadow-lg bg-primary rounded-md w-full h-auto border border-slate-100 mt-8 px-4'>

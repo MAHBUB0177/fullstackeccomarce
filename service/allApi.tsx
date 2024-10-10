@@ -54,3 +54,8 @@ export const GetAllShops = () => {
   const url = `/api/items/shop/fetch`;
   return axiosInstance.get(url);
 };
+
+export const getShopsById = (id: string | number) => {
+  const url = `/api/items/shop/fetchbyid/${id}`;  // Using path parameter instead of query parameter
+  return axiosInstance.get(url); 
+};
