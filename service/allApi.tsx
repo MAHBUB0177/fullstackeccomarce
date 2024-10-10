@@ -43,7 +43,6 @@ export const getProductById = (id: string | number) => {
   return axiosInstance.get(url); 
 };
 
-
 export const GetRelatedProduct = ( payload: any) => {
   const queryParams = new URLSearchParams(payload).toString();
   const url = `/api/items/getRelatedProducts?${queryParams}`;
