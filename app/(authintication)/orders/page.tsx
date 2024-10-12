@@ -17,20 +17,33 @@ const OrderCreate = () => {
   const [shipping, setShipping] = useState(0);
 
 
-  const handleSelectAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const isChecked = e.target.checked;
-    setSelectAll(isChecked);
+  // const handleSelectAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   const isChecked = e.target.checked;
+  //   setSelectAll(isChecked);
 
+  //   if (isChecked) {
+  //     // If "Select All" is checked, select all item objects
+  //     setSelectedItems(cartList); // Store the full cart items array
+  //   } else {
+  //     // If unchecked, clear the selected items
+  //     setSelectedItems([]);
+  //   }
+  // };
+
+  const handleSelectAllChange = (e: any) => {
+    const isChecked = e.target.checked;
+    console.log(isChecked, 'isChecked+++++++++++');
+    
+    setSelectAll(isChecked);
+    
     if (isChecked) {
       // If "Select All" is checked, select all item objects
-      setSelectedItems(cartList); // Store the full cart items array
+      setSelectedItems(cartList);
     } else {
       // If unchecked, clear the selected items
       setSelectedItems([]);
     }
-  };
-
-
+}
 
   const handleSelectItemChange = (item: any) => {
     let updatedSelectedItems = [...selectedItems];
@@ -79,9 +92,8 @@ const OrderCreate = () => {
       return total + item.qnty * item.price;
     }, 0);
   
-    // Calculate Shipping Fee (modify the 0.05 to whatever percentage or value you want for the shipping)
     let shippingFee = selectedItems.reduce((total, item) => {
-      return total + item.qnty * 10;// Example: $10 per quantity of the item, adjust as per your logic
+      return total + item.qnty * 30;// Example: $10 per quantity of the item, adjust as per your logic
     }, 0);
   
     // Update state with calculated values
