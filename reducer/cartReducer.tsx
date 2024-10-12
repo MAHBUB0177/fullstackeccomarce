@@ -18,9 +18,6 @@ interface Product {
   qnty: number; // Optional quantity, since it's not part of the original object
 }
 
-// Define the type for the auth user
-
-
 // Define the state type
 interface CartState {
   addProducts: Product[];
@@ -37,7 +34,6 @@ const addtoCartSlice = createSlice({
   reducers: {
     // Action to add products to the cart
     setAddProducts: (state, action: PayloadAction<Product>) => {
-      console.log(action.payload?._id, 'Product ID in reducer');
 
       const itemIndex = state.addProducts.findIndex(
         (item) => item?._id === action.payload?._id
@@ -60,10 +56,24 @@ const addtoCartSlice = createSlice({
       );
     },
 
+    setDicrementProduct:(state,action: PayloadAction<Product>)=>{
+      const IteamIndex_dec = state.addProducts.findIndex(
+        (iteam) => iteam._id === action.payload._id
+      );
+      if (state.addProducts[IteamIndex_dec].qnty > 1) {
+        state.addProducts[IteamIndex_dec].qnty -= 1
+      }
+    },
+
+    setEmptyCart:(state)=>{
+      state.addProducts=[]
+    
+    }
+
    
   },
 });
 
-export const { setAddProducts,setRemoveProduct } = addtoCartSlice.actions;
+export const { setAddProducts,setRemoveProduct,setDicrementProduct,setEmptyCart } = addtoCartSlice.actions;
 
 export default addtoCartSlice.reducer;
