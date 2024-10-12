@@ -191,17 +191,29 @@ const OrderCreate = () => {
               </div>
               <div className='flex justify-between pb-2'>
                 <p>SubTotal</p>
-                <p>{subTotal}tk</p>
+
+                <div className='flex justify-start '> 
+                  <p><TbCurrencyTaka className='h-[20px] w-[20px]'/>
+                  </p>  <p>{subTotal}</p>
+                </div>
               </div>
 
               <div className='flex justify-between pb-4'>
                 <p>Shipping</p>
-                <p>{shipping}</p>
+                <div className='flex justify-start '> 
+                  <p><TbCurrencyTaka className='h-[20px] w-[20px]'/>
+                  </p>  <p>{shipping}</p>
+                </div>
+                
               </div>
 
               <div className='flex justify-between pb-4 border-t-[1px] border-slate-200'>
                 <p>Total</p>
-                <p>{subTotal + shipping}</p>
+               
+                <div className='flex justify-start '> 
+                  <p><TbCurrencyTaka className='h-[20px] w-[20px]'/>
+                  </p>   <p>{subTotal + shipping}</p>
+                </div>
               </div>
               <p className='text-sm pb-2 text-slate-500'>* Delivery charges might vary depending on product size and weight.</p>
               <div>
