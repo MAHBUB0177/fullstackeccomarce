@@ -30,6 +30,7 @@ export default async function RootLayout({
 
           <LayoutProvider>
             <Rootheader />
+            {/* bg:#FCFCFC */}
             <div
               style={{ minHeight: "calc(100vh)" }}
               className="pt-[130px] md:pt-[95px] bg-[#FCFCFC] pb-[50px]"

@@ -62,3 +62,14 @@ body {
 }
 
 
+.custom-select .ant-select-selector {
+  border-radius: none !important;  /* Removes the border */
+  box-shadow: none !important;  /* Removes the shadow */
+  background-color: transparent !important;  /* Optional: transparent background if needed */
+}
+
+.custom-select .ant-select-selector:hover,
+.custom-select .ant-select-selector:focus {
+  border-radius: none !important;  /* Ensures no border on hover/focus */
+  box-shadow: none !important;
+}

@@ -19,13 +19,26 @@ interface Product {
 }
 
 // Define the state type
+// interface CartState {
+//   addProducts: Product[];
+//   checkoutCart: Product[];
+// }
+
+// // Initial state
+// const initialState: CartState = {
+//   addProducts: [],
+//   checkoutCart : []
+// };
+
 interface CartState {
   addProducts: Product[];
+  checkoutCart: Product[]; // Should be an array of products
 }
 
 // Initial state
 const initialState: CartState = {
   addProducts: [],
+  checkoutCart: [] // Initialize as an empty array
 };
 
 const addtoCartSlice = createSlice({
@@ -68,12 +81,15 @@ const addtoCartSlice = createSlice({
     setEmptyCart:(state)=>{
       state.addProducts=[]
     
+    },
+    // Action to set the checkout items
+    setCheckoutItem: (state, action: PayloadAction<Product[]>) => {
+      state.checkoutCart = action.payload;
     }
-
    
   },
 });
 
-export const { setAddProducts,setRemoveProduct,setDicrementProduct,setEmptyCart } = addtoCartSlice.actions;
+export const { setAddProducts,setRemoveProduct,setDicrementProduct,setEmptyCart,setCheckoutItem } = addtoCartSlice.actions;
 
 export default addtoCartSlice.reducer;

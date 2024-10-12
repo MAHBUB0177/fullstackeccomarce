@@ -14,7 +14,7 @@ import Service from './service'
 const LandingPage = () => {
 
   return (
-    <div className='pt-5 h-auto'>
+    <div className='pt-2 h-auto'>
       <>
         <div className='flex justify-between gap-2 '>
           <div className='w-full lg:w-2/3  shadow-md  border  rounded-md'>

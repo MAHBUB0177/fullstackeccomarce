@@ -1,9 +1,10 @@
 'use client'
 import { errorMessage } from '@/components/common/commonFunction';
 import NodataFound from '@/components/productFilter/nodataFound';
-import { setAddProducts, setDicrementProduct, setEmptyCart, setRemoveProduct } from '@/reducer/cartReducer';
+import { setAddProducts, setCheckoutItem, setDicrementProduct, setEmptyCart, setRemoveProduct } from '@/reducer/cartReducer';
 import { RootState } from '@/store';
 import { Button, Checkbox } from 'antd';
+import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react'
 import { CiLocationOn } from 'react-icons/ci';
 import { RiDeleteBin6Line } from 'react-icons/ri';
@@ -11,29 +12,16 @@ import { TbCoinTakaFilled, TbCurrencyTaka } from 'react-icons/tb';
 import { useDispatch, useSelector } from 'react-redux';
 
 const OrderCreate = () => {
+  const router=useRouter()
   const [selectedItems, setSelectedItems] = useState<any[]>([]); // Update type to store full item objects
   const [selectAll, setSelectAll] = useState(false);
   const [subTotal, setSubtotal] = useState(0);
   const [shipping, setShipping] = useState(0);
 
 
-  // const handleSelectAllChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   const isChecked = e.target.checked;
-  //   setSelectAll(isChecked);
-
-  //   if (isChecked) {
-  //     // If "Select All" is checked, select all item objects
-  //     setSelectedItems(cartList); // Store the full cart items array
-  //   } else {
-  //     // If unchecked, clear the selected items
-  //     setSelectedItems([]);
-  //   }
-  // };
-
+  
   const handleSelectAllChange = (e: any) => {
     const isChecked = e.target.checked;
-    console.log(isChecked, 'isChecked+++++++++++');
-    
     setSelectAll(isChecked);
     
     if (isChecked) {
@@ -105,6 +93,15 @@ const OrderCreate = () => {
   const removeCart=()=>{
     if(selectAll){
       dispatch(setEmptyCart())
+    }else{
+      return errorMessage('Please Select Item.')
+    }
+  }
+
+  const handelNavigate=()=>{
+    if(selectedItems.length > 0){
+      dispatch(setCheckoutItem(selectedItems))
+      router.push('/shipping')
     }else{
       return errorMessage('Please Select Item.')
     }
@@ -229,9 +226,9 @@ const OrderCreate = () => {
               </div>
               <p className='text-sm pb-2 text-slate-500'>* Delivery charges might vary depending on product size and weight.</p>
               <div>
-                <Button type="primary" danger className='w-full text-md p-4 font-semibold'>
+                <button onClick={handelNavigate} className='w-full text-sm p-2 font-semibold bg-secondary text-white rounded-md'>
                   Proced To CheckOut
-                </Button>
+                </button>
               </div>
             </div>
 
