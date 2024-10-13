@@ -9,9 +9,10 @@ import ShippingForm from './shippingForm';
 import { confirmOrder, createOrder } from '@/service/allApi';
 import {errorMessage, successMessage } from '@/components/common/commonFunction';
 import { setRemovemultipleProduct } from '@/reducer/cartReducer';
+import { useRouter } from 'next/navigation';
 
 const Shipping = () => {
-
+    const router = useRouter()
     const dispatch = useDispatch()
     const [form] = Form.useForm();
     const cartList = useSelector((state: RootState) => state.cart.checkoutCart)
@@ -64,6 +65,7 @@ const Shipping = () => {
             if (response?.data?.isSuccess) {
                 successMessage(response?.data?.message)
                 dispatch(setRemovemultipleProduct(cartList))
+                router.push('/')
 
             }
             else {
