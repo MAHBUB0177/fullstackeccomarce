@@ -58,3 +58,28 @@ export const getShopsById = (id: string | number) => {
   const url = `/api/items/shop/fetchbyid/${id}`;  // Using path parameter instead of query parameter
   return axiosInstance.get(url); 
 };
+
+export const getAllDivison=()=>{
+  const url=`/api/cart/division/fetch`
+  return axiosInstance.get(url)
+}
+
+export const getCityByDivision=(division:string)=>{
+  const url=`/api/cart/city/fetchByType?division=${division}`
+  return axiosInstance.get(url)
+}
+
+export const getAreaByCity=(city:string)=>{
+  const url=`/api/cart/area/fetchByType?city=${city}`
+  return axiosInstance.get(url)
+}
+
+export const createOrder=(payload:any)=>{
+  const url=`/api/cart/orders`
+  return axiosInstance.post(url,payload)
+}
+
+export const confirmOrder=(payload:any)=>{
+  const url=`/api/cart/orders/confrim`
+  return axiosInstance.post(url,payload)
+}

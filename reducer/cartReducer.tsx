@@ -45,6 +45,7 @@ const addtoCartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
+
     // Action to add products to the cart
     setAddProducts: (state, action: PayloadAction<Product>) => {
 
@@ -69,6 +70,18 @@ const addtoCartSlice = createSlice({
       );
     },
 
+    //multiple array of object remove to cart
+    setRemovemultipleProduct: (state, action: PayloadAction<Product[]>) => {
+      // Filter out the products to remove
+      const idsToRemove = action.payload.map(product => product._id); // Extract all the _id values to remove
+    
+      state.addProducts = state.addProducts.filter(
+        (item) => !idsToRemove.includes(item._id) // Only keep items that are not in the idsToRemove array
+      );
+    },
+    
+
+    //decrement cart item
     setDicrementProduct:(state,action: PayloadAction<Product>)=>{
       const IteamIndex_dec = state.addProducts.findIndex(
         (iteam) => iteam._id === action.payload._id
@@ -78,6 +91,8 @@ const addtoCartSlice = createSlice({
       }
     },
 
+
+    //empty an cart
     setEmptyCart:(state)=>{
       state.addProducts=[]
     
@@ -90,6 +105,6 @@ const addtoCartSlice = createSlice({
   },
 });
 
-export const { setAddProducts,setRemoveProduct,setDicrementProduct,setEmptyCart,setCheckoutItem } = addtoCartSlice.actions;
+export const { setAddProducts,setRemoveProduct,setDicrementProduct,setEmptyCart,setCheckoutItem,setRemovemultipleProduct } = addtoCartSlice.actions;
 
 export default addtoCartSlice.reducer;

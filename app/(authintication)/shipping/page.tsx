@@ -4,10 +4,15 @@ import { RootState } from '@/store';
 import { Checkbox, Form } from 'antd';
 import React, { useEffect, useState } from 'react'
 import { TbCurrencyTaka } from 'react-icons/tb';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ShippingForm from './shippingForm';
+import { confirmOrder, createOrder } from '@/service/allApi';
+import {errorMessage, successMessage } from '@/components/common/commonFunction';
+import { setRemovemultipleProduct } from '@/reducer/cartReducer';
 
 const Shipping = () => {
+
+    const dispatch = useDispatch()
     const [form] = Form.useForm();
     const cartList = useSelector((state: RootState) => state.cart.checkoutCart)
     const [select, setSelect] = useState(false)
@@ -42,11 +47,33 @@ const Shipping = () => {
 
     })
 
-    console.log(postData,'postData++++++++++++++')
 
     const onFinish = async (values: any) => {
-        console.log(values)
+        try{
+            const response =await createOrder(values)
+            successMessage(response?.data?.message)
+        }
+        catch(error){
+            errorMessage('Something Went Wrong')
+        }
     };
+
+    const ConfirmOrder = async () => {
+        try {
+            const response = await confirmOrder(cartList)
+            if (response?.data?.isSuccess) {
+                successMessage(response?.data?.message)
+                dispatch(setRemovemultipleProduct(cartList))
+
+            }
+            else {
+                errorMessage(response?.data?.message)
+            }
+        }
+        catch (error) {
+            errorMessage('Something Went Wrong')
+        }
+    }
     return (
         <div className='mx-4 lg:mx-20 mt-8'>
             <div className='flex flex-col md:flex-row  justify-between  gap-2'>
@@ -59,7 +86,6 @@ const Shipping = () => {
                         form={form}
                     >
                         <ShippingForm postData={postData} setPostData={setPostData}/>
-
                         <div className='flex justify-center items-center mb-5'>
                         <button
                             className={`w-full text-sm p-2 font-semibold bg-red-500 text-white rounded-md`}
@@ -120,6 +146,7 @@ const Shipping = () => {
 
 
                         <button
+                        onClick={ConfirmOrder}
                             disabled={select ? false : true}
                             className={`w-full text-sm p-2 font-semibold ${select ? 'bg-red-500' : 'bg-slate-400'} text-white rounded-md`}
                         >
