@@ -13,7 +13,21 @@ export const ShuffledData = (data: any) => {
     return [...data].sort(() => 0.5 - Math.random());
   };
   
-
+export  const getNextThreeDaysFormatted = (): string => {
+    const today = new Date();
+    const nextTwoDays = new Date(today);
+    nextTwoDays.setDate(today.getDate() + 2);
+  
+    const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'short' };
+  
+    const startDate = new Intl.DateTimeFormat('en-US', options).format(today); // Current date
+    const endDate = new Intl.DateTimeFormat('en-US', options).format(nextTwoDays); // Next two days
+  
+    return `${startDate}-${endDate}`;
+  };
+  
+  
+  
 
 export const settings = () => {
     return {

@@ -78,6 +78,10 @@ export const createOrder=(payload:any)=>{
   const url=`/api/cart/orders`
   return axiosInstance.post(url,payload)
 }
+export const getOrderInfo=()=>{
+  const url=`/api/cart/orders/fetch`
+  return axiosInstance.get(url)
+}
 
 export const confirmOrder=(payload:any)=>{
   const url=`/api/cart/orders/confrim`

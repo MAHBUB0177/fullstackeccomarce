@@ -6,10 +6,25 @@ import React, { useEffect, useState } from 'react'
 import { TbCurrencyTaka } from 'react-icons/tb';
 import { useDispatch, useSelector } from 'react-redux';
 import ShippingForm from './shippingForm';
-import { confirmOrder, createOrder } from '@/service/allApi';
+import { confirmOrder, createOrder, GetCurrentuserInfo, getOrderInfo } from '@/service/allApi';
 import {errorMessage, successMessage } from '@/components/common/commonFunction';
 import { setRemovemultipleProduct } from '@/reducer/cartReducer';
 import { useRouter } from 'next/navigation';
+import OrderDetailsInfo from './orderDetailsInfo';
+
+
+type Agent = {
+    _id: string;
+    name: string;
+    email: string;
+};
+
+type orderType = {
+userId:string,
+name:string,
+phoneNumber:Number,
+houseNo:string
+}
 
 const Shipping = () => {
     const router = useRouter()
@@ -20,6 +35,44 @@ const Shipping = () => {
 
     const [Total, setTotal] = useState(0);
     const [shipping, setShipping] = useState(0);
+    const [agent, setAgent] = useState<Agent | null>(null);
+  const[orderInfo,setOrderInfo]=useState<orderType | null>(null);
+  console.log(orderInfo,'orderInfo=========')
+
+
+
+
+  
+      
+
+      const getOrderallInfo = async () => {
+        try {
+          const response = await getOrderInfo();
+          if (response?.data?.isSuccess) {
+            setOrderInfo(response.data.item);
+          }
+          
+        } catch (error) {
+          console.error('Error fetching user info:', error);
+        }
+      };
+    
+
+    const getCurrentUserInfo = async () => {
+        try {
+          const res = await GetCurrentuserInfo();
+          if (res?.data?.user) {
+            setAgent(res.data.user);
+          }
+        } catch (error) {
+          console.error('Error fetching user info:', error);
+        }
+      };
+
+      useEffect(()=>{
+        getCurrentUserInfo()
+        getOrderallInfo()
+      },[])
 
     useEffect(() => {
         // Calculate Subtotal
@@ -53,6 +106,9 @@ const Shipping = () => {
         try{
             const response =await createOrder(values)
             successMessage(response?.data?.message)
+            if(response?.data?.isSuccess){
+                   getOrderallInfo()
+            }
         }
         catch(error){
             errorMessage('Something Went Wrong')
@@ -60,8 +116,23 @@ const Shipping = () => {
     };
 
     const ConfirmOrder = async () => {
+        if (!agent) {
+            errorMessage('Agent information is missing');
+            return;
+        }
+    
+        // Map through the cartList and add agent info to each product
+        const updatedCartList = cartList.map(product => ({
+            ...product,           // Copy existing product details
+            userId: agent._id,    // Add user ID
+            name: agent.name, // Add user name
+            email: agent.email // Add user email
+        }));
+        
+        console.log(updatedCartList);
+        
         try {
-            const response = await confirmOrder(cartList)
+            const response = await confirmOrder(updatedCartList)
             if (response?.data?.isSuccess) {
                 successMessage(response?.data?.message)
                 dispatch(setRemovemultipleProduct(cartList))
@@ -81,8 +152,12 @@ const Shipping = () => {
             <div className='flex flex-col md:flex-row  justify-between  gap-2'>
                 <div className='w-full md:w-2/3 bg-primary rounded-sm shadow-sm p-2'>
                     <p className='pt-2 p-4'>Delivery Information</p>
-
-                    <Form
+                   { orderInfo !== null ?
+                    <>
+                    <OrderDetailsInfo orderInfo={ orderInfo} cartList={cartList}/>
+                    </>
+                   :
+                     <Form
                         onFinish={onFinish}
                         id="reset-form"
                         form={form}
@@ -95,7 +170,8 @@ const Shipping = () => {
                             Save Information
                         </button>
                         </div>
-                    </Form>
+                    </Form> 
+                   }
 
 
                 </div>

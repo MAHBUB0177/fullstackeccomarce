@@ -16,19 +16,10 @@ interface Product {
   color: string;
   __v: number;
   qnty: number; // Optional quantity, since it's not part of the original object
+  totalPrice:number;
 }
 
-// Define the state type
-// interface CartState {
-//   addProducts: Product[];
-//   checkoutCart: Product[];
-// }
 
-// // Initial state
-// const initialState: CartState = {
-//   addProducts: [],
-//   checkoutCart : []
-// };
 
 interface CartState {
   addProducts: Product[];
@@ -48,21 +39,27 @@ const addtoCartSlice = createSlice({
 
     // Action to add products to the cart
     setAddProducts: (state, action: PayloadAction<Product>) => {
-
       const itemIndex = state.addProducts.findIndex(
         (item) => item?._id === action.payload?._id
       );
-
+    
       if (itemIndex >= 0) {
         // If the product is already in the cart, increment the quantity
         state.addProducts[itemIndex].qnty += 1;
+        // Recalculate the total price based on the updated quantity
+        state.addProducts[itemIndex].totalPrice =
+          state.addProducts[itemIndex].qnty * state.addProducts[itemIndex].price;
       } else {
-        // If the product is not in the cart, add it with a quantity of 1
-        const temp = { ...action.payload, qnty: 1 };
+        // If the product is not in the cart, add it with a quantity of 1 and calculate total price
+        const temp = { 
+          ...action.payload, 
+          qnty: 1, 
+          totalPrice: action.payload.price // Set initial total price
+        };
         state.addProducts.push(temp);
       }
     },
-
+    
     setRemoveProduct: (state, action: PayloadAction<Product>) => {
       // Filter out the product to remove
       state.addProducts = state.addProducts.filter(
@@ -88,6 +85,8 @@ const addtoCartSlice = createSlice({
       );
       if (state.addProducts[IteamIndex_dec].qnty > 1) {
         state.addProducts[IteamIndex_dec].qnty -= 1
+        state.addProducts[IteamIndex_dec].totalPrice =
+          state.addProducts[IteamIndex_dec].qnty * state.addProducts[IteamIndex_dec].price;
       }
     },
 

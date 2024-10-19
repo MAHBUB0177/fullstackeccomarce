@@ -2,6 +2,7 @@
 import { errorMessage } from '@/components/common/commonFunction';
 import NodataFound from '@/components/productFilter/nodataFound';
 import { setAddProducts, setCheckoutItem, setDicrementProduct, setEmptyCart, setRemoveProduct } from '@/reducer/cartReducer';
+import { getOrderInfo } from '@/service/allApi';
 import { RootState } from '@/store';
 import { Button, Checkbox } from 'antd';
 import { useRouter } from 'next/navigation';
@@ -13,11 +14,13 @@ import { useDispatch, useSelector } from 'react-redux';
 
 const OrderCreate = () => {
   const router=useRouter()
+  const dispatch = useDispatch()
+  const cartList = useSelector((state: RootState) => state.cart.addProducts)
   const [selectedItems, setSelectedItems] = useState<any[]>([]); // Update type to store full item objects
   const [selectAll, setSelectAll] = useState(false);
   const [subTotal, setSubtotal] = useState(0);
   const [shipping, setShipping] = useState(0);
-
+  const [select, setSelect] = useState(false)
 
   
   const handleSelectAllChange = (e: any) => {
@@ -38,7 +41,6 @@ const OrderCreate = () => {
 
     // Check if the item is already selected based on its ID
     const isAlreadySelected = updatedSelectedItems.some((selectedItem) => selectedItem._id === item._id);
-   console.log(isAlreadySelected,'isAlreadySelected')
     if (isAlreadySelected) {
       // If it's already selected, remove the item by filtering it out
       updatedSelectedItems = updatedSelectedItems.filter((selectedItem) => selectedItem._id !== item._id);
@@ -59,8 +61,6 @@ const OrderCreate = () => {
 
 
 
-  const dispatch = useDispatch()
-  const cartList = useSelector((state: RootState) => state.cart.addProducts)
   const addToCart = (item: any) => {
     dispatch(setAddProducts(item));
   }
@@ -72,14 +72,18 @@ const OrderCreate = () => {
     dispatch(setDicrementProduct(item))
   }
 
-
+ useEffect(()=>{
+  const result = cartList.filter(cart =>
+    selectedItems.some(selecteditem => selecteditem._id === cart._id)
+  );
+  setSelectedItems(result)
+ },[cartList])
   
   useEffect(() => {
     // Calculate Subtotal
     let subtotal = selectedItems.reduce((total, item) => {
-      return total + item.qnty * item.price;
+      return total +  item.totalPrice;
     }, 0);
-  
     let shippingFee = selectedItems.reduce((total, item) => {
       return total + item.qnty * 30;// Example: $10 per quantity of the item, adjust as per your logic
     }, 0);
@@ -87,8 +91,7 @@ const OrderCreate = () => {
     // Update state with calculated values
     setSubtotal(subtotal);
     setShipping(shippingFee);
-  }, [selectedItems]);
-  
+  }, [selectedItems,cartList]);
   
   const removeCart=()=>{
     if(selectAll){
@@ -106,7 +109,8 @@ const OrderCreate = () => {
       return errorMessage('Please Select Item.')
     }
   }
-  
+
+
 
   return (
     <div className='mx-4 lg:mx-20 mt-8 '>
@@ -167,7 +171,7 @@ const OrderCreate = () => {
                       <div className='pt-2'>
                         <div className='text-sm flex justify-start'>
                           <TbCoinTakaFilled className='h-[20px] w-[20px] text-red-400' />
-                          <p>{item?.price}</p>
+                          <p>{item?.totalPrice}</p>
                         </div>
                         <div className='text-sm flex justify-start line-through'>
                           <TbCurrencyTaka className='h-[20px] w-[20px] text-red-400' />
@@ -225,10 +229,25 @@ const OrderCreate = () => {
                 </div>
               </div>
               <p className='text-sm pb-2 text-slate-500'>* Delivery charges might vary depending on product size and weight.</p>
+              <div className='flex justify-start gap-2 pb-2'>
+                        <Checkbox
+                            onChange={(e) => setSelect(e.target.checked)}
+                        // checked={selectAll}
+                        >
+
+                        </Checkbox>
+                        <p className='text-xs pt-1'> I agree with Terms&Conditions.</p>
+                    </div>
               <div>
-                <button onClick={handelNavigate} className='w-full text-sm p-2 font-semibold bg-secondary text-white rounded-md'>
-                  Proced To CheckOut
-                </button>
+              
+
+                <button
+                        onClick={handelNavigate}
+                            disabled={select ? false : true}
+                            className={`w-full text-sm p-2 font-semibold ${select ? 'bg-red-500' : 'bg-slate-400'} text-white rounded-md`}
+                        >
+                            Proced To CheckOut
+                        </button>
               </div>
             </div>
 
