@@ -86,26 +86,12 @@ const Rootheader = () => {
     router.push('/search')
   };
 
-  const [isCall, setIsCall] = useState(true)
-  const getCurrentUserInfo = async () => {
-    try {
-      const res = await GetCurrentuserInfo();
-      if (res?.data?.user) {
-        dispatch(setAuthUser(res.data.user))
-      }
-    } catch (error) {
-      console.error('Error fetching user info:', error);
-    }
-  };
-  // Fetch user info on component mount
-  useEffect(() => {
-    // getCurrentUserInfo();
-  }, [isCall]);
+ 
 
   useEffect(() => {
     if (pathname === '/') {
       dispatch(setSearchData(''));
-      setSearchTerm(''); // Clear the local state when the pathname is '/'
+      setSearchTerm(''); 
     }
   }, [pathname, dispatch]);
 
@@ -114,19 +100,12 @@ const Rootheader = () => {
     dispatch(setSearchData(''))
   }
 
-  // useEffect(()=>{
-  //   console.log('this is first call')
-  //   dispatch(setSearchData(''));
-  // },[Object.keys(searchTerm).length == 0])
-
-
-
 
   const handleLinkClick = (e: React.MouseEvent) => {
     e.preventDefault();
 
     if (sessionStatus === 'authenticated') {
-      router.push('/orders'); // Go to orders if authenticated
+      router.push('/orders'); 
     } else {
       // Manually construct the URL with query parameters
       const loginUrl = `/auth?callbackUrl=/orders`;
@@ -266,7 +245,7 @@ const Rootheader = () => {
       </div>
 
       <div className='md:hidden'>
-        <SmallDeviceHeader setSearchTerm={setSearchTerm} searchTerm={searchTerm} handleSubmit={handleSubmit} searchData={searchData} clearState={clearState}/>
+        <SmallDeviceHeader handleItemClick={handleItemClick} menuList={menuList} setSearchTerm={setSearchTerm} searchTerm={searchTerm} handleSubmit={handleSubmit} searchData={searchData} clearState={clearState} handleLinkClick={handleLinkClick}/>
 
       </div>
     </div>

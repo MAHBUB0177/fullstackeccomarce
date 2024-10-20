@@ -4,6 +4,7 @@ export const config = {
   matcher: [
     "/orders",
     "/shipping",
+    "/profile"
 
   ],
 };
