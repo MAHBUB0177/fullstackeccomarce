@@ -225,8 +225,8 @@ const Shipping = () => {
 
                         <button
                         onClick={ConfirmOrder}
-                            disabled={select ? false : true}
-                            className={`w-full text-sm p-2 font-semibold ${select ? 'bg-red-500' : 'bg-slate-400'} text-white rounded-md`}
+                            disabled={select && orderInfo !== null ? false : true}
+                            className={`w-full text-sm p-2 font-semibold ${select && orderInfo !== null  ? 'bg-red-500' : 'bg-slate-400'} text-white rounded-md`}
                         >
                             Proced To Pay
                         </button>

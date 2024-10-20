@@ -1,12 +1,12 @@
 'use client'
 import { errorMessage, successMessage } from '@/components/common/commonFunction';
-import { setAuth } from '@/reducer/authReducer';
+import { setAuth, setAuthUser } from '@/reducer/authReducer';
 import { LoginUser } from '@/service/allApi';
 import { message } from 'antd';
 import axios from 'axios';
 import { signIn } from 'next-auth/react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 
@@ -27,8 +27,11 @@ const response = await signIn("credentials", {
 
 
 const Login = () => {
+  const searchParams = useSearchParams();
   const router = useRouter()
   const dispatch = useDispatch()
+  const callbackUrl = searchParams.get('callbackUrl');
+  console.log(callbackUrl,'callbackUrl++++++++++++++')
 
   //simple authentication part:
   const [loginData, setLoginData] = useState({
@@ -42,22 +45,24 @@ const Login = () => {
       email: loginData?.email,
       password: loginData?.password,
     };
-  
     // Validate if email or password is missing
     if (!loginData?.email || !loginData?.password) {
       return errorMessage('User Name Or Password Missing');
     }
-  
     try {
       // Make the API request with axios
       const response = await axios.post(`http://localhost:500/api/user/login`, payload);
-  
       // Handle successful login
       if (response?.data) {
         successMessage( response?.data?.message || 'User Successfully Logged In')
         dispatch(setAuth(response?.data?.data));
+        dispatch(setAuthUser(response?.data?.data?.user))
         authenticateWithNextAuth(response?.data?.data);
-        router.push('/');
+          if (callbackUrl !== null) {
+            router.push(callbackUrl); // Redirect to the callbackUrl after successful login
+          } else {
+            router.push('/'); 
+          }
       }
     } catch (error: any) {
       // Handle errors during the login process

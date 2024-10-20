@@ -13,6 +13,8 @@ import { TbCoinTakaFilled, TbCurrencyTaka } from 'react-icons/tb';
 import { useDispatch, useSelector } from 'react-redux';
 
 const OrderCreate = () => {
+  const authUserData = useSelector((state: RootState) => state.auth.authUser)
+  console.log(authUserData,'authUserData++++++=')
   const router=useRouter()
   const dispatch = useDispatch()
   const cartList = useSelector((state: RootState) => state.cart.addProducts)

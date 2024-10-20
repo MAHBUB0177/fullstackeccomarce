@@ -54,7 +54,7 @@ const Rootheader = () => {
 
   const searchData = useSelector((state: RootState) => state.search.search)
   const cartList = useSelector((state: RootState) => state.cart.addProducts)
-  // console.log(cartList,'cartList++++++++++++')
+ 
   
   const [show, setShow] = useState(false)
   const router = useRouter()
@@ -119,6 +119,21 @@ const Rootheader = () => {
   //   dispatch(setSearchData(''));
   // },[Object.keys(searchTerm).length == 0])
 
+
+
+
+  const handleLinkClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    if (sessionStatus === 'authenticated') {
+      router.push('/orders'); // Go to orders if authenticated
+    } else {
+      // Manually construct the URL with query parameters
+      const loginUrl = `/auth?callbackUrl=/orders`;
+      router.push(loginUrl);
+    }
+  };
+
   return (
     <div className='bg-primary  w-full z-50 fixed shadow-sm p-5 px-4 lg:px-20'>
       <div className='hidden md:block'>
@@ -168,13 +183,13 @@ const Rootheader = () => {
         </div>
 
         <div className="flex justify-start gap-7 pt-1 ">
-          <Link href={'/orders'} >
-            <div className="text-lg pt-2 font-base flex justify-between gap-1 text-slate-900">
+         
+            <div className="cursor-pointer text-lg pt-2 font-base flex justify-between gap-1 text-slate-900" onClick={handleLinkClick}>
               <Badge count={cartList?.length}>
                 <BsCart3 className='h-[20px] w-[20px] font-semibold' />
               </Badge>
             </div>
-          </Link>
+          
 
 
 
