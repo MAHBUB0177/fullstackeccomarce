@@ -38,13 +38,6 @@ const Shipping = () => {
     const [agent, setAgent] = useState<Agent | null>(null);
   const[orderInfo,setOrderInfo]=useState<orderType | null>(null);
   console.log(orderInfo,'orderInfo=========')
-
-
-
-
-  
-      
-
       const getOrderallInfo = async () => {
         try {
           const response = await getOrderInfo();

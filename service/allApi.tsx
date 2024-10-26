@@ -87,3 +87,13 @@ export const confirmOrder=(payload:any)=>{
   const url=`/api/cart/orders/confrim`
   return axiosInstance.post(url,payload)
 }
+
+export const getCategoryByName=(productName:string)=>{
+  const url=`/api/cart/area/fetchByType?productName=${productName}`
+  return axiosInstance.get(url)
+}
+
+export const getBrandByName=(productName:string)=>{
+  const url=`/api/cart/area/fetchByType?productName=${productName}`
+  return axiosInstance.get(url)
+}

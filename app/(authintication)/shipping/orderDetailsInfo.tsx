@@ -11,9 +11,6 @@ interface OrderInfo {
   address:string
 }
 
-
-
-
 interface OrderDetailsInfoProps {
   orderInfo: OrderInfo;  
   cartList:any

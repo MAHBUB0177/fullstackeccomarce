@@ -12,9 +12,19 @@ import { RiDeleteBin6Line } from 'react-icons/ri';
 import { TbCoinTakaFilled, TbCurrencyTaka } from 'react-icons/tb';
 import { useDispatch, useSelector } from 'react-redux';
 
+
+
+type orderType = {
+  userId:string,
+  name:string,
+  phoneNumber:Number,
+  houseNo:string,
+  address:string
+  }
+  
+
 const OrderCreate = () => {
   const authUserData = useSelector((state: RootState) => state.auth.authUser)
-  console.log(authUserData,'authUserData++++++=')
   const router=useRouter()
   const dispatch = useDispatch()
   const cartList = useSelector((state: RootState) => state.cart.addProducts)
@@ -113,7 +123,24 @@ const OrderCreate = () => {
   }
 
 
+  const[orderInfo,setOrderInfo]=useState<orderType | null>(null);
+  console.log(orderInfo,'orderInfo=========')
+      const getOrderallInfo = async () => {
+        try {
+          const response = await getOrderInfo();
+          if (response?.data?.isSuccess) {
+            setOrderInfo(response.data.item);
+          }
+          
+        } catch (error) {
+          console.error('Error fetching user info:', error);
+        }
+      };
 
+
+useEffect(()=>{
+  getOrderallInfo()
+},[])
   return (
     <div className='mx-4 lg:mx-20 mt-8 '>
       {
@@ -199,7 +226,7 @@ const OrderCreate = () => {
               <p className='text-sm text-slate-500'>Location</p>
               <div className='flex justify-start gap-3 border-b-[1px] border-slate-200 pt-2 pb-4'>
                 <CiLocationOn className='text-bold text-black' />
-                <p className='text-sm text-slate-700'>Add Shipping Address</p>
+                {orderInfo ? <p className='text-sm text-slate-700'> <p>{orderInfo?.address}</p></p> : <p className='text-sm text-slate-700'>Add Shipping Address</p>}
               </div>
               <div className='rounded-md bg-[#DBEAFE] p-3 mt-2 mb-2'>
                 <p className=' text-black'>Collecting from the nearest delivery hub to save 40% on delivery charge</p>
@@ -245,8 +272,8 @@ const OrderCreate = () => {
 
                 <button
                         onClick={handelNavigate}
-                            disabled={select ? false : true}
-                            className={`w-full text-sm p-2 font-semibold ${select ? 'bg-red-500' : 'bg-slate-400'} text-white rounded-md`}
+                            disabled={select && selectedItems.length > 0  ? false  : true}
+                            className={`w-full text-sm p-2 font-semibold ${select  && selectedItems.length > 0 ? 'bg-red-500' : 'bg-slate-400'} text-white rounded-md`}
                         >
                             Proced To CheckOut
                         </button>
