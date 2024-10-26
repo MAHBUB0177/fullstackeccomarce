@@ -1,13 +1,11 @@
 'use client'
 import { errorMessage, successMessage } from '@/components/common/commonFunction';
 import { setAuth, setAuthUser } from '@/reducer/authReducer';
-import { LoginUser } from '@/service/allApi';
-import { message } from 'antd';
 import axios from 'axios';
-import { signIn } from 'next-auth/react';
+import { signIn, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux';
 
 
@@ -27,11 +25,12 @@ const response = await signIn("credentials", {
 
 
 const Login = () => {
+  const {status: sessionStatus } = useSession();
+
   const searchParams = useSearchParams();
   const router = useRouter()
   const dispatch = useDispatch()
-  const callbackUrl = searchParams.get('callbackUrl');
-  console.log(callbackUrl,'callbackUrl++++++++++++++')
+
 
   //simple authentication part:
   const [loginData, setLoginData] = useState({
@@ -40,7 +39,6 @@ const Login = () => {
   })
   const LoginNow = async (e: any) => {
     e.preventDefault();
-  
     const payload = {
       email: loginData?.email,
       password: loginData?.password,
@@ -50,26 +48,30 @@ const Login = () => {
       return errorMessage('User Name Or Password Missing');
     }
     try {
-      // Make the API request with axios
       const response = await axios.post(`http://localhost:500/api/user/login`, payload);
-      // Handle successful login
       if (response?.data) {
         successMessage( response?.data?.message || 'User Successfully Logged In')
         dispatch(setAuth(response?.data?.data));
         dispatch(setAuthUser(response?.data?.data?.user))
         authenticateWithNextAuth(response?.data?.data);
-          if (callbackUrl !== null) {
-            router.push(callbackUrl); // Redirect to the callbackUrl after successful login
-          } else {
-            router.push('/'); 
-          }
       }
     } catch (error: any) {
-      // Handle errors during the login process
       errorMessage(error?.response?.data?.message || 'Login failed, please try again.');
     }
   };
   
+
+  useEffect(() => {
+    const { searchParams } = new URL(window.location.href);
+    const callbackUrl = searchParams.get('callbackUrl');
+    if (sessionStatus === "authenticated") {
+      if (callbackUrl) {
+        router.replace(callbackUrl);
+      } else {
+        router.replace('/');
+      }
+    }
+  }, [sessionStatus, router]);
 
 
   return (

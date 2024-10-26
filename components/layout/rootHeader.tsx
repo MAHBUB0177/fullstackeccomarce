@@ -174,7 +174,7 @@ const Rootheader = () => {
 
           {sessionStatus == 'authenticated' ? (
             <>
-              <p className="flex justify-center items-center cursor-pointer text-normal h-[35px] w-[35px] font-semibold rounded-full bg-secondary text-white pt-2"
+              <p className="flex justify-center items-center cursor-pointer text-normal h-[35px] w-[35px] font-semibold rounded-full bg-secondary text-white pt-0"
                 onClick={() => setShow(!show)}>
                 {authUserData?.name?.charAt(0).toUpperCase()}
               </p>{" "}

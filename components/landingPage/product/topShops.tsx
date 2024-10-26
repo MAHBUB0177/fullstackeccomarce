@@ -11,7 +11,6 @@ import { FaStar, FaStarHalfAlt } from 'react-icons/fa';
 const TopShops = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [productList, setProductList] = useState<any[]>([]);
-  console.log(productList,'productList+++++++++++++')
   const getAllProduct = async () => {
     setIsLoading(true);
     try {
