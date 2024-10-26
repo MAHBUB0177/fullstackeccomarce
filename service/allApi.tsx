@@ -89,11 +89,11 @@ export const confirmOrder=(payload:any)=>{
 }
 
 export const getCategoryByName=(productName:string)=>{
-  const url=`/api/cart/area/fetchByType?productName=${productName}`
+  const url=`/api/items/category/fetchByType?productName=${productName}`
   return axiosInstance.get(url)
 }
 
 export const getBrandByName=(productName:string)=>{
-  const url=`/api/cart/area/fetchByType?productName=${productName}`
+  const url=`/api/items/brand/fetchByType?productName=${productName}`
   return axiosInstance.get(url)
 }

@@ -3,7 +3,7 @@ import { Checkbox, Col, Row } from "antd";
 import { FaCheck } from "react-icons/fa";
 import Product from "./product";
 import Pagination from "../common/paginate";
-import { GetProductInfo, GetSearchProduct } from "@/service/allApi";
+import { getBrandByName, getCategoryByName, GetProductInfo, GetSearchProduct } from "@/service/allApi";
 import NodataFound from "./nodataFound";
 // import Loading from "./loading";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,7 +20,22 @@ const CheckboxGroup = Checkbox.Group;
 
 
 
+type categoryType = {
+  _id:string,
+  category:string,
+  productName:Number,
+  createdAt:string,
 
+  }
+
+  
+type brandType = {
+  _id:string,
+  brand:string,
+  productName:Number,
+  createdAt:string,
+
+  }
 
 
 
@@ -37,6 +52,14 @@ const FilterProducts = () => {
   const [filteredProductCategory, setFilteredProductCategory] = useState<any[]>(
     []
   );
+
+ 
+  
+  const [categoryData, setCategoryData] = useState<categoryType[] | null>(null); // Array of categoryType
+  const [brandData, setBrandData] = useState<brandType[] | null>(null);
+
+  console.log(categoryData,'categoryData')
+  console.log(brandData,'brandData')
 
   const [currentPageNumber, setCurrentPageNumber] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(12);
@@ -59,6 +82,33 @@ const FilterProducts = () => {
       behavior: "smooth",
     });
   };
+
+//get category 
+  const getCategoryProduct=async()=>{
+    try {
+      const response =await getCategoryByName(searchData)
+      if (response.data.isSuccess) {
+        setCategoryData(response.data.item); 
+      } else {
+        console.error('Error:', response.data.message);
+      }
+    } catch (error) {
+      console.error('Something Went Wrong');
+    } 
+  }
+//get barand data
+  const getBrandByProduct=async()=>{
+    try {
+      const response =await getBrandByName(searchData)
+      if (response.data.isSuccess) {
+        setBrandData(response.data.item); 
+      } else {
+        console.error('Error:', response.data.message);
+      }
+    } catch (error) {
+      console.error('Something Went Wrong');
+    } 
+  }
 
   // Get product data
   const payload = {
@@ -102,20 +152,14 @@ const FilterProducts = () => {
       );
     }
     
-    // Apply brand filter
-    // if (isbrand !== "All") {
-    //   result = result.filter((product) => product.brand === isbrand);
-    // }
+
     if (isbrand.toLowerCase() !== "all") {
       result = result.filter((product) =>
         product.brand.toLowerCase() === isbrand.toLowerCase()
       );
     }
     
-    // Apply color filter
-    // if (selectedColor !== "all") {
-    //   result = result.filter((product) => product.color === selectedColor);
-    // }
+
     if (selectedColor.toLowerCase() !== "all") {
       result = result.filter((product) =>
         product.color.toLowerCase() === selectedColor.toLowerCase()
@@ -141,15 +185,16 @@ const FilterProducts = () => {
     });
   };
 
+ 
 
   useEffect(() => {
     if (Object.keys(searchData).length === 0) {
-      // getAllProduct(1, payload);
       setCurrentPageNumber(1);
     } else {
       console.log("searchData has values");
-
     }
+    getCategoryProduct()
+    getBrandByProduct()
   }, [searchData]);
 
   useEffect(() => {
@@ -205,39 +250,41 @@ const FilterProducts = () => {
           {/* Filter by category */}
           <p className="pt-2 px-4">Category</p>
           <div className="px-4 pb-5 pt-3">
-            <CheckboxGroup onChange={onChange} value={checkedList}>
-              <Row>
-                {categoryList.map((category) => (
-                  <Col span={24} key={category.value}>
-                    <div className="p-1">
-                      <Checkbox value={category.value}>
-                        <p className="text-[15px] text-slate-700">
-                          {category.title}
-                        </p>
-                      </Checkbox>
-                    </div>
-                  </Col>
-                ))}
-              </Row>
-            </CheckboxGroup>
+          <CheckboxGroup onChange={onChange} value={checkedList}>
+  <Row>
+    {categoryData && categoryData.length > 0 && categoryData.map((category: categoryType) => (
+      <Col span={24} key={category._id}>
+        <div className="p-1">
+          <Checkbox value={category.category}> {/* Use _id as the checkbox value */}
+            <p className="text-[15px] text-slate-700">
+              {category.category} {/* Display the category name */}
+            </p>
+          </Checkbox>
+        </div>
+      </Col>
+    ))}
+  </Row>
+</CheckboxGroup>
+
           </div>
 
           {/* Filter by Brands */}
           <p className="pt-2 px-4">Brands</p>
           <div className="px-4 pb-5 pt-3">
-            <select
-              id="brandType"
-              name="brandType"
-              onChange={(e) => setIsbrand(e.target.value)}
-              className="w-full h-10 border-2 border-secondary focus:outline-none focus:border-secondary text-secondary rounded px-2 md:px-3 py-0 md:py-1 tracking-wider"
-            >
-              <option value="All">All</option>
-              <option value="HP">HP</option>
-              <option value="DELL">DELL</option>
-              <option value="ASUS">ASUS</option>
-              <option value="Samsung">Samsung</option>
-              <option value="Apple">IPHONE</option>
-            </select>
+          <select
+  id="brandType"
+  name="brandType"
+  onChange={(e) => setIsbrand(e.target.value)} // Sets selected brand value
+  className="w-full h-10 border-2 border-secondary focus:outline-none focus:border-secondary text-secondary rounded px-2 md:px-3 py-0 md:py-1 tracking-wider"
+>
+  <option value="All">All</option> {/* Default option */}
+  {brandData?.map((brand: brandType) => (
+    <option key={brand._id} value={brand.brand}>
+      {brand.brand} {/* Display the brand name */}
+    </option>
+  ))}
+</select>
+
           </div>
 
           {/* Filter by color */}
