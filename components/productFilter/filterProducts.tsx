@@ -21,27 +21,26 @@ const CheckboxGroup = Checkbox.Group;
 
 
 type categoryType = {
-  _id:string,
-  category:string,
-  productName:Number,
-  createdAt:string,
+  _id: string,
+  category: string,
+  productName: Number,
+  createdAt: string,
 
-  }
+}
 
-  
+
 type brandType = {
-  _id:string,
-  brand:string,
-  productName:Number,
-  createdAt:string,
+  _id: string,
+  brand: string,
+  productName: Number,
+  createdAt: string,
 
-  }
+}
 
 
 
 const FilterProducts = () => {
   const searchData = useSelector((state: RootState) => state.search.search);
-  const dispatch = useDispatch();
   const [isLoading, setIsloading] = useState(false);
   const [selectedColor, setSelectedColor] = useState("all");
   const [itemprice, setItemprice] = useState("highest");
@@ -53,13 +52,10 @@ const FilterProducts = () => {
     []
   );
 
- 
-  
+
+
   const [categoryData, setCategoryData] = useState<categoryType[] | null>(null); // Array of categoryType
   const [brandData, setBrandData] = useState<brandType[] | null>(null);
-
-  console.log(categoryData,'categoryData')
-  console.log(brandData,'brandData')
 
   const [currentPageNumber, setCurrentPageNumber] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(12);
@@ -83,31 +79,31 @@ const FilterProducts = () => {
     });
   };
 
-//get category 
-  const getCategoryProduct=async()=>{
+  //get category 
+  const getCategoryProduct = async () => {
     try {
-      const response =await getCategoryByName(searchData)
+      const response = await getCategoryByName(searchData)
       if (response.data.isSuccess) {
-        setCategoryData(response.data.item); 
+        setCategoryData(response.data.item);
       } else {
         console.error('Error:', response.data.message);
       }
     } catch (error) {
       console.error('Something Went Wrong');
-    } 
+    }
   }
-//get barand data
-  const getBrandByProduct=async()=>{
+  //get barand data
+  const getBrandByProduct = async () => {
     try {
-      const response =await getBrandByName(searchData)
+      const response = await getBrandByName(searchData)
       if (response.data.isSuccess) {
-        setBrandData(response.data.item); 
+        setBrandData(response.data.item);
       } else {
         console.error('Error:', response.data.message);
       }
     } catch (error) {
       console.error('Something Went Wrong');
-    } 
+    }
   }
 
   // Get product data
@@ -151,21 +147,21 @@ const FilterProducts = () => {
         checkedList.map(item => item.toLowerCase()).includes(product.category.toLowerCase())
       );
     }
-    
+
 
     if (isbrand.toLowerCase() !== "all") {
       result = result.filter((product) =>
         product.brand.toLowerCase() === isbrand.toLowerCase()
       );
     }
-    
+
 
     if (selectedColor.toLowerCase() !== "all") {
       result = result.filter((product) =>
         product.color.toLowerCase() === selectedColor.toLowerCase()
       );
     }
-    
+
     setFilteredProductCategory(result);
   };
 
@@ -185,13 +181,13 @@ const FilterProducts = () => {
     });
   };
 
- 
+
 
   useEffect(() => {
     if (Object.keys(searchData).length === 0) {
       setCurrentPageNumber(1);
     } else {
-      console.log("searchData has values");
+      // console.log("searchData has values");
     }
     getCategoryProduct()
     getBrandByProduct()
@@ -248,42 +244,42 @@ const FilterProducts = () => {
           </div>
 
           {/* Filter by category */}
-          <p className="pt-2 px-4">Category</p>
-          <div className="px-4 pb-5 pt-3">
-          <CheckboxGroup onChange={onChange} value={checkedList}>
-  <Row>
-    {categoryData && categoryData.length > 0 && categoryData.map((category: categoryType) => (
-      <Col span={24} key={category._id}>
-        <div className="p-1">
-          <Checkbox value={category.category}> {/* Use _id as the checkbox value */}
-            <p className="text-[15px] text-slate-700">
-              {category.category} {/* Display the category name */}
-            </p>
-          </Checkbox>
-        </div>
-      </Col>
-    ))}
-  </Row>
-</CheckboxGroup>
+          <p className="pt-2 px-4 font-medium">Category</p>
+          <div className="px-4 pb-3 pt-3">
+            <CheckboxGroup onChange={onChange} value={checkedList}>
+              <Row>
+                {categoryData && categoryData.length > 0 && categoryData.map((category: categoryType) => (
+                  <Col span={24} key={category._id}>
+                    <div className="p-1">
+                      <Checkbox value={category.category}> {/* Use _id as the checkbox value */}
+                        <p className="text-[15px] text-slate-700">
+                          {category.category} {/* Display the category name */}
+                        </p>
+                      </Checkbox>
+                    </div>
+                  </Col>
+                ))}
+              </Row>
+            </CheckboxGroup>
 
           </div>
 
           {/* Filter by Brands */}
-          <p className="pt-2 px-4">Brands</p>
-          <div className="px-4 pb-5 pt-3">
-          <select
-  id="brandType"
-  name="brandType"
-  onChange={(e) => setIsbrand(e.target.value)} // Sets selected brand value
-  className="w-full h-10 border-2 border-secondary focus:outline-none focus:border-secondary text-secondary rounded px-2 md:px-3 py-0 md:py-1 tracking-wider"
->
-  <option value="All">All</option> {/* Default option */}
-  {brandData?.map((brand: brandType) => (
-    <option key={brand._id} value={brand.brand}>
-      {brand.brand} {/* Display the brand name */}
-    </option>
-  ))}
-</select>
+          <p className="pt-1 px-4 font-medium">Brands</p>
+          <div className="px-4 pb-3 pt-3">
+            <select
+              id="brandType"
+              name="brandType"
+              onChange={(e) => setIsbrand(e.target.value)} // Sets selected brand value
+              className="w-full h-10 border-2 border-secondary focus:outline-none focus:border-secondary text-secondary rounded px-2 md:px-3 py-0 md:py-1 tracking-wider"
+            >
+              <option value="All">All</option> {/* Default option */}
+              {brandData?.map((brand: brandType) => (
+                <option key={brand._id} value={brand.brand}>
+                  {brand.brand} {/* Display the brand name */}
+                </option>
+              ))}
+            </select>
 
           </div>
 
@@ -363,10 +359,10 @@ const FilterProducts = () => {
           height: '300px',      // Set the modal height
           overflowY: 'auto',     // Enable scrolling when content exceeds 300px
         }}
-        
+
       >
-       
-        <FilterProductSmallDevice checkedList={checkedList} setSelectedColor={setSelectedColor} selectedColor={selectedColor} setIsbrand={setIsbrand} onChange={onChange} resetFilterList={resetFilterList}/>
+
+        <FilterProductSmallDevice checkedList={checkedList} setSelectedColor={setSelectedColor} selectedColor={selectedColor} setIsbrand={setIsbrand} onChange={onChange} resetFilterList={resetFilterList} />
 
       </CommonModal>
     </div>

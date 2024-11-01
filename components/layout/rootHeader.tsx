@@ -113,6 +113,13 @@ const Rootheader = () => {
     }
   };
 
+  useEffect(() => {
+    if (searchTerm.length === 0) {
+      console.log('first')
+      clearState(); // Call your clearState function when searchTerm is empty
+    }
+  }, [searchTerm]);
+
   return (
     <div className='bg-primary  w-full z-50 fixed shadow-sm p-5 px-4 lg:px-20'>
       <div className='hidden md:block'>
