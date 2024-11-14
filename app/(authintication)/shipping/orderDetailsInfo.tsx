@@ -1,6 +1,7 @@
 import {  getNextThreeDaysFormatted } from '@/components/common/commonFunction';
-import React from 'react';
+import React, { useState } from 'react';
 import { TbCoinTakaFilled } from 'react-icons/tb';
+import OrderInfoEdit from './orderInfoEdit';
 
 // Define the interface for the structure of the orderInfo object
 interface OrderInfo {
@@ -12,25 +13,31 @@ interface OrderInfo {
 }
 
 interface OrderDetailsInfoProps {
-  orderInfo: OrderInfo;  
+  orderInfo: any;  
   cartList:any
 }
 
+
 // Use the props in the functional component
 const OrderDetailsInfo = ({ orderInfo,cartList }:OrderDetailsInfoProps) => {
+  const [open, setOpen] = useState(false);
   return (
     <>
     <div className=' mb-3  shadow-sm  text-sm'>
-        <div className='bg-[#FAFAFA] font-semibold p-2'>
-        Shipping & Billing
+        <div className='bg-[#FAFAFA] font-semibold p-2 flex justify-between'>
+       <p>  Shipping & Billing</p>
+       <p className='text-[#1AB4D9] cursor-pointer ' onClick={()=>setOpen(true)}>EDIT</p>
+       {
+        open && <OrderInfoEdit open={open} setOpen={setOpen} />
+       }
         </div>
     <div className='flex justify-start gap-2 text-textprimary p-2'>
-      <p>{orderInfo?.name}</p>
-      <p>{orderInfo?.phoneNumber}</p>
+      <p>{orderInfo[0]?.name}</p>
+      <p>{orderInfo[0]?.phoneNumber}</p>
     </div>
     <div className='flex justify-start gap-2 text-textprimary px-2 pb-2'>
       <p className='bg-orange-500 text-white rounded-md px-2'>Home</p>
-      <p>{orderInfo?.address}</p>
+      <p>{orderInfo[0]?.address}</p>
     </div>
     </div>
 

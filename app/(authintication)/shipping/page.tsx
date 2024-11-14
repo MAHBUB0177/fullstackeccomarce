@@ -24,6 +24,7 @@ userId:string,
 name:string,
 phoneNumber:Number,
 houseNo:string
+address:string
 }
 
 const Shipping = () => {
@@ -36,18 +37,19 @@ const Shipping = () => {
     const [Total, setTotal] = useState(0);
     const [shipping, setShipping] = useState(0);
     const [agent, setAgent] = useState<Agent | null>(null);
-  const[orderInfo,setOrderInfo]=useState<orderType | null>(null);
-      const getOrderallInfo = async () => {
+   
+    const [orderInfo, setOrderInfo] = useState<orderType[]>([]); // Use array of orderType
+    const getOrderallInfo = async () => {
         try {
-          const response = await getOrderInfo();
+          const response = await getOrderInfo(); // Make the API call
           if (response?.data?.isSuccess) {
-            setOrderInfo(response.data.item);
+            setOrderInfo(response.data.item); // Assuming `items` is the array in your API response
           }
-          
         } catch (error) {
-          console.error('Error fetching user info:', error);
+          console.error('Error fetching order info:', error);
         }
       };
+      
     
 
     const getCurrentUserInfo = async () => {
@@ -121,7 +123,6 @@ const Shipping = () => {
             email: agent.email // Add user email
         }));
         
-        console.log(updatedCartList);
         
         try {
             const response = await confirmOrder(updatedCartList)
