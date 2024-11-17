@@ -15,6 +15,7 @@ import storageSession from "redux-persist/lib/storage/session";
 import searchReducer from "@/reducer/searchReducer";
 import { authReducer } from "@/reducer";
 import cartReducer from "@/reducer/cartReducer";
+import confirmCartReducer from "@/reducer/confirmCartReducer";
 
 
 // Root persist configuration without whitelisting 'search'
@@ -42,11 +43,17 @@ const addtocartPersistConfig = {
   storage,  // Use session storage
 };
 
+const confirmOrderPersistConfig = {
+  key: "confrimorderinfo",
+  storage,  // Use session storage
+};
+
 const rootReducers = combineReducers({
   auth: persistReducer(authPersistConfig, authReducer),
   search: persistReducer(searchPersistConfig, searchReducer), // Persist 'search' in session storage
   // other reducers if any...
   cart: persistReducer(addtocartPersistConfig, cartReducer),
+  Orderinfo: persistReducer(confirmOrderPersistConfig, confirmCartReducer),
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducers);
