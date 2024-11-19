@@ -9,6 +9,10 @@ import {
 } from "@/components/common/commonFunction";
 import ShippingForm from "./shippingForm";
 
+import { useDispatch, useSelector } from "react-redux";
+import { setconfirmOrderInfo } from "@/reducer/confirmCartReducer";
+import { RootState } from "@/store";
+
 interface OrderInfoEditProps {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -24,7 +28,13 @@ type orderType = {
 
 const OrderInfoEdit: React.FC<OrderInfoEditProps> = ({ open, setOpen }) => {
   const [form] = Form.useForm();
-  const[orderId,setOrderId]=useState<orderType | null>(null);
+  const [orderInfo, setOrderInfo] = useState<orderType[]>([]); // Use array of orderType
+  const dispatch = useDispatch();
+  const selctedOrderinfo = useSelector(
+    (state: RootState) => state.Orderinfo.confirmOrderInfo
+  );
+  console.log(selctedOrderinfo, "selctedOrderinfo+++");
+
   const [placement, setPlacement] = useState<DrawerProps["placement"]>("right");
   const onClose = () => {
     setOpen(false);
@@ -35,13 +45,8 @@ const OrderInfoEdit: React.FC<OrderInfoEditProps> = ({ open, setOpen }) => {
   const _handleCancel = () => {
     setIsModalOpen(false);
   };
-  //radio button
-  const [value, setValue] = useState(1);
-  const onChange = (e: RadioChangeEvent) => {
-    console.log("radio checked", e.target.value);
-    setValue(e.target.value);
-  };
 
+  
   const [postData, setPostData] = useState({
     name: "",
     phoneNumber: "",
@@ -52,7 +57,6 @@ const OrderInfoEdit: React.FC<OrderInfoEditProps> = ({ open, setOpen }) => {
     area: "",
     address: "",
   });
-  const [orderInfo, setOrderInfo] = useState<orderType[]>([]); // Use array of orderType
   const getOrderallInfo = async () => {
     try {
       const response = await getOrderInfo(); // Make the API call
@@ -78,11 +82,28 @@ const OrderInfoEdit: React.FC<OrderInfoEditProps> = ({ open, setOpen }) => {
     }
   };
 
-  const saveOrderInfo=async () => {
+  //radio button
+  const [value, setValue] = useState(1);
+  useEffect(() => {
+    if (selctedOrderinfo?.value) {
+      // Set the stored value from Redux on component mount
+      setValue(selctedOrderinfo.value);
+    }
+  }, [selctedOrderinfo]);
 
+  const handleRadioChange = (e: any) => {
+    const newValue = e.target.value; // Get the selected radio value
+    setValue(newValue);
 
-  }
+    const selectedOrder = orderInfo[newValue - 1]; // Adjust index for array
+    // Dispatch the updated value and order to Redux
+    dispatch(setconfirmOrderInfo({ value: newValue, order: selectedOrder }));
+  };
 
+  // const saveOrderInfo=async () => {
+  //   dispatch(setconfirmOrderInfo(confirmOrderData))
+
+  // }
 
   useEffect(() => {
     getOrderallInfo();
@@ -107,11 +128,11 @@ const OrderInfoEdit: React.FC<OrderInfoEditProps> = ({ open, setOpen }) => {
         }
       >
         <div className="  ">
-          <Radio.Group onChange={onChange} value={value}>
+          <Radio.Group value={value} onChange={handleRadioChange}>
             <Space direction="vertical">
-              {orderInfo?.map((order, index) => (
-                <div className="border-[1px] border-slate-300 p-3 w-[350px] md:w-[450px]  rounded-md">
-                  <Radio value={index + 1} onClick={()=>setOrderId(order)}>
+              {orderInfo.map((order, index) => (
+                <div className="border-[1px] border-slate-300 p-3 w-[350px] md:w-[450px] rounded-md">
+                  <Radio value={index + 1}>
                     <div>
                       <p className="flex justify-start gap-2 font-medium text-slate-500">
                         {order.name}
@@ -130,22 +151,19 @@ const OrderInfoEdit: React.FC<OrderInfoEditProps> = ({ open, setOpen }) => {
           </Radio.Group>
 
           <div className="flex gap-4 justify-center items-center mt-5">
+            <button
+              className={`w-[150px] text-sm p-2 font-semibold bg-slate-300 text-white `}
+              onClick={_handleCancel}
+            >
+              Cancel
+            </button>
 
-
-          <button
-            className={`w-[150px] text-sm p-2 font-semibold bg-slate-300 text-white `}
-              onClick={_handleCancel} 
-          >
-            Cancel
-          </button>
-
-          <button
-            className={`w-[150px] text-sm p-2 font-semibold bg-red-500 text-white `}
-            onClick={saveOrderInfo}
-          >
-            Save Information
-          </button>
-          
+            <button
+              className={`w-[150px] text-sm p-2 font-semibold bg-red-500 text-white `}
+              // onClick={saveOrderInfo}
+            >
+              Save Information
+            </button>
           </div>
         </div>
 
