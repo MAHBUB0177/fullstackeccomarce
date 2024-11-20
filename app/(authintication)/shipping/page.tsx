@@ -27,18 +27,27 @@ houseNo:string
 address:string
 }
 
+
+
+
 const Shipping = () => {
+
+  
     const router = useRouter()
     const dispatch = useDispatch()
     const [form] = Form.useForm();
     const cartList = useSelector((state: RootState) => state.cart.checkoutCart)
+    const selctedOrderinfo = useSelector(
+        (state: RootState) => state.Orderinfo.confirmOrderInfo
+      );
     const [select, setSelect] = useState(false)
 
     const [Total, setTotal] = useState(0);
     const [shipping, setShipping] = useState(0);
     const [agent, setAgent] = useState<Agent | null>(null);
    
-    const [orderInfo, setOrderInfo] = useState<orderType[]>([]); // Use array of orderType
+    const [orderInfo, setOrderInfo] = useState<orderType[]>([]); 
+    console.log(orderInfo,'orderInfo=====')// Use array of orderType
     const getOrderallInfo = async () => {
         try {
           const response = await getOrderInfo(); // Make the API call
@@ -145,7 +154,7 @@ const Shipping = () => {
             <div className='flex flex-col md:flex-row  justify-between  gap-2'>
                 <div className='w-full md:w-2/3 bg-primary rounded-sm shadow-sm p-2'>
                     <p className='pt-2 p-4'>Delivery Information</p>
-                   { orderInfo !== null ?
+                   { orderInfo?.length > 0  ?
                     <>
                     <OrderDetailsInfo orderInfo={ orderInfo} cartList={cartList}/>
                     </>
@@ -216,13 +225,13 @@ const Shipping = () => {
                     <div className='mt-4 mb-5'>
 
 
-                        <button
-                        onClick={ConfirmOrder}
-                            disabled={select && orderInfo !== null ? false : true}
-                            className={`w-full text-sm p-2 font-semibold ${select && orderInfo !== null  ? 'bg-red-500' : 'bg-slate-400'} text-white rounded-md`}
-                        >
-                            Proced To Pay
-                        </button>
+                    <button
+    onClick={ConfirmOrder}
+    disabled={!select || (orderInfo?.length < 1)} 
+    className={`w-full text-sm p-2 font-semibold ${!select || (orderInfo?.length < 1) ? 'bg-slate-400' : 'bg-red-500'} text-white rounded-md`}
+>
+    Proceed To Pay
+</button>
 
                     </div>
                 </div>

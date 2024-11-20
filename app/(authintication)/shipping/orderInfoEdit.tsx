@@ -19,34 +19,39 @@ interface OrderInfoEditProps {
 }
 
 type orderType = {
+  _id: string;
   userId: string;
   name: string;
-  phoneNumber: any;
+  phoneNumber: number;
   houseNo: string;
+  postalCode: number;
+  division: string;
+  city: string;
+  area: string;
   address: string;
+  __v: number;
 };
 
 const OrderInfoEdit: React.FC<OrderInfoEditProps> = ({ open, setOpen }) => {
   const [form] = Form.useForm();
   const [orderInfo, setOrderInfo] = useState<orderType[]>([]); // Use array of orderType
+
+  const [shippingDetails, setShippingDetails] = useState<orderType | null>(
+    orderInfo.length > 0 ? orderInfo[0] : null
+  );
   const dispatch = useDispatch();
   const selctedOrderinfo = useSelector(
     (state: RootState) => state.Orderinfo.confirmOrderInfo
   );
-  console.log(selctedOrderinfo, "selctedOrderinfo+++");
-
-  const [placement, setPlacement] = useState<DrawerProps["placement"]>("right");
+  // const [placement, setPlacement] = useState<DrawerProps["placement"]>("right");
   const onClose = () => {
     setOpen(false);
   };
-
   // State for modal visibility
   const [isModalOpen, setIsModalOpen] = useState(false);
   const _handleCancel = () => {
     setIsModalOpen(false);
   };
-
-  
   const [postData, setPostData] = useState({
     name: "",
     phoneNumber: "",
@@ -86,24 +91,24 @@ const OrderInfoEdit: React.FC<OrderInfoEditProps> = ({ open, setOpen }) => {
   const [value, setValue] = useState(1);
   useEffect(() => {
     if (selctedOrderinfo?.value) {
-      // Set the stored value from Redux on component mount
       setValue(selctedOrderinfo.value);
+      setShippingDetails(selctedOrderinfo.order);
     }
   }, [selctedOrderinfo]);
 
   const handleRadioChange = (e: any) => {
-    const newValue = e.target.value; // Get the selected radio value
+    const newValue = e.target.value;
     setValue(newValue);
-
-    const selectedOrder = orderInfo[newValue - 1]; // Adjust index for array
-    // Dispatch the updated value and order to Redux
+    const selectedOrder = orderInfo[newValue - 1];
     dispatch(setconfirmOrderInfo({ value: newValue, order: selectedOrder }));
   };
 
-  // const saveOrderInfo=async () => {
-  //   dispatch(setconfirmOrderInfo(confirmOrderData))
-
-  // }
+  // const saveOrderInfo = async () => {
+  //   if (selctedOrderinfo?.order) {
+  //     setShippingDetails(selctedOrderinfo.order);
+  //   }
+  //   setTimeout(() => onClose(), 0);
+  // };
 
   useEffect(() => {
     getOrderallInfo();
@@ -112,7 +117,7 @@ const OrderInfoEdit: React.FC<OrderInfoEditProps> = ({ open, setOpen }) => {
     <>
       <Drawer
         title="Shipping Address"
-        placement={placement}
+        placement={"right"}
         width={500}
         onClose={onClose}
         open={open}
@@ -158,12 +163,12 @@ const OrderInfoEdit: React.FC<OrderInfoEditProps> = ({ open, setOpen }) => {
               Cancel
             </button>
 
-            <button
+            {/* <button
               className={`w-[150px] text-sm p-2 font-semibold bg-red-500 text-white `}
               // onClick={saveOrderInfo}
             >
               Save Information
-            </button>
+            </button> */}
           </div>
         </div>
 
