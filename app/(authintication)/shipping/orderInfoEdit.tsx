@@ -36,9 +36,9 @@ const OrderInfoEdit: React.FC<OrderInfoEditProps> = ({ open, setOpen }) => {
   const [form] = Form.useForm();
   const [orderInfo, setOrderInfo] = useState<orderType[]>([]); // Use array of orderType
 
-  const [shippingDetails, setShippingDetails] = useState<orderType | null>(
-    orderInfo.length > 0 ? orderInfo[0] : null
-  );
+  // const [shippingDetails, setShippingDetails] = useState<orderType | null>(
+  //   orderInfo.length > 0 ? orderInfo[0] : null
+  // );
   const dispatch = useDispatch();
   const selctedOrderinfo = useSelector(
     (state: RootState) => state.Orderinfo.confirmOrderInfo
@@ -92,7 +92,7 @@ const OrderInfoEdit: React.FC<OrderInfoEditProps> = ({ open, setOpen }) => {
   useEffect(() => {
     if (selctedOrderinfo?.value) {
       setValue(selctedOrderinfo.value);
-      setShippingDetails(selctedOrderinfo.order);
+      // setShippingDetails(selctedOrderinfo.order);
     }
   }, [selctedOrderinfo]);
 

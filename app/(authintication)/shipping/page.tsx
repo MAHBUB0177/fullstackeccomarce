@@ -33,22 +33,22 @@ type orderType = {
   address: string;
 };
 
+
+
+
 const Shipping = () => {
   const router = useRouter();
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const cartList = useSelector((state: RootState) => state.cart.checkoutCart);
   const selctedOrderinfo = useSelector(
-    (state: RootState) => state.Orderinfo.confirmOrderInfo
+    (state: RootState) => state.Orderinfo.confirmOrderInfo as any
   );
   const [select, setSelect] = useState(false);
-
   const [Total, setTotal] = useState(0);
   const [shipping, setShipping] = useState(0);
   const [agent, setAgent] = useState<Agent | null>(null);
-
   const [orderInfo, setOrderInfo] = useState<orderType[]>([]);
-  console.log(orderInfo, "orderInfo====="); // Use array of orderType
   const getOrderallInfo = async () => {
     try {
       const response = await getOrderInfo(); // Make the API call
@@ -119,13 +119,16 @@ const Shipping = () => {
       errorMessage("Agent information is missing");
       return;
     }
-
     // Map through the cartList and add agent info to each product
     const updatedCartList = cartList.map((product) => ({
       ...product, // Copy existing product details
       userId: agent._id, // Add user ID
       name: agent.name, // Add user name
       email: agent.email, // Add user email
+      shippingUserName:selctedOrderinfo?.order?.name ??'',
+      shippingPhone:selctedOrderinfo?.order?.phoneNumber ?? '',
+      shippingHouseNo:selctedOrderinfo?.order?.houseNo ?? '',
+      shippingCity:selctedOrderinfo?.order?.city ?? '',
     }));
 
     try {
