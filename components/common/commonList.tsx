@@ -1,3 +1,17 @@
+
+import nogod from '@/assets/images/paymentType/nogod.png'
+import bkash from '@/assets/images/paymentType/bkash.png'
+import rocket from '@/assets/images/paymentType/rocket.png'
+import upay from '@/assets/images/paymentType/upay.png'
+import dbbl from '@/assets/images/paymentType/download.jpg'
+
+export const paymentType = [
+    {paymentType: nogod},
+    {paymentType: bkash},
+    {paymentType: rocket},
+    {paymentType: upay},
+    // {paymentType: dbbl},
+    ]
 export const  categoryList = [
     { title: "Laptop", value: "laptop" },
     { title: "Phone", value: "phone" },

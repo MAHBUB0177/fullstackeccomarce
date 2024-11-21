@@ -136,7 +136,7 @@ const Shipping = () => {
       if (response?.data?.isSuccess) {
         successMessage(response?.data?.message);
         dispatch(setRemovemultipleProduct(cartList));
-        router.push("/");
+        router.push("/checkOut");
       } else {
         errorMessage(response?.data?.message);
       }

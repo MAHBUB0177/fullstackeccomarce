@@ -157,10 +157,10 @@ const OrderInfoEdit: React.FC<OrderInfoEditProps> = ({ open, setOpen }) => {
 
           <div className="flex gap-4 justify-center items-center mt-5">
             <button
-              className={`w-[150px] text-sm p-2 font-semibold bg-slate-300 text-white `}
-              onClick={_handleCancel}
+              className={`w-[150px] text-sm p-2 font-semibold bg-red-500 text-white `}
+              onClick={onClose}
             >
-              Cancel
+              Close
             </button>
 
             {/* <button
