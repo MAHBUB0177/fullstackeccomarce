@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { paymentType } from "../common/commonList";
 import Image from "next/image";
 const PaymentGetway = () => {
+    const[getway,setGetway]=useState(false);
+
   return (
     <div>
       <div className=" mx-auto border-[1px] border-orange-300 bg-orange-100 text-orange-400  w-[55%] md:w-[65%] lg:w-[35%]  p-1">
@@ -17,7 +19,9 @@ const PaymentGetway = () => {
             {paymentType.map((image, i) => (
               <div
                 key={i}
-                className="border-[1px] border-slate-300 p-1 rounded-md cursor-pointer md:w-[220px] "
+                
+                className={`border-[1px] border-slate-300 p-1 rounded-md cursor-pointer md:w-[220px] ${getway ? "bg-slate-200" : "bg-white" }`}
+                onClick={()=>setGetway(true)}
               >
                 <Image
                   src={image.paymentType}
@@ -50,8 +54,11 @@ const PaymentGetway = () => {
           <div className="mt-20 mb-2">
             <button
             //   onClick={ConfirmOrder}
-            //   disabled={!select || orderInfo?.length < 1}
-              className={`w-full text-sm p-2 font-semibold bg-red-500 text-white rounded-md`}
+              disabled={!getway}
+            //   className={`w-full text-sm p-2 font-semibold bg-red-500 text-white rounded-md`}
+            className={`w-full text-sm p-2 font-semibold ${
+                !getway ? "bg-slate-400" : "bg-red-500"
+              } text-white rounded-md`}
             >
               Proceed To Pay
             </button>
