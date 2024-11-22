@@ -47,6 +47,7 @@ const Shipping = () => {
   const [select, setSelect] = useState(false);
   const [Total, setTotal] = useState(0);
   const [shipping, setShipping] = useState(0);
+  const [totalQntity, settotalQntity] = useState(0);
   const [agent, setAgent] = useState<Agent | null>(null);
   const [orderInfo, setOrderInfo] = useState<orderType[]>([]);
   const getOrderallInfo = async () => {
@@ -81,6 +82,11 @@ const Shipping = () => {
     let subtotal = cartList.reduce((total, item) => {
       return total + item.qnty * item.price;
     }, 0);
+    let totalQntity = cartList.reduce((total, item) => {
+      return total + item.qnty ;
+    }, 0);
+
+   
 
     let shippingFee = cartList.reduce((total, item) => {
       return total + item.qnty * 30; // Example: $10 per quantity of the item, adjust as per your logic
@@ -89,6 +95,7 @@ const Shipping = () => {
     // Update state with calculated values
     setTotal(subtotal);
     setShipping(shippingFee);
+    settotalQntity(totalQntity)
   }, [cartList]);
 
   const [postData, setPostData] = useState({
@@ -134,7 +141,7 @@ const Shipping = () => {
     try {
       const response = await confirmOrder(updatedCartList);
       if (response?.data?.isSuccess) {
-        successMessage(response?.data?.message);
+        // successMessage(response?.data?.message);
         dispatch(setRemovemultipleProduct(cartList));
         router.push("/checkOut");
       } else {
@@ -191,7 +198,7 @@ const Shipping = () => {
           </div>
           <p className="mt-4">Order Summary</p>
           <div className="flex justify-between pt-3 text-sm">
-            <p className="text-slate-500">Items Total (1 Items)</p>
+            <p className="text-slate-500">Items Total ({totalQntity} Items)</p>
             <div className="flex justify-start text-sm">
               <p>
                 <TbCurrencyTaka className="h-[20px] w-[20px]" />

@@ -1,13 +1,57 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { paymentType } from "../common/commonList";
 import Image from "next/image";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store";
+import { confirmOrderPayment } from "@/service/allApi";
 
 const PaymentGetway = () => {
+  const [Total, setTotal] = useState(0);
+  const [totalQntity, settotalQntity] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const cartList = useSelector((state: RootState) => state.cart.checkoutCart);
+  console.log(cartList,'cartList+++++')
 
   const handleClick = (index: number) => {
     setSelectedIndex(index); // Update state to the clicked item's index
   };
+
+  useEffect(() => {
+    // Calculate Subtotal
+    let subtotal = cartList.reduce((total, item) => {
+      return total + item.qnty * item.price;
+    }, 0);
+    let totalQntity = cartList.reduce((total, item) => {
+      return total + item.qnty ;
+    }, 0);
+
+
+    let shippingFee = cartList.reduce((total, item) => {
+      return total + item.qnty * 30; // Example: $10 per quantity of the item, adjust as per your logic
+    }, 0);
+
+    // Update state with calculated values
+    setTotal(subtotal + shippingFee);
+    settotalQntity(totalQntity)
+  }, [cartList]);
+
+  const confirmPyment=async ()=>{
+    let payload={
+      productName: '',
+      unit_amount : Total,
+      quantity: totalQntity
+    }
+
+    try {
+      const response = await confirmOrderPayment(payload)
+      console.log(response)
+      
+      
+    } catch (error) {
+      console.log(error)
+      
+    }
+  }
 
   return (
     <div>
@@ -45,28 +89,30 @@ const PaymentGetway = () => {
           <div className="bg-white border-[1px] border-slate-300 rounded-md h-[250px] shadow-sm p-4">
             <p className="text-xl font-semibold">Order Summary</p>
             <div className="flex justify-between pt-3 text-sm">
-              <p className="text-slate-500">Items Total (1 Items)</p>
+              <p className="text-slate-500">Subtotal <span className="text-[10px]">({totalQntity} Items and shipping fee included)
+                </span> </p>
               <div className="flex justify-start text-sm">
-                <p>1200</p>
+                <p>{Total}</p>
               </div>
             </div>
 
             <div className="flex justify-between pt-3 text-sm">
               <p className="text-slate-500 font-semibold">Total Amount</p>
               <div className="flex justify-start text-sm">
-                <p>1200</p>
+                <p>{Total}</p>
               </div>
             </div>
 
             <div className="mt-20 mb-2">
               <button
+              onClick={confirmPyment}
                 // When no item is selected, disable the button
                 disabled={selectedIndex === null}
                 className={`w-full text-sm p-2 font-semibold ${
                   selectedIndex === null ? "bg-slate-400" : "bg-red-500"
                 } text-white rounded-md`}
               >
-                Proceed To Pay
+                Confirm to Pay
               </button>
             </div>
           </div>

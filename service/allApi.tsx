@@ -97,3 +97,9 @@ export const getBrandByName=(productName:string)=>{
   const url=`/api/items/brand/fetchByType?productName=${productName}`
   return axiosInstance.get(url)
 }
+
+
+export const confirmOrderPayment=(payload:any)=>{
+  const url=`/api/cart/orders/confrim/create-checkout-session`
+  return axiosInstance.post(url,payload)
+}
