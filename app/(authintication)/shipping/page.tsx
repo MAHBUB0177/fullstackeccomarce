@@ -141,7 +141,6 @@ const Shipping = () => {
     try {
       const response = await confirmOrder(updatedCartList);
       if (response?.data?.isSuccess) {
-        // successMessage(response?.data?.message);
         dispatch(setRemovemultipleProduct(cartList));
         router.push("/checkOut");
       } else {
