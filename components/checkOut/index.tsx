@@ -5,12 +5,18 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { confirmOrderPayment } from "@/service/allApi";
 
+
+import { loadStripe } from '@stripe/stripe-js';
+
+const stripePromise = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
+
+
+
 const PaymentGetway = () => {
   const [Total, setTotal] = useState(0);
   const [totalQntity, settotalQntity] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const cartList = useSelector((state: RootState) => state.cart.checkoutCart);
-  console.log(cartList,'cartList+++++')
 
   const handleClick = (index: number) => {
     setSelectedIndex(index); // Update state to the clicked item's index
@@ -35,24 +41,42 @@ const PaymentGetway = () => {
     settotalQntity(totalQntity)
   }, [cartList]);
 
-  const confirmPyment=async ()=>{
-    let payload={
+ 
+
+  const confirmPyment = async () => {
+    let payload = {
       productName: '',
-      unit_amount : Total,
-      quantity: totalQntity
-    }
-
+      unit_amount: Total * 100, // Ensure the amount is in cents
+      quantity: totalQntity,
+    };
+  
     try {
-      const response = await confirmOrderPayment(payload)
-      console.log(response)
-      
-      
+      // Call the backend API to create a Stripe session
+      const response = await confirmOrderPayment(payload);
+      const sessionId = response.data.id;
+      // Get the client-side Stripe instance
+      const stripe = await stripePromise;
+  
+      if (stripe) {
+        // Redirect to Stripe Checkout
+        const result = await stripe.redirectToCheckout({ sessionId });
+  
+        if (result?.error) {
+          // Redirect to your custom error page
+          console.error('Stripe Checkout error:', result.error.message);
+          window.location.href = '/error';
+        }
+      } else {
+        console.error('Stripe failed to load.');
+        window.location.href = '/error';
+      }
     } catch (error) {
-      console.log(error)
-      
+      console.error('Error creating Stripe session:', error);
+      // Redirect to your custom error page
+      window.location.href = '/error';
     }
-  }
-
+  };
+  
   return (
     <div>
       <div className="mx-auto border-[1px] border-orange-300 bg-orange-100 text-orange-400 w-[55%] md:w-[65%] lg:w-[35%] p-1">
