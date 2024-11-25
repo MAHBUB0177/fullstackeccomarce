@@ -17,6 +17,7 @@ const PaymentGetway = () => {
   const [totalQntity, settotalQntity] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const cartList = useSelector((state: RootState) => state.cart.checkoutCart);
+  console.log(cartList,'cartList')
 
   const handleClick = (index: number) => {
     setSelectedIndex(index); // Update state to the clicked item's index
@@ -46,7 +47,7 @@ const PaymentGetway = () => {
   const confirmPyment = async () => {
     let payload = {
       productName: '',
-      unit_amount: Total * 100, // Ensure the amount is in cents
+      unit_amount: Total , // Ensure the amount is in cents
       quantity: totalQntity,
     };
   

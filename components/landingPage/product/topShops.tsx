@@ -60,7 +60,7 @@ const TopShops = () => {
                         />
                       </div>
                       <div className="px-3 pb-5">
-                        <h5 className="text-md tracking-tight text-slate-900">{item?.description}{item?.productName?.length > 20 ? '...' : ''}</h5>
+                        <h5 className="text-md flex justify-center items-center tracking-tight text-slate-900">{item?.description}</h5>
                         <div className="mt-1 mb-5 flex items-center text-orange-400 justify-start gap-1">
                         <FaStar /> <FaStar /> <FaStar /> <FaStar /> <FaStarHalfAlt />
                         <p className='text-slate-500'>

@@ -165,7 +165,7 @@ const ShopDetails = ({ params }: ProductParams) => {
                                                             </span>
                                                         </div>
                                                     </div>
-                                                    <div className='w-[212px] pt-2 cursor-pointer' onClick={() => addToCart(item)}>
+                                                    <div className=' w-full  pt-2 cursor-pointer' onClick={() => addToCart(item)}>
                                                         <a
                                                             className="flex items-center justify-center rounded-md bg-slate-900 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-blue-300"
                                                         >
