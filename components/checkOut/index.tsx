@@ -127,7 +127,7 @@ const PaymentGetway = () => {
               </div>
             </div>
 
-            <div className="mt-20 mb-2">
+            <div className="mt-16 mb-2">
               <button
               onClick={confirmPyment}
                 // When no item is selected, disable the button

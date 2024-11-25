@@ -28,9 +28,11 @@ const OrderCreate = () => {
   const router=useRouter()
   const dispatch = useDispatch()
   const cartList = useSelector((state: RootState) => state.cart.addProducts)
+  
   const [selectedItems, setSelectedItems] = useState<any[]>([]); // Update type to store full item objects
   const [selectAll, setSelectAll] = useState(false);
   const [subTotal, setSubtotal] = useState(0);
+  const [totalQntity, settotalQntity] = useState(0);
   const [shipping, setShipping] = useState(0);
   const [select, setSelect] = useState(false)
 
@@ -100,9 +102,13 @@ const OrderCreate = () => {
       return total + item.qnty * 30;// Example: $10 per quantity of the item, adjust as per your logic
     }, 0);
   
+    let totalQntity = selectedItems.reduce((total, item) => {
+      return total + item.qnty ;
+    }, 0);
     // Update state with calculated values
     setSubtotal(subtotal);
     setShipping(shippingFee);
+    settotalQntity(totalQntity)
   }, [selectedItems,cartList]);
   
   const removeCart=()=>{
@@ -274,7 +280,7 @@ useEffect(()=>{
                             disabled={select && selectedItems.length > 0  ? false  : true}
                             className={`w-full text-sm p-2 font-semibold ${select  && selectedItems.length > 0 ? 'bg-red-500' : 'bg-slate-400'} text-white rounded-md`}
                         >
-                            Proced To CheckOut
+                            Proced To CheckOut ({totalQntity})
                         </button>
               </div>
             </div>

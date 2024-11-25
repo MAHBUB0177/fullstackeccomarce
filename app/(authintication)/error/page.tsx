@@ -6,13 +6,10 @@ import { MdCancel } from 'react-icons/md'
 
 const page = () => {
     const router = useRouter()
-
     useEffect(() => {
         const timer = setTimeout(() => {
-          router.push('/'); // Redirect to the desired route
-        }, 30000); // Delay in milliseconds (30 seconds)
-    
-        // Cleanup to avoid memory leaks if the component unmounts before the timeout
+          router.push('/'); 
+        }, 15000); 
         return () => clearTimeout(timer);
       }, [router]);
 

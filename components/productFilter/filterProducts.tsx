@@ -53,28 +53,28 @@ const FilterProducts = () => {
   );
 
 
-
+  //state sate
   const [categoryData, setCategoryData] = useState<categoryType[] | null>(null); // Array of categoryType
   const [brandData, setBrandData] = useState<brandType[] | null>(null);
-
   const [currentPageNumber, setCurrentPageNumber] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(12);
   const [pageCount, setPageCount] = useState<number>(1);
+
+
 
   const onChange = (list: string[]) => {
     setCheckedList(list);
   };
 
-
   const _handlePageClick = (data: { selected: number }) => {
     const selectedPage = data.selected + 1; // Adjust to 1-based index
-    setCurrentPageNumber(selectedPage); // Update state
+    setCurrentPageNumber(selectedPage); 
   };
 
 
   const scrollToTop = () => {
     window.scrollTo({
-      top: 30, // Change this value to 30 to stop scrolling at 30 pixels from the top
+      top: 30, 
       behavior: "smooth",
     });
   };
@@ -166,7 +166,6 @@ const FilterProducts = () => {
   };
 
   const resetFilterList = () => {
-    console.log('first')
     // Reset all filters
     setItemprice("highest");
     setCheckedList([]);
@@ -187,7 +186,6 @@ const FilterProducts = () => {
     if (Object.keys(searchData).length === 0) {
       setCurrentPageNumber(1);
     } else {
-      // console.log("searchData has values");
     }
     getCategoryProduct()
     getBrandByProduct()
@@ -251,9 +249,9 @@ const FilterProducts = () => {
                 {categoryData && categoryData.length > 0 && categoryData.map((category: categoryType) => (
                   <Col span={24} key={category._id}>
                     <div className="p-1">
-                      <Checkbox value={category.category}> {/* Use _id as the checkbox value */}
+                      <Checkbox value={category.category}> 
                         <p className="text-[15px] text-slate-700">
-                          {category.category} {/* Display the category name */}
+                          {category.category} 
                         </p>
                       </Checkbox>
                     </div>
@@ -270,13 +268,13 @@ const FilterProducts = () => {
             <select
               id="brandType"
               name="brandType"
-              onChange={(e) => setIsbrand(e.target.value)} // Sets selected brand value
+              onChange={(e) => setIsbrand(e.target.value)} 
               className="w-full h-10 border-2 border-secondary focus:outline-none focus:border-secondary text-secondary rounded px-2 md:px-3 py-0 md:py-1 tracking-wider"
             >
-              <option value="All">All</option> {/* Default option */}
+              <option value="All">All</option> 
               {brandData?.map((brand: brandType) => (
                 <option key={brand._id} value={brand.brand}>
-                  {brand.brand} {/* Display the brand name */}
+                  {brand.brand} 
                 </option>
               ))}
             </select>
