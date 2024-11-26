@@ -1,83 +1,84 @@
 import React, { useEffect, useState } from "react";
 import { paymentType } from "../common/commonList";
 import Image from "next/image";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
 import { confirmOrderPayment } from "@/service/allApi";
 
+import { loadStripe } from "@stripe/stripe-js";
+import { setRemovemultipleProduct } from "@/reducer/cartReducer";
 
-import { loadStripe } from '@stripe/stripe-js';
-
-const stripePromise = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
-
-
+const stripePromise = loadStripe("pk_test_TYooMQauvdEDq54NiTphI7jx");
 
 const PaymentGetway = () => {
+  const dispatch = useDispatch();
   const [Total, setTotal] = useState(0);
   const [totalQntity, settotalQntity] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const cartList = useSelector((state: RootState) => state.cart.checkoutCart);
-  console.log(cartList,'cartList')
+  console.log(cartList, "cartList");
 
   const handleClick = (index: number) => {
     setSelectedIndex(index); // Update state to the clicked item's index
   };
 
+  const [payload, setPayload] = useState<
+    { unit_amount: number; quantity: number }[] | undefined
+  >([]);
+
   useEffect(() => {
     // Calculate Subtotal
-    let subtotal = cartList.reduce((total, item) => {
+    const subtotal = cartList.reduce((total, item) => {
       return total + item.qnty * item.price;
     }, 0);
-    let totalQntity = cartList.reduce((total, item) => {
-      return total + item.qnty ;
+
+    const totalQnty = cartList.reduce((total, item) => {
+      return total + item.qnty;
     }, 0);
 
-
-    let shippingFee = cartList.reduce((total, item) => {
-      return total + item.qnty * 30; // Example: $10 per quantity of the item, adjust as per your logic
+    const shippingFee = cartList.reduce((total, item) => {
+      return total + item.qnty * 30;
     }, 0);
-
-    // Update state with calculated values
     setTotal(subtotal + shippingFee);
-    settotalQntity(totalQntity)
+    settotalQntity(totalQnty);
+
+    if (Array.isArray(cartList)) {
+      const newPayload = cartList.map((item) => ({
+        unit_amount: item.price,
+        quantity: item.qnty,
+        product_name: item.productName,
+      }));
+      setPayload(newPayload);
+    }
   }, [cartList]);
 
- 
-
+  console.log(payload, "payload");
   const confirmPyment = async () => {
-    let payload = {
-      productName: '',
-      unit_amount: Total , // Ensure the amount is in cents
-      quantity: totalQntity,
-    };
-  
     try {
       // Call the backend API to create a Stripe session
       const response = await confirmOrderPayment(payload);
+      if (response?.statusText === "OK") {
+        dispatch(setRemovemultipleProduct(cartList));
+      }
       const sessionId = response.data.id;
       // Get the client-side Stripe instance
       const stripe = await stripePromise;
-  
+
       if (stripe) {
         // Redirect to Stripe Checkout
         const result = await stripe.redirectToCheckout({ sessionId });
-  
         if (result?.error) {
-          // Redirect to your custom error page
-          console.error('Stripe Checkout error:', result.error.message);
-          window.location.href = '/error';
+          window.location.href = "/error";
         }
       } else {
-        console.error('Stripe failed to load.');
-        window.location.href = '/error';
+        window.location.href = "/error";
       }
     } catch (error) {
-      console.error('Error creating Stripe session:', error);
-      // Redirect to your custom error page
-      window.location.href = '/error';
+      console.error("Error creating Stripe session:", error);
+      window.location.href = "/error";
     }
   };
-  
+
   return (
     <div>
       <div className="mx-auto border-[1px] border-orange-300 bg-orange-100 text-orange-400 w-[55%] md:w-[65%] lg:w-[35%] p-1">
@@ -91,21 +92,20 @@ const PaymentGetway = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-1">
             {paymentType.map((image, i) => (
               <div
-              key={i}
-              className={`border-[1px] border-slate-300 p-1 rounded-md cursor-pointer md:w-[220px] ${
-                selectedIndex === i ? "bg-slate-300" : "bg-white"
-              }`}
-              onClick={() => handleClick(i)}
-            >
-              <Image
-                src={image.paymentType}
-                alt="Payment Option"
-                className={`h-[130px] md:w-[220px] cursor-pointer ${
-                  selectedIndex === i ? "opacity-50" : "opacity-100"
+                key={i}
+                className={`border-[1px] border-slate-300 p-1 rounded-md cursor-pointer md:w-[220px] ${
+                  selectedIndex === i ? "bg-slate-300" : "bg-white"
                 }`}
-              />
-            </div>
-            
+                onClick={() => handleClick(i)}
+              >
+                <Image
+                  src={image.paymentType}
+                  alt="Payment Option"
+                  className={`h-[130px] md:w-[220px] cursor-pointer ${
+                    selectedIndex === i ? "opacity-50" : "opacity-100"
+                  }`}
+                />
+              </div>
             ))}
           </div>
         </div>
@@ -114,8 +114,12 @@ const PaymentGetway = () => {
           <div className="bg-white border-[1px] border-slate-300 rounded-md h-[250px] shadow-sm p-4">
             <p className="text-xl font-semibold">Order Summary</p>
             <div className="flex justify-between pt-3 text-sm">
-              <p className="text-slate-500">Subtotal <span className="text-[10px]">({totalQntity} Items and shipping fee included)
-                </span> </p>
+              <p className="text-slate-500">
+                Subtotal{" "}
+                <span className="text-[10px]">
+                  ({totalQntity} Items and shipping fee included)
+                </span>{" "}
+              </p>
               <div className="flex justify-start text-sm">
                 <p>{Total}</p>
               </div>
@@ -130,7 +134,7 @@ const PaymentGetway = () => {
 
             <div className="mt-16 mb-2">
               <button
-              onClick={confirmPyment}
+                onClick={confirmPyment}
                 // When no item is selected, disable the button
                 disabled={selectedIndex === null}
                 className={`w-full text-sm p-2 font-semibold ${
