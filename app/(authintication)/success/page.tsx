@@ -1,15 +1,18 @@
 'use client'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { GiConfirmed } from 'react-icons/gi'
 
 const page = () => {
     const router = useRouter()
+    const[called,setIsCalled]=useState(true)
+    console.log(called,'called')
 
     useEffect(() => {
         const timer = setTimeout(() => {
-          router.push('/'); // Redirect to the desired route
+          // router.push('/'); // Redirect to the desired route
+          setIsCalled(false)
         }, 15000); // Delay in milliseconds (30 seconds)
     
         // Cleanup to avoid memory leaks if the component unmounts before the timeout

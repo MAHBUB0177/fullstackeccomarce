@@ -3,20 +3,30 @@ import { paymentType } from "../common/commonList";
 import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "@/store";
-import { confirmOrderPayment } from "@/service/allApi";
+import { confirmOrder, confirmOrderPayment, GetCurrentuserInfo } from "@/service/allApi";
 
 import { loadStripe } from "@stripe/stripe-js";
 import { setRemovemultipleProduct } from "@/reducer/cartReducer";
+import { errorMessage } from "../common/commonFunction";
 
 const stripePromise = loadStripe("pk_test_TYooMQauvdEDq54NiTphI7jx");
+
+type Agent = {
+  _id: string;
+  name: string;
+  email: string;
+};
 
 const PaymentGetway = () => {
   const dispatch = useDispatch();
   const [Total, setTotal] = useState(0);
+  const [agent, setAgent] = useState<Agent | null>(null);
   const [totalQntity, settotalQntity] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const cartList = useSelector((state: RootState) => state.cart.checkoutCart);
-  console.log(cartList, "cartList");
+  const selctedOrderinfo = useSelector(
+    (state: RootState) => state.Orderinfo.confirmOrderInfo as any
+  );
 
   const handleClick = (index: number) => {
     setSelectedIndex(index); // Update state to the clicked item's index
@@ -25,6 +35,22 @@ const PaymentGetway = () => {
   const [payload, setPayload] = useState<
     { unit_amount: number; quantity: number }[] | undefined
   >([]);
+
+  const getCurrentUserInfo = async () => {
+    try {
+      const res = await GetCurrentuserInfo();
+      if (res?.data?.user) {
+        setAgent(res.data.user);
+      }
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+    }
+  };
+
+
+  useEffect(() => {
+    getCurrentUserInfo();
+  }, []);
 
   useEffect(() => {
     // Calculate Subtotal
@@ -52,13 +78,41 @@ const PaymentGetway = () => {
     }
   }, [cartList]);
 
-  console.log(payload, "payload");
+  const ConfirmOrder = async () => {
+    if (!agent) {
+      errorMessage("Agent information is missing");
+      return;
+    }
+    // Map through the cartList and add agent info to each product
+    const updatedCartList = cartList.map((product) => ({
+      ...product, // Copy existing product details
+      userId: agent._id, // Add user ID
+      name: agent.name, // Add user name
+      email: agent.email, // Add user email
+      shippingUserName: selctedOrderinfo?.order?.name ?? "",
+      shippingPhone: selctedOrderinfo?.order?.phoneNumber ?? "",
+      shippingHouseNo: selctedOrderinfo?.order?.houseNo ?? "",
+      shippingCity: selctedOrderinfo?.order?.city ?? "",
+    }));
+
+    try {
+      const response = await confirmOrder(updatedCartList);
+      // if (response?.data?.isSuccess) {
+      // } else {
+      //   errorMessage(response?.data?.message);
+      // }
+    } catch (error) {
+      errorMessage("Something Went Wrong");
+    }
+  };
+
   const confirmPyment = async () => {
     try {
       // Call the backend API to create a Stripe session
       const response = await confirmOrderPayment(payload);
       if (response?.statusText === "OK") {
         dispatch(setRemovemultipleProduct(cartList));
+        ConfirmOrder()
       }
       const sessionId = response.data.id;
       // Get the client-side Stripe instance

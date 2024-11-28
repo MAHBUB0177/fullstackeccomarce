@@ -45,7 +45,7 @@ const Shipping = () => {
   const [Total, setTotal] = useState(0);
   const [shipping, setShipping] = useState(0);
   const [totalQntity, settotalQntity] = useState(0);
-  const [agent, setAgent] = useState<Agent | null>(null);
+  // const [agent, setAgent] = useState<Agent | null>(null);
   const [orderInfo, setOrderInfo] = useState<orderType[]>([]);
   const getOrderallInfo = async () => {
     try {
@@ -58,19 +58,19 @@ const Shipping = () => {
     }
   };
 
-  const getCurrentUserInfo = async () => {
-    try {
-      const res = await GetCurrentuserInfo();
-      if (res?.data?.user) {
-        setAgent(res.data.user);
-      }
-    } catch (error) {
-      console.error("Error fetching user info:", error);
-    }
-  };
+  // const getCurrentUserInfo = async () => {
+  //   try {
+  //     const res = await GetCurrentuserInfo();
+  //     if (res?.data?.user) {
+  //       setAgent(res.data.user);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching user info:", error);
+  //   }
+  // };
 
   useEffect(() => {
-    getCurrentUserInfo();
+    // getCurrentUserInfo();
     getOrderallInfo();
   }, []);
 
@@ -117,32 +117,33 @@ const Shipping = () => {
   };
 
   const ConfirmOrder = async () => {
-    if (!agent) {
-      errorMessage("Agent information is missing");
-      return;
-    }
-    // Map through the cartList and add agent info to each product
-    const updatedCartList = cartList.map((product) => ({
-      ...product, // Copy existing product details
-      userId: agent._id, // Add user ID
-      name: agent.name, // Add user name
-      email: agent.email, // Add user email
-      shippingUserName: selctedOrderinfo?.order?.name ?? "",
-      shippingPhone: selctedOrderinfo?.order?.phoneNumber ?? "",
-      shippingHouseNo: selctedOrderinfo?.order?.houseNo ?? "",
-      shippingCity: selctedOrderinfo?.order?.city ?? "",
-    }));
+    router.push("/checkOut");
+    // if (!agent) {
+    //   errorMessage("Agent information is missing");
+    //   return;
+    // }
+    // // Map through the cartList and add agent info to each product
+    // const updatedCartList = cartList.map((product) => ({
+    //   ...product, // Copy existing product details
+    //   userId: agent._id, // Add user ID
+    //   name: agent.name, // Add user name
+    //   email: agent.email, // Add user email
+    //   shippingUserName: selctedOrderinfo?.order?.name ?? "",
+    //   shippingPhone: selctedOrderinfo?.order?.phoneNumber ?? "",
+    //   shippingHouseNo: selctedOrderinfo?.order?.houseNo ?? "",
+    //   shippingCity: selctedOrderinfo?.order?.city ?? "",
+    // }));
 
-    try {
-      const response = await confirmOrder(updatedCartList);
-      if (response?.data?.isSuccess) {
-        router.push("/checkOut");
-      } else {
-        errorMessage(response?.data?.message);
-      }
-    } catch (error) {
-      errorMessage("Something Went Wrong");
-    }
+    // try {
+    //   const response = await confirmOrder(updatedCartList);
+    //   if (response?.data?.isSuccess) {
+    //     router.push("/checkOut");
+    //   } else {
+    //     errorMessage(response?.data?.message);
+    //   }
+    // } catch (error) {
+    //   errorMessage("Something Went Wrong");
+    // }
   };
   return (
     <div className="mx-4 lg:mx-20 mt-8">
