@@ -23,7 +23,7 @@ export function CountdownStart1(callback:any) {
 //countdown card 2
 export function CountdownStart2(callback:any) {
     const countdownInterval = setInterval(function() {
-        var countDownDate1 = new Date("oct 19, 2024 00:00:00").getTime();
+        var countDownDate1 = new Date("jan 1, 2025 00:00:00").getTime();
         var now = new Date().getTime();
         var distance = countDownDate1 - now;
         var days = Math.floor(distance / (1000 * 60 * 60 * 24));
