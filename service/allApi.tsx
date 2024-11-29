@@ -101,7 +101,7 @@ export const getBrandByName=(productName:string)=>{
 
 export const confirmOrderPayment=(payload:any)=>{
   const url=`/api/cart/orders/confrim/create-checkout-session`
-  return axiosInstance.post(url,payload)
+  return axiosInstance.post(url,{payload})
 }
 export const getBgImage=()=>{
   const url=`/api/bgimage/getAllBgIMage`

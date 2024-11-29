@@ -83,12 +83,12 @@ const ShopDetails = ({ params }: ProductParams) => {
                 </div>
                 <div >
                     <p className='text-2xl font-semibold '>{product?.description}</p>
-                    <p className='text-md font-medium text-slate-400'> Category : {product?.delivery_date}</p>
+                    <p className='text-md font-medium text-slate-500'> Delivery In  {product?.delivery_date}</p>
                     <div className='flex justify-start gap-1  pt-1 text-orange-400'>
                         <FaStar /> <FaStar /> <FaStar /> <FaStar /> <FaStarHalfAlt />
-                        <p className='text-slate-400 mb-2 text-sm'>({product?.followers})</p>
+                        <p className='text-slate-500 mb-2 text-sm'>({product?.followers})</p>
                     </div>
-                    <p className='text-slate-400 '>{product?.address}</p>
+                    <p className='text-slate-700 '>{product?.address}</p>
                 </div>
             </div>
 
