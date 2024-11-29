@@ -22,6 +22,7 @@ const PaymentGetway = () => {
   const [Total, setTotal] = useState(0);
   const [agent, setAgent] = useState<Agent | null>(null);
   const [totalQntity, settotalQntity] = useState(0);
+  const [totalShipping, setTotalShipping] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const cartList = useSelector((state: RootState) => state.cart.checkoutCart);
   const selctedOrderinfo = useSelector(
@@ -65,6 +66,7 @@ const PaymentGetway = () => {
     const shippingFee = cartList.reduce((total, item) => {
       return total + item.qnty * 30;
     }, 0);
+    setTotalShipping(shippingFee)
     setTotal(subtotal + shippingFee);
     settotalQntity(totalQnty);
 
@@ -89,6 +91,8 @@ const PaymentGetway = () => {
       userId: agent._id, // Add user ID
       name: agent.name, // Add user name
       email: agent.email, // Add user email
+      shippingFee: totalShipping,
+      grandTotal:Total,
       shippingUserName: selctedOrderinfo?.order?.name ?? "",
       shippingPhone: selctedOrderinfo?.order?.phoneNumber ?? "",
       shippingHouseNo: selctedOrderinfo?.order?.houseNo ?? "",
@@ -97,10 +101,6 @@ const PaymentGetway = () => {
 
     try {
       const response = await confirmOrder(updatedCartList);
-      // if (response?.data?.isSuccess) {
-      // } else {
-      //   errorMessage(response?.data?.message);
-      // }
     } catch (error) {
       errorMessage("Something Went Wrong");
     }
