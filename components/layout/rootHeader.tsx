@@ -60,8 +60,10 @@ const Rootheader = () => {
   const router = useRouter()
   const dispatch = useDispatch()
   const authUserData = useSelector((state: RootState) => state.auth.authUser) as UserType
+  const authData = useSelector((state: RootState) => state.auth.authData) as AuthDataType
+  console.log(authData,'authData')
   const { data: session, status: sessionStatus } = useSession();
-
+console.log(sessionStatus,'sessionStatus')
   const handelLogout = () => {
     dispatch(setAuth({}))
     dispatch(setAuthUser({}))

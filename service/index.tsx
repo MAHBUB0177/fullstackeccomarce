@@ -1,7 +1,10 @@
 import { getAuthData } from "@/lib";
+import { setAuth } from "@/reducer/authReducer";
 import axios from "axios";
-import moment from "moment";
-// import { getAuthData } from "./authUtils"; // Adjust the path as necessary
+import { store } from "@/store"; 
+
+
+
 
 export interface AuthDataType {
   accessToken: string;
@@ -51,7 +54,7 @@ axiosInstance.interceptors.response.use(
             const refreshTokenResponse = await axios.post('http://localhost:500/api/user/refreshToken', sendobj);
             const newAccessToken = refreshTokenResponse?.data?.data;
             if (newAccessToken) {
-              localStorage.setItem('authdata', JSON.stringify(newAccessToken));
+              store.dispatch(setAuth(newAccessToken));
               originalRequest.headers["Authorization"] = "Bearer " + newAccessToken?.accessToken;
               return axiosInstance(originalRequest);
             }
