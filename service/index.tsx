@@ -1,7 +1,8 @@
 import { getAuthData } from "@/lib";
-import { setAuth } from "@/reducer/authReducer";
+import { setAuth, setAuthUser } from "@/reducer/authReducer";
 import axios from "axios";
 import { store } from "@/store"; 
+import { signOut } from "next-auth/react";
 
 
 
@@ -19,7 +20,6 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(async (config) => {
   const authData = getAuthData();
-
   if (authData) {
     config.headers.Authorization = `Bearer ${authData.accessToken}`;
   }
@@ -34,38 +34,40 @@ axiosInstance.interceptors.response.use(
     if (error?.response?.status === 403 && !originalRequest._retry) {
       originalRequest._retry = true;
       const authData = getAuthData();
-      let sendobj = {
+      const sendobj = {
         refreshToken: authData?.refreshToken,
       };
 
       try {
-        if (authData?.refreshTokenExpiration !== undefined) {
-          const refreshTokenExpiration = new Date(authData.refreshTokenExpiration);
-          const now = new Date();
+          // Attempt to refresh the token
+          const refreshTokenResponse = await axios.post(
+            'http://localhost:500/api/user/refreshToken',
+            sendobj
+          );
+          const newAuthData = refreshTokenResponse?.data?.data;
 
-          if (now < refreshTokenExpiration) {
-            const handleLogout = () => {
-              localStorage.clear();
-              sessionStorage.clear();
-              window.location.href = "/";
-            };
-            handleLogout();
-          } else {
-            const refreshTokenResponse = await axios.post('http://localhost:500/api/user/refreshToken', sendobj);
-            const newAccessToken = refreshTokenResponse?.data?.data;
-            if (newAccessToken) {
-              store.dispatch(setAuth(newAccessToken));
-              originalRequest.headers["Authorization"] = "Bearer " + newAccessToken?.accessToken;
-              return axiosInstance(originalRequest);
-            }
+          if (newAuthData?.accessToken) {
+            // Save the new tokens and retry the original request
+            store.dispatch(setAuth(newAuthData));
+            originalRequest.headers["Authorization"] = "Bearer " + newAuthData.accessToken;
+            return axiosInstance(originalRequest);
           }
-        }
+        
       } catch (refreshError) {
+        handelLogout(); // Log out if refresh fails
         return Promise.reject(refreshError);
       }
     }
+
     return Promise.reject(error);
   }
 );
+
+// Helper function for logging out the user
+const handelLogout = () => {
+  store.dispatch(setAuth({}))
+  store.dispatch(setAuthUser({}))
+  signOut({ callbackUrl: "/" });
+}
 
 export default axiosInstance;
