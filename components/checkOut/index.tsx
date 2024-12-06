@@ -20,6 +20,8 @@ type Agent = {
 const PaymentGetway = () => {
   const dispatch = useDispatch();
   const [Total, setTotal] = useState(0);
+  const [productTotal, setProductTotal] = useState(0);
+  const [sheppingFee, setShippingFee] = useState(0);
   const [agent, setAgent] = useState<Agent | null>(null);
   const [totalQntity, settotalQntity] = useState(0);
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
@@ -27,7 +29,7 @@ const PaymentGetway = () => {
   const selctedOrderinfo = useSelector(
     (state: RootState) => state.Orderinfo.confirmOrderInfo as any
   );
-
+console.log(selctedOrderinfo,'selctedOrderinfo+++')
   const handleClick = (index: number) => {
     setSelectedIndex(index); // Update state to the clicked item's index
   };
@@ -65,6 +67,8 @@ const PaymentGetway = () => {
     const shippingFee = cartList.reduce((total, item) => {
       return total + item.qnty * 30;
     }, 0);
+    setProductTotal(subtotal)
+    setShippingFee(shippingFee)
     setTotal(subtotal + shippingFee);
     settotalQntity(totalQnty);
 
@@ -93,6 +97,9 @@ const PaymentGetway = () => {
       shippingPhone: selctedOrderinfo?.order?.phoneNumber ?? "",
       shippingHouseNo: selctedOrderinfo?.order?.houseNo ?? "",
       shippingCity: selctedOrderinfo?.order?.city ?? "",
+      shippingFee:sheppingFee,
+      grandTotal:productTotal
+
     }));
 
     try {
