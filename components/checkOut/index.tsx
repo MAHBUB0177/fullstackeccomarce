@@ -120,6 +120,7 @@ console.log(selctedOrderinfo,'selctedOrderinfo+++')
         dispatch(setRemovemultipleProduct(cartList));
         ConfirmOrder()
       }
+      
       const sessionId = response.data.id;
       // Get the client-side Stripe instance
       const stripe = await stripePromise;
