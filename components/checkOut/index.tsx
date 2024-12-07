@@ -101,7 +101,6 @@ console.log(selctedOrderinfo,'selctedOrderinfo+++')
       grandTotal:productTotal
 
     }));
-
     try {
       const response = await confirmOrder(updatedCartList);
       // if (response?.data?.isSuccess) {
