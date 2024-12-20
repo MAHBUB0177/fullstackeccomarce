@@ -71,7 +71,7 @@ const Products = () => {
                           alt={item.productName}
                         />
                         <div className="absolute bg-secondary text-white rounded-xl p-[2px] top-[3%] left-[5%] px-4">
-                          <p className="font-normal text-[12px]">{item.discount ?? 'No Discount'} OFF</p>
+                          <p className="font-normal text-[12px]">{item.discount ?? '0%'} OFF</p>
                         </div>
                       </div>
                       <div className="px-3 pb-5">

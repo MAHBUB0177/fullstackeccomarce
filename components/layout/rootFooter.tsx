@@ -48,7 +48,7 @@ const RootFooter = () => {
             <ul className="leading-8">
               <li><a href="#" className="hover:text-blue-400">House #8, Road # 14,<br/>
               Dhanmondi, Dhaka-1209.</a></li>
-              <li>Email: support@e-valy.com</li>
+              <li>Email: support@ecom.com</li>
             
             </ul>
           </div>
