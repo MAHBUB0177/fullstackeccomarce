@@ -91,8 +91,8 @@ const PaymentGetway = () => {
       userId: agent._id, // Add user ID
       name: agent.name, // Add user name
       email: agent.email, // Add user email
-      shippingFee: totalShipping,
-      grandTotal:Total,
+      // shippingFee: totalShipping,
+      // grandTotal:Total,
       shippingUserName: selctedOrderinfo?.order?.name ?? "",
       shippingPhone: selctedOrderinfo?.order?.phoneNumber ?? "",
       shippingHouseNo: selctedOrderinfo?.order?.houseNo ?? "",

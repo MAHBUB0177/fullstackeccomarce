@@ -11,7 +11,7 @@ const page = () => {
 
     useEffect(() => {
         const timer = setTimeout(() => {
-          // router.push('/'); // Redirect to the desired route
+          router.push('/'); // Redirect to the desired route
           setIsCalled(false)
         }, 15000); // Delay in milliseconds (30 seconds)
     
