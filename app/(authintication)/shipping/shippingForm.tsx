@@ -140,14 +140,14 @@ const ShippingForm = ({ postData, setPostData }: ShippingFormProps) => {
             rules={[
               {
                 required: true,
-                message: "Please input your Title",
+                message: "Please input your Division",
               },
             ]}
           >
             <Select
 
               size='large'
-              placeholder={"IMAGETYPE"}
+              placeholder={"Division"}
               value={postData.division}
               onChange={(value) => {
                 setPostData({
@@ -170,7 +170,7 @@ const ShippingForm = ({ postData, setPostData }: ShippingFormProps) => {
             rules={[
               {
                 required: true,
-                message: "Please input your Title",
+                message: "Please input your Phone Numer",
               },
             ]}
           >
@@ -201,7 +201,7 @@ const ShippingForm = ({ postData, setPostData }: ShippingFormProps) => {
             rules={[
               {
                 required: true,
-                message: "Please input your Title",
+                message: "Please input your City",
               },
             ]}
           >
@@ -227,7 +227,7 @@ const ShippingForm = ({ postData, setPostData }: ShippingFormProps) => {
             rules={[
               {
                 required: true,
-                message: "Please input your Title",
+                message: "Please input your House No",
               },
             ]}
           >
@@ -254,13 +254,13 @@ const ShippingForm = ({ postData, setPostData }: ShippingFormProps) => {
             rules={[
               {
                 required: true,
-                message: "Please input your Title",
+                message: "Please input your Area",
               },
             ]}
           >
             <Select
               size='large'
-              placeholder={"IMAGETYPE"}
+              placeholder={"Select Area"}
               value={postData.area}
 
               onChange={(value) => {
@@ -285,7 +285,7 @@ const ShippingForm = ({ postData, setPostData }: ShippingFormProps) => {
             rules={[
               {
                 required: true,
-                message: "Please input your Title",
+                message: "Please input your Postal Code",
               },
             ]}
           >
@@ -316,7 +316,7 @@ const ShippingForm = ({ postData, setPostData }: ShippingFormProps) => {
             rules={[
               {
                 required: true,
-                message: "Please input your Title",
+                message: "Please input your Address",
               },
             ]}
           >
@@ -324,7 +324,7 @@ const ShippingForm = ({ postData, setPostData }: ShippingFormProps) => {
               className='rounded-none'
               type="text"
               size='large'
-              placeholder={"Full Name"}
+              placeholder={"Address"}
               value={postData.address}
               onChange={(e) => {
                 setPostData({

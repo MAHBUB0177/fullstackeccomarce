@@ -38,7 +38,7 @@ const RootFooter = () => {
               <li><a href="#" className="hover:text-blue-400">About Us</a></li>
               <li><a href="#" className="hover:text-blue-400">Terms &amp; Conditions</a></li>
               <li><a href="#" className="hover:text-blue-400">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-blue-400">Contact Us</a></li>
+              <li><a href="/contact" className="hover:text-blue-400">Contact Us</a></li>
             </ul>
           </div>
           <div className="px-4 my-4 w-full sm:w-auto">
