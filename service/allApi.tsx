@@ -107,3 +107,8 @@ export const getBgImage=()=>{
   const url=`/api/bgimage/getAllBgIMage`
   return axiosInstance.get(url)
 }
+
+export const createMyContact=(payload:any)=>{
+  const url=`/api/contact/create`
+  return axiosInstance.post(url,payload)
+}
