@@ -38,14 +38,11 @@ const Shipping = () => {
   const dispatch = useDispatch();
   const [form] = Form.useForm();
   const cartList = useSelector((state: RootState) => state.cart.checkoutCart);
-  const selctedOrderinfo = useSelector(
-    (state: RootState) => state.Orderinfo.confirmOrderInfo as any
-  );
+
   const [select, setSelect] = useState(false);
   const [Total, setTotal] = useState(0);
   const [shipping, setShipping] = useState(0);
   const [totalQntity, settotalQntity] = useState(0);
-  // const [agent, setAgent] = useState<Agent | null>(null);
   const [orderInfo, setOrderInfo] = useState<orderType[]>([]);
   const getOrderallInfo = async () => {
     try {

@@ -28,7 +28,7 @@ const OrderCreate = () => {
   const router=useRouter()
   const dispatch = useDispatch()
   const cartList = useSelector((state: RootState) => state.cart.addProducts)
-  
+
   const [selectedItems, setSelectedItems] = useState<any[]>([]); // Update type to store full item objects
   const [selectAll, setSelectAll] = useState(false);
   const [subTotal, setSubtotal] = useState(0);

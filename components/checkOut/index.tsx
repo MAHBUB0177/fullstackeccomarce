@@ -20,6 +20,8 @@ type Agent = {
 const PaymentGetway = () => {
   const dispatch = useDispatch();
   const [Total, setTotal] = useState(0);
+  const [productTotal, setProductTotal] = useState(0);
+  const [sheppingFee, setShippingFee] = useState(0);
   const [agent, setAgent] = useState<Agent | null>(null);
   const [totalQntity, settotalQntity] = useState(0);
   const [totalShipping, setTotalShipping] = useState(0);
@@ -28,7 +30,7 @@ const PaymentGetway = () => {
   const selctedOrderinfo = useSelector(
     (state: RootState) => state.Orderinfo.confirmOrderInfo as any
   );
-
+console.log(selctedOrderinfo,'selctedOrderinfo+++')
   const handleClick = (index: number) => {
     setSelectedIndex(index); // Update state to the clicked item's index
   };
@@ -97,8 +99,10 @@ const PaymentGetway = () => {
       shippingPhone: selctedOrderinfo?.order?.phoneNumber ?? "",
       shippingHouseNo: selctedOrderinfo?.order?.houseNo ?? "",
       shippingCity: selctedOrderinfo?.order?.city ?? "",
-    }));
+      shippingFee:sheppingFee,
+      grandTotal:productTotal
 
+    }));
     try {
       const response = await confirmOrder(updatedCartList);
     } catch (error) {
@@ -114,6 +118,7 @@ const PaymentGetway = () => {
         dispatch(setRemovemultipleProduct(cartList));
         ConfirmOrder()
       }
+      
       const sessionId = response.data.id;
       // Get the client-side Stripe instance
       const stripe = await stripePromise;
