@@ -138,7 +138,7 @@ export interface UserType {
 
     return (
         <div>
-            <div className="bg-white mx-auto max-w-screen-xl my-[100px]  p-3">
+            <div className=" mx-auto max-w-screen-xl py-[100px]  p-3">
                 <div className="md:flex no-wrap">
 
                     <div className="w-full md:w-3/12 m-2 shadow-2xl">

@@ -64,7 +64,7 @@ const ProductDetails = ({ params }: ProductParams) => {
 
   }
   return (
-    < div className='mx-4 lg:mx-20 mt-8 '>
+    < div className='mx-4 pb-[50px] lg:mx-20 mt-8 '>
 
       <div className="  p-4 flex flex-col md:flex-row justify-between  md:gap-40 shadow-sm border border-slate-100 bg-primary rounded-md h-auto">
         <div >

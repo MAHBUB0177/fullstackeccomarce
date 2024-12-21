@@ -4,7 +4,7 @@ const RootFooter = () => {
   return (
     <>
     <footer>
-    <div className="bg-[#111926] py-4 text-gray-400 px-3 lg:px-12">
+    <div className="bg-[#111926] py-4 text-gray-400 px-3 lg:px-12 ">
       <div className="container px-4 mx-auto">
         <div className="-mx-4 flex flex-wrap justify-between">
           <div className="px-4 my-4 w-full xl:w-1/5">
@@ -35,10 +35,11 @@ const RootFooter = () => {
               <h2 className="inline-block text-2xl pb-4 mb-4 border-b-4 border-blue-600">Company</h2>
             </div>
             <ul className="leading-8">
-              <li><a href="#" className="hover:text-blue-400">About Us</a></li>
-              <li><a href="#" className="hover:text-blue-400">Terms &amp; Conditions</a></li>
-              <li><a href="#" className="hover:text-blue-400">Privacy Policy</a></li>
+              <li><a href="/about" className="hover:text-blue-400">About Us</a></li>
               <li><a href="/contact" className="hover:text-blue-400">Contact Us</a></li>
+              <li><a href="/terms-condition" className="hover:text-blue-400">Terms &amp; Conditions</a></li>
+              <li><a href="/terms-condition" className="hover:text-blue-400">Privacy Policy</a></li>
+              
             </ul>
           </div>
           <div className="px-4 my-4 w-full sm:w-auto">

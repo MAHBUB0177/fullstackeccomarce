@@ -75,7 +75,7 @@ const Login = () => {
 
 
   return (
-    <div className='px-4 lg:px-20'>
+    <div className='px-4 lg:px-20 pb-[50px]'>
       <div className="flex justify-center items-center dark:bg-gray-900">
 
         <div

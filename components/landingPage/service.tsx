@@ -4,7 +4,7 @@ import AppStore from './appStore'
 const Service = () => {
     return (
         <div>
-            <section className="text-gray-700 body-font mt-8 bg-slate-100 px-4 lg:px-20">
+            <section className="text-gray-700 body-font mt-8 bg-slate-100 px-4 lg:px-20 mb-[50px]">
 
                 <div className="container px-5 py-12 mx-auto">
                     <div className="flex flex-wrap text-center justify-center">

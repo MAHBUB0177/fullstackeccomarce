@@ -109,7 +109,7 @@ const Shipping = () => {
     
   };
   return (
-    <div className="mx-4 lg:mx-20 mt-8">
+    <div className="mx-4 lg:mx-20 mt-8 pb-[50px]">
       <div className="flex flex-col md:flex-row  justify-between  gap-2">
         <div className="w-full md:w-2/3 bg-primary rounded-sm shadow-sm p-2">
           <p className="pt-2 p-4">Delivery Information</p>

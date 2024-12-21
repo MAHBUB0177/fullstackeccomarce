@@ -33,7 +33,7 @@ export default async function RootLayout({
             {/* bg:#FCFCFC */}
             <div
               style={{ minHeight: "calc(100vh)" }}
-              className="pt-[130px] md:pt-[95px] bg-[#FCFCFC] pb-[50px]"
+              className="pt-[130px] md:pt-[95px] bg-[#FCFCFC] "
             >
               {children}
             </div>

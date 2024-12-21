@@ -6,12 +6,12 @@ import Product from "./(authintication)/search/page";
 
 export default function Home() {
   return (
-    <>
-      <div className=" px-4 lg:px-20">
+    <div className="pb-[50px]">
+      <div className=" px-4 lg:px-20 ">
         <LandingPage />
       </div>
       <Service />
-    </>
+    </div>
 
   );
 }
