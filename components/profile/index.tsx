@@ -11,6 +11,7 @@ import EditForm from './editForm';
 import CustomButton from '../common/customButton';
 import { GetCurrentuserInfo, updateUserInfo } from '@/service/allApi';
 import { setAuthUser } from '@/reducer/authReducer';
+import PasswordForm from './passwordChange';
 
 const items = [
     {
@@ -56,6 +57,11 @@ export interface UserType {
   }
   
 
+  export interface passwordChangeType {
+    oldPassword: string;
+    Password: string;
+    confirmPassword: string; // Ensure the id matches the actual field in your data
+  }
   
   const Profile = () => {
     const [form] = Form.useForm();
@@ -68,12 +74,32 @@ export interface UserType {
       name: '',
       email: ''
     });
-  
+
+    const[passwordChnage,setPasswordChnage] = useState({
+        oldPassword:'',
+        Password:'',
+        confirmPassword:''
+    })
+  console.log(passwordChnage,'passwordChnage=========')
     // State for modal visibility
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const _handleCancel = () => {
-      setIsModalOpen(false);
-    };
+    const [isModalOpen, setIsModalOpen] = useState({
+        editModalOpen: false,
+        passwordChangedOpen: false
+    });
+     // Function to toggle specific modals
+  const toggleModal = (modalType: 'editModalOpen' | 'passwordChangedOpen', isOpen: boolean) => {
+    setIsModalOpen((prevState) => ({
+      ...prevState,
+      [modalType]: isOpen,
+    }));
+  };
+
+  const _handleCancel = () => {
+    toggleModal('editModalOpen', false); // Close the edit modal
+  };
+  const _handleCancel1 = () => {
+    toggleModal('passwordChangedOpen', false); // Close the edit modal
+  };
   
     // State for agent data
     const [agentData, setAgentData] = useState<UserType | null>(null);  
@@ -110,7 +136,9 @@ export interface UserType {
           email: agentData.email,
         });
   
-        setIsModalOpen(true);
+      
+        // setIsModalOpen({...isModalOpen,editModalOpen:true});
+        toggleModal('editModalOpen', true)
       }
     };
   
@@ -126,6 +154,19 @@ export interface UserType {
         message.error('Something went wrong!');
       }
     };
+
+    const onFinishPassword = async (values:any) => {
+        console.log(values,'--------')
+        try {
+          const res = await updateUserInfo(userData);
+          message.success(res.data.message);
+          _handleCancel();
+          getCurrentUserInfo()
+        } catch (error) {
+          console.error('Error updating user info:', error);
+          message.error('Something went wrong!');
+        }
+      };
   
     // Handle input change
     const handleInputChange = (value: string, key: keyof UserType) => {
@@ -134,6 +175,14 @@ export interface UserType {
         [key]: value,
       }));
     };
+
+    const handleInputChangepass = (value: string, key: keyof passwordChangeType) => {
+        setPasswordChnage((prevState) => ({
+          ...prevState,
+          [key]: value,
+        }));
+      };
+    
   
 
     return (
@@ -206,7 +255,7 @@ export interface UserType {
                                     }
                                     <div className="grid grid-cols-2 ">
                                         <div className="md:px-4 py-2 font-semibold flex justify-start">
-                                            <button type={"submit"} className=' bg-secondary rounded-md p-2 text-white w-auto md:w-[150px] h-[40px] ' >
+                                            <button type={"submit"} className=' bg-secondary rounded-md p-2 text-white w-auto md:w-[150px] h-[40px]' onClick={() => toggleModal('passwordChangedOpen', true)} >
                                                 Change Password
                                             </button>
                                         </div>
@@ -221,14 +270,46 @@ export interface UserType {
 
             <div>
                 <CommonModal
-                    open={isModalOpen}
-                    setIsModalOpen={setIsModalOpen}
+                    open={isModalOpen?.editModalOpen}
+                    setIsModalOpen={(isOpen) => toggleModal('editModalOpen', isOpen)}
                     title={`EDIT`}
                     onCancel={_handleCancel}
                     width={"1000px"}
                 >
                     <Form onFinish={onFinish} form={form}>
                         <EditForm userData={userData} handleInputChange={handleInputChange} />
+
+                        <div className="flex justify-end mt-3">
+                            <div
+                                style={{ marginRight: "4px" }}
+                                onClick={() => _handleCancel()}
+                            >
+                                <CustomButton
+                                    btnName="Cancle"
+                                    size={"w-28 text-sm py-2 bg-red-500"}
+                                />
+                            </div>
+                            <div style={{ marginRight: "4px" }}>
+                                <CustomButton type={"submit"} btnName="submit" size={"w-28 text-sm py-2"} bg={'bg-bgsecondary'} />
+                            </div>
+                        </div>
+                    </Form>
+
+                </CommonModal>
+            </div>
+
+
+            
+            <div>
+                <CommonModal
+                    open={isModalOpen.passwordChangedOpen}
+                    setIsModalOpen={(isOpen) => toggleModal('passwordChangedOpen', isOpen)}
+                    title="Password Changed"
+                    onCancel={() => toggleModal('passwordChangedOpen', false)}
+                    width={"1000px"}
+                >
+                    <Form onFinish={onFinishPassword} form={form}>
+                        <PasswordForm passwordChnage={passwordChnage} handleInputChangepass={handleInputChangepass} />
 
                         <div className="flex justify-end mt-3">
                             <div
