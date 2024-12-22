@@ -67,7 +67,7 @@ const ShopDetails = ({ params }: ProductParams) => {
 
     }
     return (
-        < div className='mx-4 lg:mx-20 mt-8 '>
+        < div className='mx-4 lg:mx-20 mt-8 pb-[50px]'>
 
             <div className="p-8  flex flex-col md:flex-row justify-start md:gap-8 shadow-sm border border-slate-100 bg-primary rounded-md h-auto">
                 <div className='flex justify-center items-center'>

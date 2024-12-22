@@ -227,7 +227,7 @@ useEffect(()=>{
               ))}
             </div>
 
-            <div className='w-full h-auto md:h-[450px] lg:h-[400px] md:w-1/3 p-3 bg-primary shadow-sm  rounded-sm sticky top-20'>
+            <div className='w-full h-auto py-2 md:h-[450px] lg:h-[400px] md:w-1/3 p-3 bg-primary shadow-sm  rounded-sm sticky top-20'>
               <p className='text-sm text-slate-500'>Location</p>
               <div className='flex justify-start gap-3 border-b-[1px] border-slate-200 pt-2 pb-4'>
                 <CiLocationOn className='text-bold text-black' />
@@ -278,7 +278,7 @@ useEffect(()=>{
                 <button
                         onClick={handelNavigate}
                             disabled={select && selectedItems.length > 0  ? false  : true}
-                            className={`w-full text-sm p-2 font-semibold ${select  && selectedItems.length > 0 ? 'bg-red-500' : 'bg-slate-400'} text-white rounded-md`}
+                            className={`w-full text-sm p-2  font-semibold ${select  && selectedItems.length > 0 ? 'bg-red-500' : 'bg-slate-400'} text-white rounded-md`}
                         >
                             Proced To CheckOut ({totalQntity})
                         </button>

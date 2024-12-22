@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React from 'react'
 
 const RootFooter = () => {
@@ -35,12 +36,19 @@ const RootFooter = () => {
               <h2 className="inline-block text-2xl pb-4 mb-4 border-b-4 border-blue-600">Company</h2>
             </div>
             <ul className="leading-8">
-              <li><a href="/about" className="hover:text-blue-400">About Us</a></li>
-              <li><a href="/contact" className="hover:text-blue-400">Contact Us</a></li>
-              <li><a href="/terms-condition" className="hover:text-blue-400">Terms &amp; Conditions</a></li>
-              <li><a href="/terms-condition" className="hover:text-blue-400">Privacy Policy</a></li>
-              
-            </ul>
+  <li>
+    <Link href="/about" className="hover:text-blue-400">About Us</Link>
+  </li>
+  <li>
+    <Link href="/contact" className="hover:text-blue-400">Contact Us</Link>
+  </li>
+  <li>
+    <Link href="/terms-condition" className="hover:text-blue-400">Terms &amp; Conditions</Link>
+  </li>
+  <li>
+    <Link href="/terms-condition" className="hover:text-blue-400">Privacy Policy</Link>
+  </li>
+</ul>
           </div>
           <div className="px-4 my-4 w-full sm:w-auto">
             <div>
