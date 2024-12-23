@@ -24,6 +24,11 @@ export const LoginUser = (payload:any) => {
   let url=`api/user/update`;
   return axiosInstance.put(url,payload);
  }
+
+ export const UserPassChange=(payload:any)=>{
+  let url=`api/user/resetPassword`;
+  return axiosInstance.put(url,payload);
+ }
   export const GetProductInfo = (currentPageNumber: number, pageSize: number) => {
     const url = `/api/items/getproducts?page=${currentPageNumber}&limit=${pageSize}`;
     http://localhost:500/api/products?name=iphone&select=company,featured

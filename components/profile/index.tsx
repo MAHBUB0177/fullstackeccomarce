@@ -9,9 +9,10 @@ import { Form, message } from 'antd';
 import CustomInput from '../common/CustomInput';
 import EditForm from './editForm';
 import CustomButton from '../common/customButton';
-import { GetCurrentuserInfo, updateUserInfo } from '@/service/allApi';
+import { GetCurrentuserInfo, updateUserInfo, UserPassChange } from '@/service/allApi';
 import { setAuthUser } from '@/reducer/authReducer';
 import PasswordForm from './passwordChange';
+import { errorMessage } from '../common/commonFunction';
 
 const items = [
     {
@@ -98,8 +99,9 @@ export interface UserType {
     toggleModal('editModalOpen', false); // Close the edit modal
   };
   const _handleCancel1 = () => {
-    toggleModal('passwordChangedOpen', false); // Close the edit modal
+    toggleModal('passwordChangedOpen', false);
   };
+  
   
     // State for agent data
     const [agentData, setAgentData] = useState<UserType | null>(null);  
@@ -156,11 +158,17 @@ export interface UserType {
     };
 
     const onFinishPassword = async (values:any) => {
-        console.log(values,'--------')
+        if(passwordChnage?.Password !== passwordChnage?.confirmPassword){
+            return  message.error('passwords do not match');
+        }
         try {
-          const res = await updateUserInfo(userData);
+            let payloads={
+                oldPassword: passwordChnage?.oldPassword,
+                Password: passwordChnage?.Password
+            }
+          const res = await UserPassChange(payloads);
           message.success(res.data.message);
-          _handleCancel();
+          _handleCancel1()
           getCurrentUserInfo()
         } catch (error) {
           console.error('Error updating user info:', error);
@@ -302,10 +310,10 @@ export interface UserType {
             
             <div>
                 <CommonModal
-                    open={isModalOpen.passwordChangedOpen}
+                    open={isModalOpen?.passwordChangedOpen}
                     setIsModalOpen={(isOpen) => toggleModal('passwordChangedOpen', isOpen)}
-                    title="Password Changed"
-                    onCancel={() => toggleModal('passwordChangedOpen', false)}
+                    title={`Change Password`}
+                    onCancel={_handleCancel1}
                     width={"1000px"}
                 >
                     <Form onFinish={onFinishPassword} form={form}>
