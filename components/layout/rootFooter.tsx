@@ -1,17 +1,16 @@
-import Link from 'next/link'
 import React from 'react'
 
 const RootFooter = () => {
   return (
     <>
     <footer>
-    <div className="bg-[#111926] py-4 text-gray-400 px-3 lg:px-12 ">
+    <div className="bg-[#111926] py-4 text-gray-400 px-3 lg:px-12">
       <div className="container px-4 mx-auto">
         <div className="-mx-4 flex flex-wrap justify-between">
           <div className="px-4 my-4 w-full xl:w-1/5">
             <a href="/" className="block w-56 mb-10">
               <svg version="1.1" viewBox="0 0 3368 512" xmlns="http://www.w3.org/2000/svg">
-                <g fill="none" fillRule="evenodd">
+                <g fill="none" fill-rule="evenodd">
                   <g transform="translate(0 -75)">
                     <g transform="translate(0 75)">
                       <rect width="512" height="512" rx="128" fill="#3D5AFE"></rect>
@@ -19,7 +18,7 @@ const RootFooter = () => {
                       <circle cx="259" cy="156" r="40" fill="#fff"></circle>
                       <circle cx="369" cy="286" r="40" fill="#2962FF"></circle>
                     </g>
-                    <text fill="white" fontFamily="Nunito-Bold, Nunito" fontSize="512" fontWeight="bold">
+                    <text fill="white" font-family="Nunito-Bold, Nunito" font-size="512" font-weight="bold">
                       <tspan x="654" y="518">Tailwindow</tspan>
                     </text>
                   </g>
@@ -36,19 +35,11 @@ const RootFooter = () => {
               <h2 className="inline-block text-2xl pb-4 mb-4 border-b-4 border-blue-600">Company</h2>
             </div>
             <ul className="leading-8">
-  <li>
-    <Link href="/about" className="hover:text-blue-400">About Us</Link>
-  </li>
-  <li>
-    <Link href="/contact" className="hover:text-blue-400">Contact Us</Link>
-  </li>
-  <li>
-    <Link href="/terms-condition" className="hover:text-blue-400">Terms &amp; Conditions</Link>
-  </li>
-  <li>
-    <Link href="/terms-condition" className="hover:text-blue-400">Privacy Policy</Link>
-  </li>
-</ul>
+              <li><a href="#" className="hover:text-blue-400">About Us</a></li>
+              <li><a href="#" className="hover:text-blue-400">Terms &amp; Conditions</a></li>
+              <li><a href="#" className="hover:text-blue-400">Privacy Policy</a></li>
+              <li><a href="#" className="hover:text-blue-400">Contact Us</a></li>
+            </ul>
           </div>
           <div className="px-4 my-4 w-full sm:w-auto">
             <div>
@@ -57,7 +48,7 @@ const RootFooter = () => {
             <ul className="leading-8">
               <li><a href="#" className="hover:text-blue-400">House #8, Road # 14,<br/>
               Dhanmondi, Dhaka-1209.</a></li>
-              <li>Email: support@ecom.com</li>
+              <li>Email: support@e-valy.com</li>
             
             </ul>
           </div>

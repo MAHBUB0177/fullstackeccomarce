@@ -1,62 +1,40 @@
-'use client';
-import React, { useEffect, useState } from 'react';
+'use client'
+import React from 'react'
 import Slider from 'react-slick';
 
+import image1 from '@/assets/images/hotDeal/image1.png'
+import image2 from '@/assets/images/hotDeal/image2.webp'
+import image3 from '@/assets/images/hotDeal/image3.jpg'
+import image4 from '@/assets/images/hotDeal/image4.png'
+import image5 from '@/assets/images/hotDeal/image5.webp'
 import Image from 'next/image';
-import { getBgImage } from '@/service/allApi';
 
-type BgImage = {
-  image: string;
-};
+
+
+const categoryList = [image1,image2,image3,image4,image5];
 
 const BannerSlider = () => {
-  const [bgImag, setBgImg] = useState<BgImage[]>([]);
-
-  const settings = {
-    autoplay: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1,
-    arrows: false,
-  };
-
-  const getCurrentUserInfo = async () => {
-    try {
-      const res = await getBgImage();
-      if (res?.data?.isSuccess) {
-        setBgImg(res?.data?.item); // Ensure `item` is an array of objects with `image` keys.
-      }
-    } catch (error) {
-      console.error("Error fetching user info:", error);
-    }
-  };
-
-  useEffect(() => {
-    getCurrentUserInfo();
-  }, []);
-
+    var settings = {
+        // dots: true,
+        autoplay: true,
+        infinite: true,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        arrows: false,
+      };
+    
   return (
     <div>
-      <Slider {...settings}>
-        {bgImag.length > 0 ? (
-          bgImag.map((item, index) => (
-            <div key={index}>
-              <Image
-                src={item.image}
-                alt="bannerimg"
-                className="h-[170px] md:h-[350px] w-full rounded-md"
-                width={1000} // Adjust width
-                height={350} // Adjust height
-              />
-            </div>
-          ))
-        ) : (
-          <div></div>
-        )}
-      </Slider>
+        <Slider {...settings}>
+      
+        {categoryList.map((item,index)=><>
+        <Image src={item} alt='bannerimg' className='h-[350px] w-full rounded-md'/>
+        </>)}
+      
+    </Slider>
     </div>
-  );
-};
+  )
+}
 
-export default BannerSlider;
+export default BannerSlider

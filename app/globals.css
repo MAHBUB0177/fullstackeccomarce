@@ -33,43 +33,13 @@ body {
 }
 
 
+
+/* .horizontal-checkbox-group .ant-checkbox-group-item {
+  display: inline-block;
+  margin-right: 10px;
+} */
+
 .vertical-checkbox-group .ant-checkbox-group-item {
   display: block;
   margin-bottom: 8px;
-}
-
-.slick-prev:before,
-.slick-next:before {
-  color: #7d827e !important;
-  font-size: 22px !important;
-}
-
-/* Target slider's container to set a fixed height */
-.slider-zoom-wrapper {
-  height: 150px !important;
-}
-
-/* Ensure images fit within the fixed height */
-.slider-zoom-wrapper img {
-  height: 100% !important;
-  object-fit: cover; /* Maintain image aspect ratio */
-}
-
-
-/* Hide the left and right arrow controls */
-.slider-control {
-  display: none !important;
-}
-
-
-.custom-select .ant-select-selector {
-  border-radius: none !important;  /* Removes the border */
-  box-shadow: none !important;  /* Removes the shadow */
-  background-color: transparent !important;  /* Optional: transparent background if needed */
-}
-
-.custom-select .ant-select-selector:hover,
-.custom-select .ant-select-selector:focus {
-  border-radius: none !important;  /* Ensures no border on hover/focus */
-  box-shadow: none !important;
 }

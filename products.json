@@ -1,0 +1,104 @@
+ [
+    {
+        "_id": "667ed307b3c3e676992711d1",
+        "productName": "ASUS P151",
+        "price": 77000,
+        "featured": true,
+        "rating": 5.9,
+        "createdAt": "2024-06-28T15:13:00.529Z",
+        "company": "ASUS",
+        "image": "http://res.cloudinary.com/dg8qdhrgh/image/upload/v1719587591/itdrlzjpj78xradvnxmn.webp",
+        "__v": 0
+    },
+    {
+        "_id": "667ed37572a996e03c095c0d",
+        "productName": "ASUS S15S51",
+        "price": 69000,
+        "featured": true,
+        "rating": 5.9,
+        "createdAt": "2024-06-28T15:14:30.045Z",
+        "company": "ASUS",
+        "image": "http://res.cloudinary.com/dg8qdhrgh/image/upload/v1719587700/krlwmaizkbnhw5aoop5p.webp",
+        "__v": 0
+    },
+    {
+        "_id": "667ed39f72a996e03c095c10",
+        "productName": "ASUS Vivobook",
+        "price": 75000,
+        "featured": true,
+        "rating": 5.9,
+        "createdAt": "2024-06-28T15:14:30.045Z",
+        "company": "ASUS",
+        "image": "http://res.cloudinary.com/dg8qdhrgh/image/upload/v1719587742/qlthjfb7oruk1l0ssbzm.jpg",
+        "__v": 0
+    },
+    {
+        "_id": "667ed3c472a996e03c095c13",
+        "productName": "ASUS x415k1",
+        "price": 71000,
+        "featured": true,
+        "rating": 5.9,
+        "createdAt": "2024-06-28T15:14:30.045Z",
+        "company": "ASUS",
+        "image": "http://res.cloudinary.com/dg8qdhrgh/image/upload/v1719587780/zlcshoql97wq2mwz02qt.webp",
+        "__v": 0
+    },
+    {
+        "_id": "667ed3f372a996e03c095c16",
+        "productName": "DELL 23SP1",
+        "price": 81000,
+        "featured": true,
+        "rating": 5.9,
+        "createdAt": "2024-06-28T15:14:30.045Z",
+        "company": "DELL",
+        "image": "http://res.cloudinary.com/dg8qdhrgh/image/upload/v1719587827/ehcapdrs6h9gi1qksfey.webp",
+        "__v": 0
+    },
+    {
+        "_id": "667ed53c72a996e03c095c1b",
+        "productName": "DELL INSPIRON Mx Super -Red",
+        "price": 61000,
+        "featured": true,
+        "rating": 5.9,
+        "createdAt": "2024-06-28T15:14:30.045Z",
+        "company": "DELL",
+        "image": "http://res.cloudinary.com/dg8qdhrgh/image/upload/v1719588156/tnagtyj7xce9z5jydfwr.webp",
+        "__v": 0
+    },
+    {
+        "_id": "667ed79772a996e03c095c22",
+        "productName": "DELL Lattitude  Super -Red",
+        "price": 91000,
+        "featured": true,
+        "rating": 5.9,
+        "createdAt": "2024-06-28T15:14:30.045Z",
+        "company": "DELL",
+        "image": "http://res.cloudinary.com/dg8qdhrgh/image/upload/v1719588758/fvuoxikfg20dbrewjzzy.webp",
+        "__v": 0
+    },
+    {
+        "_id": "667ed8374ca070abbb67a2a4",
+        "productName": "DELL T20  HIPEX -Red",
+        "price": 63000,
+        "oldprice": 64500,
+        "featured": true,
+        "rating": 5.9,
+        "createdAt": "2024-06-28T15:33:16.307Z",
+        "company": "DELL",
+        "image": "http://res.cloudinary.com/dg8qdhrgh/image/upload/v1719588919/i5vwl0o1i0sobhvdfzm0.webp",
+        "__v": 0
+    },
+    {
+        "_id": "667ed8854ca070abbb67a2a7",
+        "productName": "DELL vester  HIPEX -Red",
+        "price": 61000,
+        "oldprice": 64500,
+        "featured": true,
+        "rating": 4.8,
+        "createdAt": "2024-06-28T15:33:16.307Z",
+        "company": "DELL",
+        "image": "http://res.cloudinary.com/dg8qdhrgh/image/upload/v1719588996/lv0qsrwy3pplwnhu4pnt.jpg",
+        "__v": 0
+    }
+  ]
+  

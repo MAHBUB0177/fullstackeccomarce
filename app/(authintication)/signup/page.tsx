@@ -14,6 +14,7 @@ const SignUp = () => {
     password: '',
     confirmpassword: ''
   })
+  console.log(usrData,'usrData')
   const handelSubmit=async(e:any)=>{
     e.preventDefault()
     if(!usrData?.name){
@@ -37,21 +38,26 @@ const SignUp = () => {
       password:usrData?.password,
     }
 
-    await axios.post (`https://node-express-hostapi.onrender.com/api/user/register`,payload)
+    RegisterUser(payload)
       .then(response => {
         if (response?.data) {
+         console.log(response?.data,'+++++++++++++')
           message.success(response?.data?.message)
+         //  setToken(true)
+         //  dispatch(setAuth(response?.data));
+         //  dispatch(setSearchData(guestlist))
           router.push('/auth')
   
         }
       })
       .catch(error => {
+       //  console.error('An error occurred:', error); 
         message.error(error?.response?.data?.message)
       });
   }
   return (
     <>
-      <section className="flex flex-col items-center pt-6 pb-[50px]">
+      <section className="flex flex-col items-center pt-6">
         <div
           className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
