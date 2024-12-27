@@ -1,5 +1,5 @@
 'use client'
-import { RegisterUser } from '@/service/allApi'
+// import { RegisterUser } from '@/service/allApi'
 import { message } from 'antd'
 import axios from 'axios'
 import Link from 'next/link'
