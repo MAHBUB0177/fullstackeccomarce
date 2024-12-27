@@ -37,7 +37,7 @@ const SignUp = () => {
       password:usrData?.password,
     }
 
-    await axios.post (`http://localhost:500/api/user/register`,payload)
+    await axios.post (`https://node-express-hostapi.onrender.com/api/user/register`,payload)
       .then(response => {
         if (response?.data) {
           message.success(response?.data?.message)
