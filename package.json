@@ -2,6 +2,9 @@
   "name": "fullstackeccomarce",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=16.x"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -25,6 +28,7 @@
     "react-slick": "^0.30.2",
     "react-zoom-slider": "^0.1.0",
     "redux-persist": "^6.0.0",
+    "sharp": "^0.33.5",
     "slick-carousel": "^1.8.1",
     "stripe": "^17.4.0"
   },
