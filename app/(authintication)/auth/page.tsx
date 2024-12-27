@@ -44,7 +44,7 @@ const Login = () => {
       email: loginData?.email,
       password: loginData?.password,
     };
-    // Validate if email or password is missing
+    // Validate if email or password is missing/
     if (!loginData?.email || !loginData?.password) {
       return errorMessage('User Name Or Password Missing');
     }
