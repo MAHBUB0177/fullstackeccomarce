@@ -1,6 +1,4 @@
 import React from "react";
-// import ReactPaginate from "react-paginate";
-
 interface PaginationProps {
     pageCount: number;
     forcePage: number;
@@ -9,7 +7,6 @@ interface PaginationProps {
   }
 
 const Pagination = ({ pageCount, forcePage, onPageChange ,scrollToTop}:PaginationProps) => {
-    console.log(pageCount,forcePage,'++++++++++++')
   return (
     <>
     <div className="flex justify-between pagination px-4 py-1 ml-2">

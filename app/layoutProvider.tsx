@@ -1,8 +1,8 @@
 'use client'
 import React from 'react'
-import { Provider } from 'react-redux'
 import {persistor, store} from '@/store'
 import { PersistGate } from 'redux-persist/integration/react'
+import { Provider } from 'react-redux';
 
 interface LayoutProviderProps {
     children: React.ReactNode;

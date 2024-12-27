@@ -6,14 +6,21 @@ import profilePic from '@/assets/images/logo/airbnb-logo.png'
 import { BsCart3 } from "react-icons/bs";
 import { FaRegUser } from "react-icons/fa";
 import Link from 'next/link';
-import { Badge, Input, Space } from 'antd';
-import type { SearchProps } from 'antd/es/input/Search';
-import { title } from 'process';
+import { Badge } from 'antd';
 import { SketchOutlined } from "@ant-design/icons";
-import { GetCurrentuserInfo, GetProductInfo, GetSearchProduct } from '@/service/allApi';
 import { useDispatch, useSelector } from 'react-redux';
-import {  setSearchData } from '@/reducer/searchReducer';
-import { RootState } from "@/store" 
+import { setSearchData } from '@/reducer/searchReducer';
+// import { RootState } from '@/store';
+import { setAuth, setAuthUser } from '@/reducer/authReducer';
+import { GetCurrentuserInfo } from '@/service/allApi';
+import { signOut, useSession } from 'next-auth/react';
+import CustomButton from '../common/customButton';
+import { usePathname, useRouter } from 'next/navigation';
+import { IoMdCloseCircleOutline } from 'react-icons/io';
+import { RootState } from '@/store';
+import SmallDeviceHeader from './smallDeviceHeader';
+
+
 
 
 export interface UserType {
@@ -26,89 +33,99 @@ export interface AuthDataType {
   user: UserType;
 }
 
-const menuList=[
-  {title:'My Orders',path:''},
-  {title:'Old Orders',path:''},
-  {title:'My Orders',path:''},
-  {title:'Profile',path:'/profile'},
-  {title:'Logout',path:''},
+export interface UserType {
+  email: string;
+  name: string;
+  _id: string; // Ensure the id matches the actual field in your data
+}
+
+const menuList = [
+  { title: 'My Orders', path: '' },
+  { title: 'Old Orders', path: '' },
+  { title: 'Profile', path: '/profile' },
+  { title: 'Logout', path: '' },
 ]
 
 
-interface SearchPayload {
-  searchTerm: string;
-}
-interface SearchDataType {
-  data: any;
- 
-  // Add other properties as needed
-}
+
+
 const Rootheader = () => {
-  const searchData = useSelector((state: RootState) => state.auth?.searchData) as SearchDataType;
-  const [authData, setAuthData] = useState<AuthDataType | null>(null);
-  const[show,setShow]=useState(false)
-  const dispatch=useDispatch()
+  const pathname = usePathname()
+
+  const searchData = useSelector((state: RootState) => state.search.search)
+  const cartList = useSelector((state: RootState) => state.cart.addProducts)
+ 
   
-
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const storedAuthData = localStorage.getItem('authdata');
-      if (storedAuthData) {
-        setAuthData(JSON.parse(storedAuthData));
-      }
-    }
-  }, []);
-
-
-
+  const [show, setShow] = useState(false)
+  const router = useRouter()
+  const dispatch = useDispatch()
+  const authUserData = useSelector((state: RootState) => state.auth.authUser) as UserType
+  const authData = useSelector((state: RootState) => state.auth.authData) as AuthDataType
+  console.log(authData,'authData')
+  const { data: session, status: sessionStatus } = useSession();
+console.log(sessionStatus,'sessionStatus')
   const handelLogout = () => {
-    console.log('call logout function');
-    localStorage.setItem('authdata', JSON.stringify({})); // Correctly setting an empty object
-    window.location.href = '/';
-}
+    dispatch(setAuth({}))
+    dispatch(setAuthUser({}))
+    signOut({ callbackUrl: "/" });
+  }
 
   const handleItemClick = (title: string) => {
     setShow(false)
     if (title === "Logout") {
       handelLogout()
-    } else  {
-      // handelLogout()
-      
-    } 
-  };
-
-  const [currentPageNumber, setCurrentPageNumber] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(9);
-  const [pageCount, setPageCount] = useState<number>(1);
-
-  const [searchTerm, setSearchTerm] = useState<string>('');
-  interface SearchPayload {
-    searchTerm: string;
-  }
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(searchTerm, 'searchTerm++++++++++++++');
-
-    const payload = {
-      searchTerm: searchTerm  // Ensure searchTerm is explicitly treated as a string
-    };
-    try {
-      const res = await GetSearchProduct(currentPageNumber, pageSize, payload);
-      console.log(res, '++++++++++response');
-      dispatch(setSearchData(res))
-    
-    } catch (error) {
-      console.error('Error fetching product info:', error);
+    } else {
+      return;
     }
   };
 
 
 
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    dispatch(setSearchData(searchTerm));
+    router.push('/search')
+  };
+
  
+
+  useEffect(() => {
+    if (pathname === '/') {
+      dispatch(setSearchData(''));
+      setSearchTerm(''); 
+    }
+  }, [pathname, dispatch]);
+
+  const clearState=()=>{
+    setSearchTerm('');
+    dispatch(setSearchData(''))
+  }
+
+
+  const handleLinkClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+
+    if (sessionStatus === 'authenticated') {
+      router.push('/orders'); 
+    } else {
+      // Manually construct the URL with query parameters
+      const loginUrl = `/auth?callbackUrl=/orders`;
+      router.push(loginUrl);
+    }
+  };
+
+  useEffect(() => {
+    if (searchTerm.length === 0) {
+      console.log('first')
+      clearState(); // Call your clearState function when searchTerm is empty
+    }
+  }, [searchTerm]);
 
   return (
     <div className='bg-primary  w-full z-50 fixed shadow-sm p-5 px-4 lg:px-20'>
-      <div className='flex justify-between items-center'>
+      <div className='hidden md:block'>
+      <div className='  flex justify-between items-center'>
         <Link href={'/'}>
           <div className='flex gap-1'>
             <Image
@@ -122,106 +139,123 @@ const Rootheader = () => {
 
         <div className="flex justify-start">
           <form className="flex flex-col md:flex-row gap-3" onSubmit={handleSubmit}>
-            <div className="flex">
-                <input type="text" placeholder="Search for Category,Brand,Name"
-              className="w-full md:w-80 px-3 h-10 rounded-l border-2 border-sky-500 focus:outline-none focus:border-sky-500"
-              onChange={(e)=>setSearchTerm(e.target.value)}
-              />
-                <button type="submit" className="bg-sky-500 text-white rounded-r px-2 md:px-3 py-0 md:py-1">Search</button>
+            <div className="flex items-center">
+              <div className="relative w-full md:w-80">
+                <input
+                  type="text"
+                  placeholder="Search for Category, Brand, Name"
+                  className="w-full px-3 h-10 rounded-l border-2 border-secondary focus:outline-none focus:border-secondary pr-10"
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  value={searchTerm !== '' ? searchTerm : searchData || ''}
+                />
+
+
+                {(searchTerm || searchData) && (
+                  <button
+                    type="button"
+                    onClick={clearState}
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 focus:outline-none"
+                  >
+                    <IoMdCloseCircleOutline className="text-secondary h-[20px] w-[20px]" />
+                  </button>
+                )}
+
+              </div>
+
+              <button type="submit" className="bg-secondary text-white rounded-r px-3 md:px-4 py-1 md:py-2">
+                Search
+              </button>
             </div>
-        </form>
+
+          </form>
         </div>
 
         <div className="flex justify-start gap-7 pt-1 ">
-          {/* {beforeList?.map((item, i) => (
-            <Link href={item?.path} key={i}>
-              <div className="text-lg font-base flex justify-between gap-1 text-slate-900">
-                <p className='pt-1'>{item?.icon && <item.icon className='h-[20px] w-[20px] font-extrabold' />}</p>
-                <p> {item?.title}</p>
-              </div>
-            </Link>
-          ))} */}
-          <Link href={'/about'} >
-              <div className="text-lg font-base flex justify-between gap-1 text-slate-900">
-                <p> About</p>
-              </div>
-            </Link>
+         
+            <div className="cursor-pointer text-lg pt-2 font-base flex justify-between gap-1 text-slate-900" onClick={handleLinkClick}>
+              <Badge count={cartList?.length}>
+                <BsCart3 className='h-[20px] w-[20px] font-semibold' />
+              </Badge>
+            </div>
+          
 
-            <Link href={'/'} >
-              <div className="text-lg font-base flex justify-between gap-1 text-slate-900">
-                <p> Contact</p>
-              </div>
-            </Link>
 
-            <Link href={'/'} >
-              <div className="text-lg font-base flex justify-between gap-1 text-slate-900">
-                <Badge count={5}>
-                  <BsCart3 className='h-[20px] w-[20px] font-extrabold' />
-                </Badge>
-              </div>
-            </Link>
 
-           
+          {sessionStatus == 'authenticated' ? (
+            <>
+              <p className="flex justify-center items-center cursor-pointer text-normal h-[35px] w-[35px] font-semibold rounded-full bg-secondary text-white pt-0"
+                onClick={() => setShow(!show)}>
+                {authUserData?.name?.charAt(0).toUpperCase()}
+              </p>{" "}
+            </>
+          ) : (
+            <div className='flex justify-between gap-2'>
+              <Link href={'/auth'} >
+                <button
+                  className={"w-20 text-sm p-[6px] font-semibold border hover:bg-red-200 border-red-500  text-secondary rounded-md hover:scale-105 duration-300"}
+                >
+                  Sign in
 
-            {authData?.accessToken ? (
-                <>
-                  <p className="flex justify-center items-center cursor-pointer text-normal h-[25px] w-[25px] font-semibold rounded-full bg-black text-white"
-                  onClick={()=>setShow(!show)}>
-                    {authData?.user?.name?.charAt(0).toUpperCase()}
-                  </p>{" "}
-                </>
-              ) : (
-                <Link href={'/auth'} >
-              <div className="text-lg font-base flex justify-between gap-1 text-slate-900">
-              <p> <FaRegUser className='h-[20px] w-[20px] font-extrabold' /></p>
-                <p> Sign In</p>
-              </div>
-            </Link>
-              )}
+                </button>
+              </Link>
 
-            
+              <Link href={'/signup'} >
+                <CustomButton
+                  btnName="Sign up"
+                  size={"w-20 text-sm p-[6px] font-semibold bg-secondary"}
+                />
+              </Link>
+            </div>
+
+
+          )}
+
+
         </div>
-        {show && 
-        <div
-          className="bg-primary shadow-md rounded-md h-auto w-[40%] md:w-[25%] lg:w-[15%] fixed right-10 top-20 px-4 border-[1px] border-slate-200"
-          style={{ zIndex: 1000 }}
-        >
-          <div className='flex justify-start gap-2'>
-          <p className="mt-5 flex justify-center items-center cursor-pointer text-normal h-[25px] w-[25px] font-semibold rounded-full bg-black text-white"
-                  onClick={()=>setShow(!show)}>
-                    {authData?.user?.name?.charAt(0).toUpperCase()}
-                  </p>
-                  <p className='pt-5'> {authData?.user?.name}</p>
-        
+        {show &&
+          <div
+            className="bg-primary shadow-md rounded-md h-auto w-[40%] md:w-[25%] lg:w-[15%] fixed right-10 top-20 px-4 border-[1px] border-slate-200"
+            style={{ zIndex: 1000 }}
+          >
+            <div className='flex justify-start gap-2'>
+              <p className="mt-5 flex justify-center items-center cursor-pointer text-normal h-[25px] w-[25px] font-semibold rounded-full bg-secondary text-white pt-1"
+                onClick={() => setShow(!show)}>
+                {authUserData?.name?.charAt(0).toUpperCase()}
+              </p>
+              <p className='pt-5'> {authUserData?.name}</p>
+
             </div>
 
             <div className='flex justify-start gap-2  border-2 border-orange-300 mt-3 rounded-md p-2 bg-orange-100'>
-            <SketchOutlined
-          className="h-[30px] w-[30px]  text-orange-400"
-          style={{ fontSize: "200%" }}
-        />
+              <SketchOutlined
+                className="h-[30px] w-[30px]  text-orange-400"
+                style={{ fontSize: "200%" }}
+              />
               <p className='text-orange-400'>0 points</p>
-              </div>
-          
+            </div>
+
             {menuList.map((item, i) => (
-            <Link href={item?.path} key={i}>
-              <p
-                key={i}
-                className={`py-1 cursor-pointer ${
-                  item?.title === "Sign Up"
+              <Link href={item?.path} key={i}>
+                <p
+                  key={i}
+                  className={`py-1 cursor-pointer ${item?.title === "Sign Up"
                     ? "border-b-[1px] border-slate-400"
                     : ""
-                }`}
-                onClick={() => handleItemClick(item.title)}
-              >
-                {item?.title}
-              </p>
-            </Link>
-          ))}
-             
-          
-        </div>}
-    
+                    }`}
+                  onClick={() => handleItemClick(item.title)}
+                >
+                  {item?.title}
+                </p>
+              </Link>
+            ))}
+          </div>}
+
+      </div>
+      </div>
+
+      <div className='md:hidden'>
+        <SmallDeviceHeader handleItemClick={handleItemClick} menuList={menuList} setSearchTerm={setSearchTerm} searchTerm={searchTerm} handleSubmit={handleSubmit} searchData={searchData} clearState={clearState} handleLinkClick={handleLinkClick}/>
+
       </div>
     </div>
   )
