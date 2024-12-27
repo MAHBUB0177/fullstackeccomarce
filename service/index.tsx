@@ -1,20 +1,27 @@
+import { getAuthData } from "@/lib";
+import { setAuth, setAuthUser } from "@/reducer/authReducer";
 import axios from "axios";
-import moment from "moment";
+import { store } from "@/store"; 
+import { signOut } from "next-auth/react";
+
+
+
+
+export interface AuthDataType {
+  accessToken: string;
+  refreshToken: string;
+  refreshTokenExpiration: string;
+  tokenExpiration: string;
+}
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_SERVER,
 });
 
 axiosInstance.interceptors.request.use(async (config) => {
-  let authData;
-  if (typeof window !== 'undefined') {
-    const storedAuthData = localStorage.getItem('authdata');
-    if (storedAuthData) {
-      authData = JSON.parse(storedAuthData);
-    }
-  }
+  const authData = getAuthData();
   if (authData) {
-    config.headers.Authorization = `Bearer ${authData?.accessToken}`;
+    config.headers.Authorization = `Bearer ${authData.accessToken}`;
   }
   return config;
 });
@@ -22,58 +29,45 @@ axiosInstance.interceptors.request.use(async (config) => {
 axiosInstance.interceptors.response.use(
   (response) => response,
   async (error) => {
-    console.log(error?.response?.status, '+++++++++status')
     const originalRequest = error.config;
 
     if (error?.response?.status === 403 && !originalRequest._retry) {
       originalRequest._retry = true;
-      let authData;
-      if (typeof window !== 'undefined') {
-        const storedAuthData = localStorage.getItem('authdata');
-        if (storedAuthData) {
-          authData = JSON.parse(storedAuthData);
-        }
-      }
-      let sendobj = {
-        refreshToken: authData?.refreshToken
-      }
+      const authData = getAuthData();
+      const sendobj = {
+        refreshToken: authData?.refreshToken,
+      };
 
       try {
-        if (authData?.refreshTokenExpiration !== undefined) {
-          // Check if the refresh token has expired
-          const refreshTokenExpiration = new Date(authData.refreshTokenExpiration);
-          const now = new Date();
-          console.log(authData,'authData++++++++++++')
-        console.log(now < refreshTokenExpiration,'++++++time check')
-          if (now < refreshTokenExpiration) {
-            console.log('we are called')
-            const handleLogout = () => {
-              localStorage.clear();
-              sessionStorage.clear();
-              window.location.href = "/";
-            };
-            handleLogout();
-          } else {
-            const refreshTokenResponse = await axios.post('http://localhost:500/api/user/refreshToken', sendobj);
-            const newAccessToken = refreshTokenResponse?.data?.data;
-            console.log(newAccessToken, '++++newAccessToken')
-            if (newAccessToken) {
-              localStorage.setItem('authdata', JSON.stringify(newAccessToken));
-              originalRequest.headers["Authorization"] = "Bearer " + newAccessToken?.accessToken;
-              return axiosInstance(originalRequest);
-            }
-          }
-        }
+          // Attempt to refresh the token
+          const refreshTokenResponse = await axios.post(
+            'https://node-express-hostapi.onrender.com/api/user/refreshToken',
+            sendobj
+          );
+          const newAuthData = refreshTokenResponse?.data?.data;
 
-      } catch (refreshError) {
-        console.error("Error refreshing token:", refreshError);
+          if (newAuthData?.accessToken) {
+            // Save the new tokens and retry the original request
+            store.dispatch(setAuth(newAuthData));
+            originalRequest.headers["Authorization"] = "Bearer " + newAuthData.accessToken;
+            return axiosInstance(originalRequest);
+          }
         
+      } catch (refreshError) {
+        handelLogout(); // Log out if refresh fails
         return Promise.reject(refreshError);
       }
     }
+
     return Promise.reject(error);
   }
 );
 
+// Helper function for logging out the user
+const handelLogout = () => {
+  store.dispatch(setAuth({}))
+  store.dispatch(setAuthUser({}))
+  signOut({ callbackUrl: "/" });
+}
 
 export default axiosInstance;

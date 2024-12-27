@@ -32,8 +32,8 @@ const config: Config = {
       },
       colors:{
         primary:'#FFFFFF',
-        secondary:'#FD375C',
-        bgsecondary:'#F7F7F7',
+        secondary:'#E10101',
+        bgsecondary:'#67AACE',
         bgsecondarylight:'#232323',
         textprimary:'#666463',
         textsecondary:'#525252'
