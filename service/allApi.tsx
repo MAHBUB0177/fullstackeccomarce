@@ -80,6 +80,7 @@ export const getAreaByCity=(city:string)=>{
 }
 
 export const createOrder=(payload:any)=>{
+  console.log(payload,'000000000000')
   const url=`/api/cart/orders`
   return axiosInstance.post(url,payload)
 }
