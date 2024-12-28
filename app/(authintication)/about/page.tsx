@@ -6,6 +6,7 @@ import image1 from '@/assets/images/about/shoping1.jpg'
 import image2 from '@/assets/images/about/shoping2.jpg'
 import Image from 'next/image'
 import CommonDetails from '@/components/common/commonDetails'
+// import CommonDetails from '@/components/common/commonDetails'
 interface userDataType {
   name: string
 }
