@@ -11,20 +11,30 @@ import { useDispatch } from 'react-redux';
 
 
 
+// const authenticateWithNextAuth = async (userData: any) => {
+
+// const response = await signIn("credentials", {
+//   email: userData.user.email,
+//   name: userData.user.name,
+//   // accessToken: userData.accessToken,
+//   // refreshToken: userData.refreshToken,
+//   // tokenExpiration: userData.tokenExpiration,
+//   // refreshTokenExpiration: userData.refreshTokenExpiration,
+//   redirect: false, // Optional, set to true if you want NextAuth to handle redirects
+// });
+// if (response?.error) {
+//   throw new Error(response.error);
+// }
+//   return response;
+// };
+
 const authenticateWithNextAuth = async (userData: any) => {
-const response = await signIn("credentials", {
-  email: userData.user.email,
-  name: userData.user.name,
-  accessToken: userData.accessToken,
-  refreshToken: userData.refreshToken,
-  tokenExpiration: userData.tokenExpiration,
-  refreshTokenExpiration: userData.refreshTokenExpiration,
-  redirect: false, // Optional, set to true if you want NextAuth to handle redirects
-});
+  const response = await signIn("credentials", {
+    ...userData,
+    redirect: false,
+  });
   return response;
 };
-
-
 const Login = () => {
   const {status: sessionStatus } = useSession();
 
@@ -54,7 +64,7 @@ const Login = () => {
         successMessage( response?.data?.message || 'User Successfully Logged In')
         dispatch(setAuth(response?.data?.data));
         dispatch(setAuthUser(response?.data?.data?.user))
-        authenticateWithNextAuth(response?.data?.data);
+       await authenticateWithNextAuth(response?.data?.data);
       }
     } catch (error: any) {
       errorMessage(error?.response?.data?.message || 'Login failed, please try again.');

@@ -37,7 +37,7 @@ const authOptions = {
         email: {
           label: "Email",
           type: "email",
-          placeholder: "test@example.com",
+          placeholder: "mailto:test@example.com",
         },
         password: { label: "Password", type: "password" },
       },

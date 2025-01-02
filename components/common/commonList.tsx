@@ -19,6 +19,12 @@ export const  categoryList = [
     { title: "Shoes", value: "shoes" },
   ];
 
+// src/types/authTypes.ts
+export type AuthDataType = {
+  userId: string;
+  username: string;
+  token: string;
+};
 
   type Color = "all" | "red" | "green" | "blue" | "slate" | "purple";
 
